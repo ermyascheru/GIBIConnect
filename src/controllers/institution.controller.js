@@ -6,7 +6,7 @@ async function getAllInstitutions(req, res, next) {
 
         res.status(200).json({
             data: institutions,
-            meta: {timestamp: new Date().toISOString()},
+            meta: { timestamp: new Date().toISOString() },
             error: null
         })
     } catch (error) {
@@ -14,4 +14,23 @@ async function getAllInstitutions(req, res, next) {
     }
 }
 
-module.exports = { getAllInstitutions };
+
+async function getInstitutionById(req, res, next) {
+    try {
+        const id = req.params.id;
+        const institution = await institutionRepo.getInstitutionById(id);
+
+        if (!institution) {
+            return res.status(404).json({ data: null, meta: { timestamp: new Date().toISOString() }, error: { code: 'NOT_FOUND', message: 'Institution not found' } });
+        }
+        res.status(200).json({
+            data: institution,
+            meta: { timestamp: new Date().toISOString() },
+            error: null
+        })
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports = { getAllInstitutions, getInstitutionById };

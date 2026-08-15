@@ -3,5 +3,6 @@ const router = express.Router();
 const institutionController = require('../controllers/institution.controller');
 
 router.get('/', institutionController.getAllInstitutions);
+router.get('/:id', institutionController.getInstitutionById);
 
 module.exports = router;
