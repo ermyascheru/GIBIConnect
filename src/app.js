@@ -2,11 +2,13 @@ const express = require('express');
 const env = require('./config/env');
 const healthRoutes = require('./routes/health.routes');
 const errorHandler = require('./middleware/errorHandler');
+const institutionRoutes = require('./routes/institution.routes');
 
 const app = express();
 
 app.use(express.json());
 app.use('/api/health', healthRoutes);
+app.use('/api/institutions', institutionRoutes);
 app.use(errorHandler);
 
 app.listen(env.PORT, function(){
