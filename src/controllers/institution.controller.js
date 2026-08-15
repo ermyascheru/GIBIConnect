@@ -70,4 +70,22 @@ async function updateInstitution(req, res, next) {
     }
 }
 
-module.exports = { getAllInstitutions, getInstitutionById, createInstitution, updateInstitution};
+async function deleteInstitution(req, res, next){
+    try {
+
+        const deletedInstitution = await institutionRepo.deleteInstitution(id);
+
+        if(!deletedInstitution){
+            return res.status(404).json({ data: null, meta: { timestamp: new Date().toISOString() }, error: { code: 'NOT_FOUND', message: 'Institution not found' } });
+        }
+        res.status(200).json({
+            data: deletedInstitution,
+            meta: { timestamp: new Date().toISOString() },
+            error: null
+        })
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports = { getAllInstitutions, getInstitutionById, createInstitution, updateInstitution, deleteInstitution};

@@ -21,4 +21,11 @@ async function updateInstitution(id, institutionData){
 
     return result.rows[0];
 }
-module.exports = { getAllInstitutions, getInstitutionById, createInstitution, updateInstitution};
+
+async function deleteInstitution(id) {
+    const id = req.params.id;
+    const result = await db.query('DELETE FROM institutions WHERE id = $1 RETURNING  *', [id]);
+
+    return result.rows[0];
+}
+module.exports = { getAllInstitutions, getInstitutionById, createInstitution, updateInstitution, deleteInstitution};
