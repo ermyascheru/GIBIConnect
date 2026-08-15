@@ -4,5 +4,6 @@ const institutionController = require('../controllers/institution.controller');
 
 router.get('/', institutionController.getAllInstitutions);
 router.get('/:id', institutionController.getInstitutionById);
+router.post('/', institutionController.createInstitution);
 
 module.exports = router;

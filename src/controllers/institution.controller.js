@@ -33,4 +33,20 @@ async function getInstitutionById(req, res, next) {
     }
 }
 
-module.exports = { getAllInstitutions, getInstitutionById };
+async function createInstitution(req, res, next){
+    try {
+        const newInstitutionData = req.body;
+
+        const createdInstitution =  await institutionRepo.createInstitution(newInstitutionData);
+
+        res.status(201).json({
+            data: createdInstitution,
+            meta: { timestamp: new Date().toISOString() },
+            error: null
+        })
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports = { getAllInstitutions, getInstitutionById, createInstitution };
