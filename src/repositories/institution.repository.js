@@ -15,4 +15,10 @@ async function createInstitution(institutionData) {
 
     return result.rows[0];
 }
-module.exports = { getAllInstitutions, getInstitutionById, createInstitution };
+
+async function updateInstitution(id, institutionData){
+    const result = await db.query('UPDATE institutions SET name = $1, type = $2, description = $3 WHERE id = $4 RETURNING *',[institutionData.name, institutionData.type, institutionData.description, id]);
+
+    return result.rows[0];
+}
+module.exports = { getAllInstitutions, getInstitutionById, createInstitution, updateInstitution};
