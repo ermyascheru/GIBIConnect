@@ -1,4 +1,5 @@
 const institutionRepo = require('../repositories/institution.repository');
+const { institutionSchema } = require('../validations/institution.validation');
 
 async function getAllInstitutions(req, res, next) {
     try {
@@ -33,11 +34,19 @@ async function getInstitutionById(req, res, next) {
     }
 }
 
-async function createInstitution(req, res, next){
+async function createInstitution(req, res, next) {
     try {
-        const newInstitutionData = req.body;
+        const { error } = institutionSchema.validate(req.body);
+        if (error) {
+            return res.status(400).json({
+                data: null,
+                meta: { timestamp: new Date().toISOString() },
+                error: { code: 'VALIDATION_ERROR', message: error.details[0].message }
+            });
+        }
 
-        const createdInstitution =  await institutionRepo.createInstitution(newInstitutionData);
+        const newInstitutionData = req.body;
+        const createdInstitution = await institutionRepo.createInstitution(newInstitutionData);
 
         res.status(201).json({
             data: createdInstitution,
@@ -51,12 +60,21 @@ async function createInstitution(req, res, next){
 
 async function updateInstitution(req, res, next) {
     try {
+        const { error } = institutionSchema.validate(req.body);
+        if (error) {
+            return res.status(400).json({
+                data: null,
+                meta: { timestamp: new Date().toISOString() },
+                error: { code: 'VALIDATION_ERROR', message: error.details[0].message }
+            });
+        }
+        
         const id = req.params.id;
         const data = req.body;
 
         const updatedInstitution = await institutionRepo.updateInstitution(id, req.body);
 
-        if(!updatedInstitution){
+        if (!updatedInstitution) {
             return res.status(404).json({ data: null, meta: { timestamp: new Date().toISOString() }, error: { code: 'NOT_FOUND', message: 'Institution not found' } });
         }
 
@@ -70,12 +88,11 @@ async function updateInstitution(req, res, next) {
     }
 }
 
-async function deleteInstitution(req, res, next){
+async function deleteInstitution(req, res, next) {
     try {
-
+        const id = req.params.id;
         const deletedInstitution = await institutionRepo.deleteInstitution(id);
-
-        if(!deletedInstitution){
+        if (!deletedInstitution) {
             return res.status(404).json({ data: null, meta: { timestamp: new Date().toISOString() }, error: { code: 'NOT_FOUND', message: 'Institution not found' } });
         }
         res.status(200).json({
@@ -88,4 +105,4 @@ async function deleteInstitution(req, res, next){
     }
 }
 
-module.exports = { getAllInstitutions, getInstitutionById, createInstitution, updateInstitution, deleteInstitution};
+module.exports = { getAllInstitutions, getInstitutionById, createInstitution, updateInstitution, deleteInstitution };
