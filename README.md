@@ -1,4 +1,4 @@
-<img width="1767" height="1059" alt="image" src="https://github.com/user-attachments/assets/4ee4b4ad-2702-40cd-a814-90ce1a55320f" /># GIBI Connect
+# GIBI Connect
 
 ## Educational Information and AI Consultation Platform
 
