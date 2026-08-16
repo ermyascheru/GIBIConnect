@@ -34,4 +34,40 @@ async function register(req, res, next) {
     }
 }
 
-module.exports = {register};
+async function login(req, res, next){
+    try {
+        const { email, password } = req.body;
+
+        const user = await userRepo.findUserByEmail(email);
+
+        if (!user) {
+            return res.status(401).json({
+                data: null,
+                meta: { timestamp: new Date().toISOString() },
+                error: { code: 'UNAUTHORIZED', message: 'Invalid email or password' }
+            });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            return res.status(401).json({
+                data: null,
+                meta: { timestamp: new Date().toISOString() },
+                error: { code: 'UNAUTHORIZED', message: 'Invalid email or password' }
+            });
+        }
+
+        delete user.password;
+
+        res.status(200).json({
+            data: user,
+            meta: { timestamp: new Date().toISOString() },
+            error: null
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports = {register, login};
