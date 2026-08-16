@@ -23,7 +23,6 @@ async function updateInstitution(id, institutionData){
 }
 
 async function deleteInstitution(id) {
-    const id = req.params.id;
     const result = await db.query('DELETE FROM institutions WHERE id = $1 RETURNING  *', [id]);
 
     return result.rows[0];
