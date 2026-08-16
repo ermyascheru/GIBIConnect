@@ -1,4 +1,4 @@
-# GIBI Connect
+<img width="1767" height="1059" alt="image" src="https://github.com/user-attachments/assets/4ee4b4ad-2702-40cd-a814-90ce1a55320f" /># GIBI Connect
 
 ## Educational Information and AI Consultation Platform
 
@@ -338,11 +338,11 @@ GIBI Connect can be expanded in the future with additional features such as:
 
 | No. | Full Name                        | Student ID           | Responsibility                   |
 | --: | -------------------------------- | -------------------- | -------------------------------- |
-|   1 |      Ermiyas Cheru               | **  CTC-5723-26   ** |       Database and AI            |
-|   2 |      Fekadu Alemnew              | **  CTC-4438-26   ** |         Backend                  |
-|   3 |      Ezra Michael                | **  CTC-3205-26   ** |         frontend                 |
-|   4 | **____________________________** | **________________** | **____________________________** |
-|   5 | **____________________________** | **________________** | **____________________________** |
+|   1 |      Ermiyas Cheru               |     CTC-5723-26      |        Database and AI           |
+|   2 |      Fekadu Alemnew              |     CTC-4438-26      |         Backend                  |
+|   3 |      Ezra Michael                |     CTC-3205-26      |         frontend                 |
+|   4 |      Ezana Girmay                |     CTC-7612-26      |         frontend                 |
+|   5 |      Elsabeth Berhanu            |     CTC-1036-26      |         Backend                  |
 
 ### Team Members
 
@@ -354,11 +354,11 @@ GIBI Connect can be expanded in the future with additional features such as:
 
 **Member 3:**   Ezra Michael  
 **Student ID:** CTC-3205-26   
-**Member 4:** __________________________________________
-**Student ID:** _________________________________________
+**Member 4:** Ezana Girmay 
+**Student ID:** CTC-7612-26 
 
-**Member 5:** __________________________________________
-**Student ID:** _________________________________________
+**Member 5:** Elsabeth Berhanu 
+**Student ID:** CTC-1036-26 
 
 ---
 
