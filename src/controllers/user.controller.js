@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt');
 const userRepo = require('../repositories/user.repository');
+const jwt = require('jsonwebtoken');
+const env = require('../config/env');
 
 async function register(req, res, next) {
     try {
@@ -34,7 +36,7 @@ async function register(req, res, next) {
     }
 }
 
-async function login(req, res, next){
+async function login(req, res, next) {
     try {
         const { email, password } = req.body;
 
@@ -60,8 +62,13 @@ async function login(req, res, next){
 
         delete user.password;
 
+        const token = jwt.sign({ id: user.id, role: user.role }, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN });
+
         res.status(200).json({
-            data: user,
+            data: {
+                user: user,
+                token: token
+            },
             meta: { timestamp: new Date().toISOString() },
             error: null
         });
@@ -70,4 +77,4 @@ async function login(req, res, next){
     }
 }
 
-module.exports = {register, login};
+module.exports = { register, login };
