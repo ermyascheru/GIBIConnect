@@ -1,108 +1,156 @@
-const institutionRepo = require('../repositories/institution.repository');
-const { institutionSchema } = require('../validations/institution.validation');
+const Joi = require('joi');
+const institutionService = require('../services/institution.service');
+const { createInstitutionSchema, updateInstitutionSchema } = require('../schemas/institution.schema');
+const institutionRepository = require('../repositories/institution.repository');
 
-async function getAllInstitutions(req, res, next) {
+const uuidSchema = Joi.string().uuid().required();
+
+const getAll = async (req, res, next) => {
     try {
-        const institutions = await institutionRepo.getAllInstitutions();
-
-        res.status(200).json({
+        const institutions = await institutionService.getAllInstitutions();
+        return res.status(200).json({
             data: institutions,
             meta: { timestamp: new Date().toISOString() },
             error: null
-        })
-    } catch (error) {
-        next(error);
+        });
+    } catch (err) {
+        next(err);
     }
-}
+};
 
-
-async function getInstitutionById(req, res, next) {
+const getById = async (req, res, next) => {
     try {
-        const id = req.params.id;
-        const institution = await institutionRepo.getInstitutionById(id);
-
-        if (!institution) {
-            return res.status(404).json({ data: null, meta: { timestamp: new Date().toISOString() }, error: { code: 'NOT_FOUND', message: 'Institution not found' } });
+        const { id } = req.params;
+        const { error: idError } = uuidSchema.validate(id);
+        if (idError) {
+            return res.status(400).json({
+                data: null,
+                meta: { timestamp: new Date().toISOString() },
+                error: 'Invalid institution UUID format'
+            });
         }
-        res.status(200).json({
+
+        const institution = await institutionService.getInstitutionById(id);
+        if (!institution) {
+            return res.status(404).json({
+                data: null,
+                meta: { timestamp: new Date().toISOString() },
+                error: 'Institution not found'
+            });
+        }
+
+        return res.status(200).json({
             data: institution,
             meta: { timestamp: new Date().toISOString() },
             error: null
-        })
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
+const create = async (req, res, next) => {
+    try {
+        // 1. Check if slug exists in DB before inserting
+        const existingInstitution = await institutionRepository.findBySlug(req.body.slug);
+        if (existingInstitution) {
+            return res.status(409).json({
+                data: null,
+                error: {
+                    code: 'DUPLICATE_SLUG',
+                    message: 'An institution with this slug already exists.'
+                }
+            });
+        }
+
+        // 2. Proceed to create
+        const institution = await institutionRepository.create(req.body);
+        return res.status(201).json({ data: institution });
+
     } catch (error) {
+        // 3. Fallback check for Postgres unique violation constraint (code 23505)
+        if (error.code === '23505' && error.constraint === 'institutions_slug_key') {
+            return res.status(409).json({
+                data: null,
+                error: {
+                    code: 'DUPLICATE_SLUG',
+                    message: 'An institution with this slug already exists.'
+                }
+            });
+        }
         next(error);
     }
-}
+};
 
-async function createInstitution(req, res, next) {
+const update = async (req, res, next) => {
     try {
-        const { error } = institutionSchema.validate(req.body);
+        const { id } = req.params;
+        const { error: idError } = uuidSchema.validate(id);
+        if (idError) {
+            return res.status(400).json({
+                data: null,
+                meta: { timestamp: new Date().toISOString() },
+                error: 'Invalid institution UUID format'
+            });
+        }
+
+        const { error, value } = updateInstitutionSchema.validate(req.body);
         if (error) {
             return res.status(400).json({
                 data: null,
                 meta: { timestamp: new Date().toISOString() },
-                error: { code: 'VALIDATION_ERROR', message: error.details[0].message }
+                error: error.details[0].message
             });
         }
 
-        const newInstitutionData = req.body;
-        const createdInstitution = await institutionRepo.createInstitution(newInstitutionData);
+        const updated = await institutionService.updateInstitution(id, value);
+        if (!updated) {
+            return res.status(404).json({
+                data: null,
+                meta: { timestamp: new Date().toISOString() },
+                error: 'Institution not found'
+            });
+        }
 
-        res.status(201).json({
-            data: createdInstitution,
+        return res.status(200).json({
+            data: updated,
             meta: { timestamp: new Date().toISOString() },
             error: null
-        })
-    } catch (error) {
-        next(error);
+        });
+    } catch (err) {
+        next(err);
     }
-}
+};
 
-async function updateInstitution(req, res, next) {
+const remove = async (req, res, next) => {
     try {
-        const { error } = institutionSchema.validate(req.body);
-        if (error) {
+        const { id } = req.params;
+        const { error: idError } = uuidSchema.validate(id);
+        if (idError) {
             return res.status(400).json({
                 data: null,
                 meta: { timestamp: new Date().toISOString() },
-                error: { code: 'VALIDATION_ERROR', message: error.details[0].message }
+                error: 'Invalid institution UUID format'
             });
         }
-        
-        const id = req.params.id;
-        const data = req.body;
 
-        const updatedInstitution = await institutionRepo.updateInstitution(id, req.body);
-
-        if (!updatedInstitution) {
-            return res.status(404).json({ data: null, meta: { timestamp: new Date().toISOString() }, error: { code: 'NOT_FOUND', message: 'Institution not found' } });
+        const deleted = await institutionService.deleteInstitution(id);
+        if (!deleted) {
+            return res.status(404).json({
+                data: null,
+                meta: { timestamp: new Date().toISOString() },
+                error: 'Institution not found'
+            });
         }
 
-        res.status(200).json({
-            data: updatedInstitution,
+        return res.status(200).json({
+            data: deleted,
             meta: { timestamp: new Date().toISOString() },
             error: null
-        })
-    } catch (error) {
-        next(error);
+        });
+    } catch (err) {
+        next(err);
     }
-}
+};
 
-async function deleteInstitution(req, res, next) {
-    try {
-        const id = req.params.id;
-        const deletedInstitution = await institutionRepo.deleteInstitution(id);
-        if (!deletedInstitution) {
-            return res.status(404).json({ data: null, meta: { timestamp: new Date().toISOString() }, error: { code: 'NOT_FOUND', message: 'Institution not found' } });
-        }
-        res.status(200).json({
-            data: deletedInstitution,
-            meta: { timestamp: new Date().toISOString() },
-            error: null
-        })
-    } catch (error) {
-        next(error);
-    }
-}
-
-module.exports = { getAllInstitutions, getInstitutionById, createInstitution, updateInstitution, deleteInstitution };
+module.exports = { getAll, getById, create, update, remove };
