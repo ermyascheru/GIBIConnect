@@ -2,7 +2,7 @@ const db = require('../config/database');
 
 const findByInstitutionId = async (institutionId) => {
     const query = `
-        SELECT r.id, r.institution_id, r.user_id, r.rating, r.comment, r.created_at, u.full_name
+        SELECT r.id, r.institution_id, r.user_id, r.rating, r.comment, r.created_at, u.name
         FROM reviews r
         JOIN users u ON r.user_id = u.id
         WHERE r.institution_id = $1
