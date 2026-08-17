@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const admissionController = require('../controllers/admission.controller');
-const authenticate = require('../middleware/auth.middleware');
-const authorizeRoles = require('../middleware/role.middleware');
 
-router.get('/institution/:institutionId', admissionController.getAdmissionsByInstitution);
-router.post('/', authenticate, authorizeRoles('admin'), admissionController.createAdmission);
+router.get('/institution/:institutionId', admissionController.getByInstitution);
+router.post('/', admissionController.create);
+
+router.put('/:id', admissionController.update);
+router.delete('/:id', admissionController.remove);
 
 module.exports = router;
