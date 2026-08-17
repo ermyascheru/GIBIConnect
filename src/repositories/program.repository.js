@@ -1,69 +1,75 @@
 const db = require('../config/database');
 
-const findByInstitutionId = async (institutionId) => {
-    const query = 'SELECT * FROM programs WHERE institution_id = $1 ORDER BY name ASC';
-    const result = await db.query(query, [institutionId]);
+const findByDepartmentId = async (departmentId) => {
+    const query = `
+        SELECT id, institution_id, department_id, name, slug, degree_level, study_mode, duration, admission_requirements, status, created_at
+        FROM programs
+        WHERE department_id = $1
+        ORDER BY name ASC
+    `;
+    const result = await db.query(query, [departmentId]);
     return result.rows;
 };
 
 const findById = async (id) => {
-    const query = 'SELECT * FROM programs WHERE id = $1';
+    const query = `
+        SELECT p.*, d.name AS department_name, f.name AS faculty_name, i.name AS institution_name
+        FROM programs p
+        LEFT JOIN departments d ON p.department_id = d.id
+        LEFT JOIN faculties f ON d.faculty_id = f.id
+        LEFT JOIN institutions i ON p.institution_id = i.id
+        WHERE p.id = $1
+    `;
     const result = await db.query(query, [id]);
     return result.rows[0];
 };
 
-const create = async (data) => {
+const create = async (departmentId, data) => {
     const {
-        institution_id, department_id, name, degree_level, study_mode,
-        slug, duration, description, admission_requirements, status
+        institution_id,
+        name,
+        slug,
+        description,
+        degree_level,
+        study_mode,
+        duration,
+        admission_requirements,
+        status
     } = data;
+
     const query = `
         INSERT INTO programs 
-        (institution_id, department_id, name, degree_level, study_mode, slug, duration, description, admission_requirements, status)
+        (institution_id, department_id, name, slug, description, degree_level, study_mode, duration, admission_requirements, status)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
         RETURNING *
     `;
-    const result = await db.query(query, [
-        institution_id, department_id, name, degree_level, study_mode,
-        slug || null, duration || null, description || null,
-        admission_requirements || null, status || 'published'
-    ]);
-    return result.rows[0];
-};
 
-const update = async (id, data) => {
-    const {
-        institution_id, department_id, name, slug, degree_level,
-        study_mode, duration, description, admission_requirements, status
-    } = data;
-    const query = `
-        UPDATE programs
-        SET institution_id = COALESCE($1, institution_id),
-            department_id = COALESCE($2, department_id),
-            name = COALESCE($3, name),
-            slug = COALESCE($4, slug),
-            degree_level = COALESCE($5, degree_level),
-            study_mode = COALESCE($6, study_mode),
-            duration = COALESCE($7, duration),
-            description = COALESCE($8, description),
-            admission_requirements = COALESCE($9, admission_requirements),
-            status = COALESCE($10, status),
-            updated_at = NOW()
-        WHERE id = $11
-        RETURNING *
-    `;
-    const result = await db.query(query, [
-        institution_id || null, department_id || null, name || null, slug || null,
-        degree_level || null, study_mode || null, duration || null,
-        description || null, admission_requirements || null, status || null, id
-    ]);
+    const values = [
+        institution_id || null,
+        departmentId,
+        name,
+        slug,
+        description || null,
+        degree_level,
+        study_mode || null,
+        duration || null,
+        admission_requirements || null,
+        status || 'draft'
+    ];
+
+    const result = await db.query(query, values);
     return result.rows[0];
 };
 
 const deleteById = async (id) => {
-    const query = 'DELETE FROM programs WHERE id = $1 RETURNING *';
+    const query = 'DELETE FROM programs WHERE id = $1 RETURNING id';
     const result = await db.query(query, [id]);
     return result.rows[0];
 };
 
-module.exports = { findByInstitutionId, findById, create, update, deleteById };
+module.exports = {
+    findByDepartmentId,
+    findById,
+    create,
+    deleteById
+};

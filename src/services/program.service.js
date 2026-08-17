@@ -1,29 +1,37 @@
 const programRepository = require('../repositories/program.repository');
+const departmentRepository = require('../repositories/department.repository');
 
-const getProgramsByInstitution = async (institutionId) => {
-    return await programRepository.findByInstitutionId(institutionId);
+const getProgramsByDepartment = async (departmentId) => {
+    return await programRepository.findByDepartmentId(departmentId);
 };
 
 const getProgramById = async (id) => {
-    return await programRepository.findById(id);
+    const program = await programRepository.findById(id);
+    if (!program) {
+        const error = new Error('Program not found');
+        error.statusCode = 404;
+        throw error;
+    }
+    return program;
 };
 
-const createProgram = async (data) => {
-    return await programRepository.create(data);
-};
-
-const updateProgram = async (id, data) => {
-    return await programRepository.update(id, data);
+const createProgram = async (departmentId, data) => {
+    return await programRepository.create(departmentId, data);
 };
 
 const deleteProgram = async (id) => {
+    const existing = await programRepository.findById(id);
+    if (!existing) {
+        const error = new Error('Program not found');
+        error.statusCode = 404;
+        throw error;
+    }
     return await programRepository.deleteById(id);
 };
 
 module.exports = {
-    getProgramsByInstitution,
+    getProgramsByDepartment,
     getProgramById,
     createProgram,
-    updateProgram,
     deleteProgram
 };
