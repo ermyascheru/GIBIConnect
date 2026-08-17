@@ -4,7 +4,6 @@ const admissionController = require('../controllers/admission.controller');
 
 router.get('/institution/:institutionId', admissionController.getByInstitution);
 router.post('/', admissionController.create);
-
 router.put('/:id', admissionController.update);
 router.delete('/:id', admissionController.remove);
 

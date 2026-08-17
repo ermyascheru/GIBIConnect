@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const admissionSchema = Joi.object({
+const createAdmissionSchema = Joi.object({
     institution_id: Joi.string().uuid().required(),
     program_id: Joi.string().uuid().allow(null).optional(),
     degree_level: Joi.string().valid('certificate', 'diploma', 'bachelor', 'master', 'phd').required(),
@@ -12,4 +12,10 @@ const admissionSchema = Joi.object({
     application_url: Joi.string().uri().allow('', null).optional()
 });
 
-module.exports = { admissionSchema };
+// Make institution_id and degree_level optional during updates
+const updateAdmissionSchema = createAdmissionSchema.fork(
+    ['institution_id', 'degree_level'], 
+    (schema) => schema.optional()
+);
+
+module.exports = { createAdmissionSchema, updateAdmissionSchema };

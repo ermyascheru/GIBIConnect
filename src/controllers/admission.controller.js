@@ -1,5 +1,5 @@
 const admissionService = require('../services/admission.service');
-const { admissionSchema } = require('../schemas/admission.schema');
+const { createAdmissionSchema, updateAdmissionSchema } = require('../schemas/admission.schema');
 
 const getByInstitution = async (req, res, next) => {
     try {
@@ -18,7 +18,7 @@ const getByInstitution = async (req, res, next) => {
 
 const create = async (req, res, next) => {
     try {
-        const { error, value } = admissionSchema.validate(req.body);
+        const { error, value } = createAdmissionSchema.validate(req.body);
         if (error) {
             return res.status(400).json({
                 data: null,
@@ -41,7 +41,7 @@ const create = async (req, res, next) => {
 const update = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const { error, value } = admissionSchema.validate(req.body);
+        const { error, value } = updateAdmissionSchema.validate(req.body);
         if (error) {
             return res.status(400).json({
                 data: null,
@@ -91,4 +91,9 @@ const remove = async (req, res, next) => {
     }
 };
 
-module.exports = { getByInstitution, create, update, remove };
+module.exports = {
+    getByInstitution,
+    create,
+    update,
+    remove
+};
