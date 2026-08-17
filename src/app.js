@@ -10,6 +10,8 @@ const calendarRoutes = require('./routes/academic_calendar.routes');
 const scholarshipRoutes = require('./routes/scholarship.routes');
 const programRoutes = require('./routes/program.routes');
 const institutionRoutes = require('./routes/institution.routes');
+const facultyRoutes = require('./routes/faculty.routes');
+const departmentRoutes = require('./routes/department.routes');
 
 const app = express();
 
@@ -23,6 +25,9 @@ app.use('/api/academic-calendar', calendarRoutes);
 app.use('/api/scholarships', scholarshipRoutes);
 app.use('/api/programs', programRoutes);
 app.use('/api/v1/institutions', institutionRoutes);
+app.use('/api/v1/institutions/:institutionId/faculties', facultyRoutes);
+app.use('/api/v1', facultyRoutes);
+app.use('/api/v1/faculties/:facultyId/departments', departmentRoutes);
 app.use(errorHandler);
 
 app.listen(env.PORT, function(){
