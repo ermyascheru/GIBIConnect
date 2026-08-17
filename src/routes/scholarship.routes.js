@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const scholarshipController = require('../controllers/scholarship.controller');
-const authenticate = require('../middleware/auth.middleware');
-const authorizeRoles = require('../middleware/role.middleware');
 
-router.get('/institution/:institutionId', scholarshipController.getScholarshipsByInstitution);
-
-router.post('/', authenticate, authorizeRoles('admin'), scholarshipController.createScholarship);
-
+router.get('/', scholarshipController.getAll);
+router.get('/:id', scholarshipController.getById);
+router.post('/', scholarshipController.create);
+router.put('/:id', scholarshipController.update);
+router.delete('/:id', scholarshipController.remove);
 
 module.exports = router;

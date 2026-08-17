@@ -1,37 +1,89 @@
-const db = require('../config/database');
-const { scholarshipSchema } = require('../schemas/scholarship.schema');
+const Joi = require('joi');
+const scholarshipService = require('../services/scholarship.service');
+const { createScholarshipSchema, updateScholarshipSchema } = require('../schemas/scholarship.schema');
 
-exports.getScholarshipsByInstitution = async (req, res, next) => {
+const uuidSchema = Joi.string().uuid().required();
+
+const getAll = async (req, res, next) => {
     try {
-        const { institutionId } = req.params;
-
-        const result = await db.query('SELECT * FROM scholarships WHERE institution_id = $1', [institutionId]);
-        res.json({ data: result.rows, meta: { timestamp: new Date().toISOString() }, error: null });
+        const scholarships = await scholarshipService.getAllScholarships();
+        return res.status(200).json({ data: scholarships, meta: { timestamp: new Date().toISOString() }, error: null });
     } catch (err) {
         next(err);
     }
-}
+};
 
-exports.createScholarship = async (req, res, next) => {
+const getById = async (req, res, next) => {
     try {
-        const { error, value } = scholarshipSchema.validate(req.body || {});
+        const { id } = req.params;
+        const { error: idError } = uuidSchema.validate(id);
+        if (idError) {
+            return res.status(400).json({ data: null, meta: { timestamp: new Date().toISOString() }, error: 'Invalid scholarship UUID' });
+        }
+        const scholarship = await scholarshipService.getScholarshipById(id);
+        if (!scholarship) {
+            return res.status(404).json({ data: null, meta: { timestamp: new Date().toISOString() }, error: 'Scholarship not found' });
+        }
+        return res.status(200).json({ data: scholarship, meta: { timestamp: new Date().toISOString() }, error: null });
+    } catch (err) {
+        next(err);
+    }
+};
 
+const create = async (req, res, next) => {
+    try {
+        const { error, value } = createScholarshipSchema.validate(req.body);
         if (error) {
-            return res.status(400).json({
-                data: null,
-                meta: { timestamp: new Date().toISOString() },
-                error: { code: 'VALIDATION_ERROR', message: error.details[0].message }
-            });
+            return res.status(400).json({ data: null, meta: { timestamp: new Date().toISOString() }, error: error.details[0].message });
+        }
+        const newScholarship = await scholarshipService.createScholarship(value);
+        return res.status(201).json({ data: newScholarship, meta: { timestamp: new Date().toISOString() }, error: null });
+    } catch (err) {
+        next(err);
+    }
+};
+
+const update = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { error: idError } = uuidSchema.validate(id);
+        if (idError) {
+            return res.status(400).json({ data: null, meta: { timestamp: new Date().toISOString() }, error: 'Invalid scholarship UUID' });
         }
 
-        const { institution_id, title, amount, eligibility_criteria, deadline } = value;
-        const result = await db.query(
-            'INSERT INTO scholarships (institution_id, title, amount, eligibility_criteria, deadline) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-            [institution_id, title, amount, eligibility_criteria, deadline]
-        );
+        const { error, value } = updateScholarshipSchema.validate(req.body);
+        if (error) {
+            return res.status(400).json({ data: null, meta: { timestamp: new Date().toISOString() }, error: error.details[0].message });
+        }
 
-        res.status(201).json({ data: result.rows[0], meta: { timestamp: new Date().toISOString() }, error: null });
+        const updated = await scholarshipService.updateScholarship(id, value);
+        if (!updated) {
+            return res.status(404).json({ data: null, meta: { timestamp: new Date().toISOString() }, error: 'Scholarship not found' });
+        }
+
+        return res.status(200).json({ data: updated, meta: { timestamp: new Date().toISOString() }, error: null });
     } catch (err) {
         next(err);
     }
-}
+};
+
+const remove = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { error: idError } = uuidSchema.validate(id);
+        if (idError) {
+            return res.status(400).json({ data: null, meta: { timestamp: new Date().toISOString() }, error: 'Invalid scholarship UUID' });
+        }
+
+        const deleted = await scholarshipService.deleteScholarship(id);
+        if (!deleted) {
+            return res.status(404).json({ data: null, meta: { timestamp: new Date().toISOString() }, error: 'Scholarship not found' });
+        }
+
+        return res.status(200).json({ data: deleted, meta: { timestamp: new Date().toISOString() }, error: null });
+    } catch (err) {
+        next(err);
+    }
+};
+
+module.exports = { getAll, getById, create, update, remove };

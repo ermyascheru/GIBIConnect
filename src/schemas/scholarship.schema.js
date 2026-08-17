@@ -1,11 +1,19 @@
 const Joi = require('joi');
 
-const scholarshipSchema = Joi.object({
-    institution_id: Joi.number().integer().required(),
-    title: Joi.string().min(3).max(255).required(),
-    amount: Joi.number().precision(2).positive().optional(),
-    eligibility_criteria: Joi.string().allow('', null).optional(),
-    deadline: Joi.date().iso().optional()
+const createScholarshipSchema = Joi.object({
+    name: Joi.string().trim().required(),
+    slug: Joi.string().trim().allow('', null).optional(),
+    description: Joi.string().allow('', null).optional(),
+    funding: Joi.string().allow('', null).optional(),
+    eligibility: Joi.string().allow('', null).optional(),
+    deadline: Joi.date().iso().allow(null).optional(),
+    application_url: Joi.string().uri().allow('', null).optional(),
+    status: Joi.string().valid('draft', 'published', 'archived').default('published').optional()
 });
 
-module.exports = { scholarshipSchema };
+const updateScholarshipSchema = createScholarshipSchema.fork(
+    ['name'],
+    (schema) => schema.optional()
+);
+
+module.exports = { createScholarshipSchema, updateScholarshipSchema };
