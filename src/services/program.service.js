@@ -4,11 +4,26 @@ const getProgramsByInstitution = async (institutionId) => {
     return await programRepository.findByInstitutionId(institutionId);
 };
 
-const createProgram = async (programData) => {
-    return await programRepository.create(programData);
+const getProgramById = async (id) => {
+    return await programRepository.findById(id);
+};
+
+const createProgram = async (data) => {
+    return await programRepository.create(data);
+};
+
+const updateProgram = async (id, data) => {
+    return await programRepository.update(id, data);
+};
+
+const deleteProgram = async (id) => {
+    return await programRepository.deleteById(id);
 };
 
 module.exports = {
     getProgramsByInstitution,
-    createProgram
+    getProgramById,
+    createProgram,
+    updateProgram,
+    deleteProgram
 };
