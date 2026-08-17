@@ -8,6 +8,7 @@ const institutionRoutes = require('./routes/institution.routes');
 const userRoutes = require('./routes/user.routes');
 const programRoutes = require('./routes/program.routes');
 const scholarshipRoutes = require('./routes/scholarship.routes');
+const admissionRoutes = require('./routes/admission.routes');
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use('/api/institutions', institutionRoutes);
 app.use('/api/auth', userRoutes);
 app.use('/api/programs', programRoutes);
 app.use('/api/scholarships', scholarshipRoutes)
+app.use('/api/admissions', admissionRoutes);
 app.use(errorHandler);
 
 app.listen(env.PORT, function(){
