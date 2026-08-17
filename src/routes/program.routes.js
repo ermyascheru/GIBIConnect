@@ -1,17 +1,22 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 const {
+    getAllPrograms,
     getPrograms,
     getProgramById,
     createProgram,
     deleteProgram
 } = require('../controllers/program.controller');
 
-// Nested under /api/v1/departments/:departmentId/programs
-router.get('/', getPrograms);
-router.post('/', createProgram);
+// Root program routes (mounted at /api/v1/programs)
+router.get('/', (req, res, next) => {
+    if (req.params.departmentId) {
+        return getPrograms(req, res, next);
+    }
+    return getAllPrograms(req, res, next);
+});
 
-// Direct program endpoints
+router.post('/', createProgram);
 router.get('/:id', getProgramById);
 router.delete('/:id', deleteProgram);
 

@@ -1,5 +1,42 @@
 const programService = require('../services/program.service');
 
+
+const getAllPrograms = async (req, res, next) => {
+    try {
+        const { page, limit, q, degree_level, study_mode, status, institution_id, department_id } = req.query;
+
+        const result = await programService.getAllPrograms({
+            page: parseInt(page, 10) || 1,
+            limit: parseInt(limit, 10) || 10,
+            q,
+            degree_level,
+            study_mode,
+            status,
+            institution_id,
+            department_id
+        });
+
+        return res.status(200).json({
+            data: result.rows,
+            meta: {
+                page: result.page,
+                limit: result.limit,
+                totalCount: result.totalCount,
+                totalPages: result.totalPages,
+                timestamp: new Date().toISOString()
+            }
+        });
+    } catch (error) {
+        if (error.code === '22P02') {
+            return res.status(400).json({
+                data: null,
+                error: { code: 'INVALID_ID', message: 'Invalid UUID format provided in query filters.' }
+            });
+        }
+        next(error);
+    }
+};
+
 const getPrograms = async (req, res, next) => {
     try {
         const programs = await programService.getProgramsByDepartment(req.params.departmentId);
@@ -64,6 +101,7 @@ const deleteProgram = async (req, res, next) => {
 };
 
 module.exports = {
+    getAllPrograms,
     getPrograms,
     getProgramById,
     createProgram,

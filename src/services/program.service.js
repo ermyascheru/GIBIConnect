@@ -1,6 +1,10 @@
 const programRepository = require('../repositories/program.repository');
 const departmentRepository = require('../repositories/department.repository');
 
+const getAllPrograms = async (queryParams) => {
+    return await programRepository.findAll(queryParams);
+};
+
 const getProgramsByDepartment = async (departmentId) => {
     return await programRepository.findByDepartmentId(departmentId);
 };
@@ -29,9 +33,11 @@ const deleteProgram = async (id) => {
     return await programRepository.deleteById(id);
 };
 
+
 module.exports = {
+    getAllPrograms,
     getProgramsByDepartment,
     getProgramById,
     createProgram,
-    deleteProgram
+    deleteProgram,
 };
