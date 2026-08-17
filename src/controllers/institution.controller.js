@@ -68,8 +68,61 @@ const createInstitution = async (req, res, next) => {
     }
 };
 
+const updateInstitution = async (req, res, next) => {
+    try {
+        const updated = await institutionService.updateInstitution(req.params.id, req.body);
+        return res.status(200).json({
+            data: updated,
+            meta: { timestamp: new Date().toISOString() }
+        });
+    } catch (error) {
+        if (error.statusCode === 404) {
+            return res.status(404).json({
+                data: null,
+                error: { code: 'NOT_FOUND', message: error.message }
+            });
+        }
+        if (error.statusCode === 409 || error.code === '23505') {
+            return res.status(409).json({
+                data: null,
+                error: { code: 'DUPLICATE_SLUG', message: error.message }
+            });
+        }
+        next(error);
+    }
+};
+
+const deleteInstitution = async (req, res, next) => {
+    try {
+        await institutionService.deleteInstitution(req.params.id);
+        return res.status(200).json({
+            data: { message: 'Institution deleted successfully' },
+            meta: { timestamp: new Date().toISOString() }
+        });
+    } catch (error) {
+        if (error.statusCode === 404) {
+            return res.status(404).json({
+                data: null,
+                error: { code: 'NOT_FOUND', message: error.message }
+            });
+        }
+        if (error.code === '23503') {
+            return res.status(409).json({
+                data: null,
+                error: {
+                    code: 'FOREIGN_KEY_CONSTRAINT',
+                    message: 'Cannot delete institution because it has linked faculties, programs, or records.'
+                }
+            });
+        }
+        next(error);
+    }
+};
+
 module.exports = {
     getInstitutions,
     getInstitutionBySlug,
-    createInstitution
+    createInstitution,
+    updateInstitution,
+    deleteInstitution
 };

@@ -5,13 +5,11 @@ const findAll = async ({ page = 1, limit = 10, q, type, ownership, region, statu
     const values = [];
     const conditions = [];
 
-    // Filter by status if provided (default: published)
     if (status) {
         values.push(status);
         conditions.push(`status = $${values.length}`);
     }
 
-    // Enum & text filters
     if (type) {
         values.push(type);
         conditions.push(`type = $${values.length}`);
@@ -27,7 +25,6 @@ const findAll = async ({ page = 1, limit = 10, q, type, ownership, region, statu
         conditions.push(`region ILIKE $${values.length}`);
     }
 
-    // Full-text search using PostgreSQL tsvector column
     if (q) {
         values.push(q);
         conditions.push(`search_vector @@ plainto_tsquery('english', $${values.length})`);
@@ -35,12 +32,10 @@ const findAll = async ({ page = 1, limit = 10, q, type, ownership, region, statu
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
-    // Total Count Query
     const countQuery = `SELECT COUNT(*) FROM institutions ${whereClause}`;
     const countResult = await db.query(countQuery, values);
     const totalCount = parseInt(countResult.rows[0].count, 10);
 
-    // Data Fetch Query
     values.push(limit, offset);
     const dataQuery = `
         SELECT id, name, slug, description, type, ownership, logo_url, city, region, website_url, status, created_at 
@@ -98,4 +93,61 @@ const create = async (data) => {
     return result.rows[0];
 };
 
-module.exports = { findAll, findBySlug, findById, create };
+const update = async (id, data) => {
+    const {
+        name, slug, description, history, type, ownership,
+        logo_url, cover_image_url, website_url, email, phone,
+        address, city, region, latitude, longitude, accreditation, status
+    } = data;
+
+    const query = `
+        UPDATE institutions
+        SET 
+            name = COALESCE($1, name),
+            slug = COALESCE($2, slug),
+            description = COALESCE($3, description),
+            history = COALESCE($4, history),
+            type = COALESCE($5, type),
+            ownership = COALESCE($6, ownership),
+            logo_url = COALESCE($7, logo_url),
+            cover_image_url = COALESCE($8, cover_image_url),
+            website_url = COALESCE($9, website_url),
+            email = COALESCE($10, email),
+            phone = COALESCE($11, phone),
+            address = COALESCE($12, address),
+            city = COALESCE($13, city),
+            region = COALESCE($14, region),
+            latitude = COALESCE($15, latitude),
+            longitude = COALESCE($16, longitude),
+            accreditation = COALESCE($17, accreditation),
+            status = COALESCE($18, status)
+        WHERE id = $19
+        RETURNING *
+    `;
+
+    const values = [
+        name || null, slug || null, description || null, history || null, 
+        type || null, ownership || null, logo_url || null, cover_image_url || null, 
+        website_url || null, email || null, phone || null, address || null, 
+        city || null, region || null, latitude || null, longitude || null, 
+        accreditation || null, status || null, id
+    ];
+
+    const result = await db.query(query, values);
+    return result.rows[0];
+};
+
+const deleteById = async (id) => {
+    const query = 'DELETE FROM institutions WHERE id = $1 RETURNING id';
+    const result = await db.query(query, [id]);
+    return result.rows[0];
+};
+
+module.exports = {
+    findAll,
+    findBySlug,
+    findById,
+    create,
+    update,
+    deleteById
+};
