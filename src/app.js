@@ -22,7 +22,7 @@ app.use('/api/admissions', admissionRoutes);
 app.use('/api/academic-calendar', calendarRoutes);
 app.use('/api/scholarships', scholarshipRoutes);
 app.use('/api/programs', programRoutes);
-app.use('/api/institutions', institutionRoutes);
+app.use('/api/v1/institutions', institutionRoutes);
 app.use(errorHandler);
 
 app.listen(env.PORT, function(){
