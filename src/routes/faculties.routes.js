@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
-const { getFaculties, createFaculty, deleteFaculty } = require('../controllers/faculties.controller');
+const facultiesController = require('../controllers/faculties.controller');
+const validate = require('../middleware/validation.middleware');
+const { createFacultySchema } = require('../validators/faculty.validator');
+const { authenticate, authorize } = require('../middleware/auth.middleware');
 
-// Routes mounted at /api/v1/institutions/:institutionId/faculties
-router.get('/', getFaculties);
-router.post('/', createFaculty);
-
-// Standalone route for delete: /api/v1/faculties/:id
-router.delete('/faculties/:id', deleteFaculty);
+router.get('/', facultiesController.getFaculties);
+router.get('/:id', facultiesController.getFacultyById);
+router.post('/', authenticate, authorize('admin'), validate(createFacultySchema), facultiesController.createFaculty);
+router.delete('/:id', authenticate, authorize('admin'), facultiesController.deleteFaculty);
 
 module.exports = router;

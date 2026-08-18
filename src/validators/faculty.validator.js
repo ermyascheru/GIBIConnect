@@ -5,4 +5,7 @@ const createFacultySchema = Joi.object({
     description: Joi.string().allow('', null)
 });
 
-module.exports = { createFacultySchema };
+module.exports = {
+    createFacultySchema,
+    facultySchema: createFacultySchema
+};

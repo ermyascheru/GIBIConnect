@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
-const { getDepartments, createDepartment } = require('../controllers/departments.controller');
+const departmentsController = require('../controllers/departments.controller');
+const { authenticate, authorize } = require('../middleware/auth.middleware');
 
-router.get('/', getDepartments);
-router.post('/', createDepartment);
+router.get('/', departmentsController.getDepartments);
+router.get('/:id', departmentsController.getDepartmentById);
+router.post('/', authenticate, authorize('admin'), departmentsController.createDepartment);
 
 module.exports = router;

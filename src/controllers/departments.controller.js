@@ -1,23 +1,41 @@
-const departmentService = require('../services/departments.service');
+const departmentsService = require('../services/departments.service');
+const { successResponse } = require('../utils/response');
 
 const getDepartments = async (req, res, next) => {
     try {
-        const departments = await departmentService.getDepartmentsByFaculty(req.params.facultyId);
-        return res.status(200).json({ data: departments, meta: { totalCount: departments.length, timestamp: new Date().toISOString() } });
+        const data = await departmentsService.getAllDepartments(req.query);
+        return successResponse(res, 200, 'Departments retrieved successfully', data);
     } catch (error) {
-        if (error.statusCode === 404) return res.status(404).json({ data: null, error: { code: 'NOT_FOUND', message: error.message } });
+        next(error);
+    }
+};
+
+const getDepartmentById = async (req, res, next) => {
+    try {
+        const data = await departmentsService.getDepartmentById(req.params.id);
+        if (!data) {
+            const err = new Error('Department not found');
+            err.statusCode = 404;
+            throw err;
+        }
+        return successResponse(res, 200, 'Department details retrieved', data);
+    } catch (error) {
         next(error);
     }
 };
 
 const createDepartment = async (req, res, next) => {
     try {
-        const department = await departmentService.createDepartment(req.params.facultyId, req.body);
-        return res.status(201).json({ data: department, meta: { timestamp: new Date().toISOString() } });
+        const data = await departmentsService.createDepartment(req.body);
+        return successResponse(res, 201, 'Department created successfully', data);
     } catch (error) {
-        if (error.statusCode === 404) return res.status(404).json({ data: null, error: { code: 'NOT_FOUND', message: error.message } });
         next(error);
     }
 };
 
-module.exports = { getDepartments, createDepartment };
+module.exports = {
+    getDepartments,
+    getAllDepartments: getDepartments,
+    getDepartmentById,
+    createDepartment
+};
