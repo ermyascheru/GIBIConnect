@@ -33,8 +33,18 @@ const createInstitution = async (req, res, next) => {
     }
 };
 
+const deleteInstitution = async (req, res, next) => {
+    try {
+        await institutionsService.deleteInstitution(req.params.id);
+        return successResponse(res, 200, 'Institution deleted successfully');
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     getAllInstitutions,
     getInstitutionById,
-    createInstitution
+    createInstitution,
+    deleteInstitution
 };

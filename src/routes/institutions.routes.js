@@ -8,5 +8,6 @@ const { authenticate, authorize } = require('../middleware/auth.middleware');
 router.get('/', institutionsController.getAllInstitutions);
 router.get('/:id', institutionsController.getInstitutionById);
 router.post('/', authenticate, authorize('admin'), validate(createInstitutionSchema), institutionsController.createInstitution);
+router.delete('/:id', authenticate, authorize('admin'), institutionsController.deleteInstitution);
 
 module.exports = router;
