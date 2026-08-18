@@ -1,10 +1,15 @@
-import { ResearchService } from '../services/research.service.js';
+const researchService = require('../services/research.service');
+const { sendSuccess } = require('../utils/response');
 
-export const getPublications = async (req, res, next) => {
-  try {
-    const publications = await ResearchService.listPublications(req.query);
-    res.json({ success: true, data: publications });
-  } catch (error) {
-    next(error);
+class ResearchController {
+  async getAll(req, res, next) {
+    try {
+      const data = await researchService.getAllResearch(req.query);
+      return sendSuccess(res, data, 'Research papers retrieved successfully');
+    } catch (error) {
+      next(error);
+    }
   }
-};
+}
+
+module.exports = new ResearchController();
