@@ -4,11 +4,11 @@ const cors = require('cors');
 const env = require('./config/env');
 const healthRoutes = require('./routes/health.routes');
 const errorHandler = require('./middleware/errorHandler');
-const userRoutes = require('./routes/user.routes');
-const admissionRoutes = require('./routes/admission.routes');
+const userRoutes = require('./routes/users.routes');
+const admissionRoutes = require('./routes/admissions.routes');
 const calendarRoutes = require('./routes/academic_calendar.routes');
 const scholarshipRoutes = require('./routes/scholarship.routes');
-const institutionRoutes = require('./routes/institution.routes');
+const institutionRoutes = require('./routes/institutions.routes');
 const facultyRoutes = require('./routes/faculty.routes');
 const departmentRoutes = require('./routes/department.routes');
 const programRoutes = require('./routes/program.routes');
@@ -32,6 +32,7 @@ app.use('/api/v1/faculties/:facultyId/departments', departmentRoutes);
 app.use('/api/v1/departments/:departmentId/programs', programRoutes)
 app.use('/api/v1/programs', programRoutes);
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 app.use(errorHandler);
 
 app.listen(env.PORT, function(){

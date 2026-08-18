@@ -1,4 +1,4 @@
-const programService = require('../services/program.service');
+const programService = require('../services/programs.service');
 
 
 const getAllPrograms = async (req, res, next) => {

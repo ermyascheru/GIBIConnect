@@ -1,59 +1,92 @@
-const authService = require('../services/auth.service');
-const { registerSchema, loginSchema } = require('../schemas/auth.schema');
+const db = require('../config/database');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
-const register = async (req, res, next) => {
+const register = async (req, res) => {
+    const { full_name, email, password } = req.body;
     try {
-        const { error, value } = registerSchema.validate(req.body);
-        if (error) {
-            return res.status(400).json({
-                data: null,
-                error: { code: 'VALIDATION_ERROR', message: error.details[0].message }
-            });
+        if (!full_name || !email || !password) {
+            return res.status(400).json({ message: 'Full name, email, and password are required' });
         }
 
-        const result = await authService.register(value);
-        return res.status(201).json({
-            data: result,
-            meta: { timestamp: new Date().toISOString() }
-        });
-    } catch (error) {
-        if (error.statusCode === 409) {
-            return res.status(409).json({
-                data: null,
-                error: { code: 'EMAIL_EXISTS', message: error.message }
-            });
+        const existingUser = await db.query('SELECT id FROM users WHERE email = $1', [email]);
+        if (existingUser.rows.length > 0) {
+            return res.status(409).json({ message: 'Email is already registered' });
         }
-        next(error);
+
+        const passwordHash = await bcrypt.hash(password, 10);
+        const newUser = await db.query(
+            `INSERT INTO users (full_name, email, password_hash, role, status)
+             VALUES ($1, $2, $3, 'user', 'active')
+             RETURNING id, full_name, email, role, status, created_at`,
+            [full_name, email, passwordHash]
+        );
+
+        res.status(201).json({
+            message: 'User registered successfully',
+            user: newUser.rows[0]
+        });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error during registration', error: err.message });
     }
 };
 
-const login = async (req, res, next) => {
+const login = async (req, res) => {
+    const { email, password } = req.body;
     try {
-        const { error, value } = loginSchema.validate(req.body);
-        if (error) {
-            return res.status(400).json({
-                data: null,
-                error: { code: 'VALIDATION_ERROR', message: error.details[0].message }
-            });
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Email and password are required' });
         }
 
-        const result = await authService.login(value);
-        return res.status(200).json({
-            data: result,
-            meta: { timestamp: new Date().toISOString() }
-        });
-    } catch (error) {
-        if (error.statusCode === 401) {
-            return res.status(401).json({
-                data: null,
-                error: { code: 'UNAUTHORIZED', message: error.message }
-            });
+        const userResult = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+        if (userResult.rows.length === 0) {
+            return res.status(401).json({ message: 'Invalid credentials' });
         }
-        next(error);
+
+        const user = userResult.rows[0];
+        const isMatch = await bcrypt.compare(password, user.password_hash);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        if (user.status !== 'active') {
+            return res.status(403).json({ message: 'Account is inactive or suspended' });
+        }
+
+        const token = jwt.sign(
+            { id: user.id, email: user.email, role: user.role },
+            process.env.JWT_SECRET || 'supersecretkey',
+            { expiresIn: '24h' }
+        );
+
+        res.json({
+            message: 'Login successful',
+            token,
+            user: {
+                id: user.id,
+                full_name: user.full_name,
+                email: user.email,
+                role: user.role
+            }
+        });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error during login', error: err.message });
     }
 };
 
-module.exports = {
-    register,
-    login
+const getMe = async (req, res) => {
+    try {
+        const userResult = await db.query(
+            'SELECT id, full_name, email, role, status, created_at FROM users WHERE id = $1',
+            [req.user.id]
+        );
+        if (userResult.rows.length === 0) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.json(userResult.rows[0]);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error fetching user profile', error: err.message });
+    }
 };
+
+module.exports = { register, login, getMe };

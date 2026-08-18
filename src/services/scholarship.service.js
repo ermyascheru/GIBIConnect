@@ -1,4 +1,4 @@
-const scholarshipRepository = require('../repositories/scholarship.repository');
+const scholarshipRepository = require('../repositories/scholarships.repository');
 
 const getAllScholarships = async () => {
     return await scholarshipRepository.findAll();
