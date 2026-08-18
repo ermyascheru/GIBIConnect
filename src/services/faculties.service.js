@@ -12,13 +12,19 @@ const getFacultiesByInstitution = async (institutionId) => {
 };
 
 const createFaculty = async (institutionId, data) => {
-    const institution = await institutionRepository.findById(institutionId);
+    const targetId = typeof institutionId === 'string' ? institutionId : (data?.institution_id || data?.institutionId);
+    if (!targetId) {
+        const error = new Error('Institution ID is required.');
+        error.statusCode = 400;
+        throw error;
+    }
+    const institution = await institutionRepository.findById(targetId);
     if (!institution) {
         const error = new Error('Institution not found');
         error.statusCode = 404;
         throw error;
     }
-    return await facultyRepository.create(institutionId, data);
+    return await facultyRepository.create(targetId, data || {});
 };
 
 const deleteFaculty = async (id) => {

@@ -14,7 +14,8 @@ const getFaculties = async (req, res, next) => {
 
 const createFaculty = async (req, res, next) => {
     try {
-        const data = await facultiesService.createFaculty(req.body);
+        const institutionId = req.body.institution_id || req.body.institutionId || req.params.institutionId;
+        const data = await facultiesService.createFaculty(institutionId, req.body);
         return successResponse(res, 201, 'Faculty created successfully', data);
     } catch (error) {
         next(error);
