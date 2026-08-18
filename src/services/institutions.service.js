@@ -1,5 +1,15 @@
 const institutionRepository = require('../repositories/institutions.repository');
 
+const generateSlug = (text) => {
+    return text
+        .toString()
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-');
+};
+
 const getAllInstitutions = async (queryParams) => {
     return await institutionRepository.findAll(queryParams);
 };
@@ -14,13 +24,22 @@ const getInstitutionBySlug = async (slug) => {
     return institution;
 };
 
+const getInstitutionById = async (id) => {
+    return await institutionRepository.findById(id);
+};
+
 const createInstitution = async (data) => {
+    if (!data.slug && data.name) {
+        data.slug = generateSlug(data.name);
+    }
+    if (!data.ownership) data.ownership = 'public';
+    if (!data.city) data.city = 'Addis Ababa';
+    if (!data.region) data.region = 'Addis Ababa';
+    if (!data.status) data.status = 'published';
+
     const existing = await institutionRepository.findBySlug(data.slug);
     if (existing) {
-        const error = new Error('An institution with this slug already exists.');
-        error.code = 'DUPLICATE_SLUG';
-        error.statusCode = 409;
-        throw error;
+        data.slug = `${data.slug}-${Date.now().toString().slice(-4)}`;
     }
     return await institutionRepository.create(data);
 };
@@ -60,6 +79,7 @@ const deleteInstitution = async (id) => {
 module.exports = {
     getAllInstitutions,
     getInstitutionBySlug,
+    getInstitutionById,
     createInstitution,
     updateInstitution,
     deleteInstitution
