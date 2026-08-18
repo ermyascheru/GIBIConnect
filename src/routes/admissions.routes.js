@@ -1,10 +1,10 @@
 const express = require('express');
-const router = express.Router();
-const admissionController = require('../controllers/admissions.controller');
+const router = express.Router({ mergeParams: true });
+const admissionsController = require('../controllers/admissions.controller');
+const { authenticate, authorize } = require('../middleware/auth.middleware');
 
-router.get('/institution/:institutionId', admissionController.getByInstitution);
-router.post('/', admissionController.create);
-router.put('/:id', admissionController.update);
-router.delete('/:id', admissionController.remove);
+router.get('/', admissionsController.getAdmissions);
+router.get('/:id', admissionsController.getAdmissionById);
+router.post('/', authenticate, authorize('admin'), admissionsController.createAdmission);
 
 module.exports = router;

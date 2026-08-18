@@ -1,99 +1,41 @@
-const admissionService = require('../services/admissions.service');
-const { createAdmissionSchema, updateAdmissionSchema } = require('../validators/admission.validator');
+const admissionsService = require('../services/admissions.service');
+const { successResponse } = require('../utils/response');
 
-const getByInstitution = async (req, res, next) => {
+const getAdmissions = async (req, res, next) => {
     try {
-        const { institutionId } = req.params;
-        const admissions = await admissionService.getAdmissionsByInstitution(institutionId);
-        
-        return res.status(200).json({
-            data: admissions,
-            meta: { timestamp: new Date().toISOString() },
-            error: null
-        });
-    } catch (err) {
-        next(err);
+        const data = await admissionsService.getAllAdmissions(req.query);
+        return successResponse(res, 200, 'Admissions retrieved successfully', data);
+    } catch (error) {
+        next(error);
     }
 };
 
-const create = async (req, res, next) => {
+const getAdmissionById = async (req, res, next) => {
     try {
-        const { error, value } = createAdmissionSchema.validate(req.body);
-        if (error) {
-            return res.status(400).json({
-                data: null,
-                meta: { timestamp: new Date().toISOString() },
-                error: error.details[0].message
-            });
+        const data = await admissionsService.getAdmissionById(req.params.id);
+        if (!data) {
+            const err = new Error('Admission record not found');
+            err.statusCode = 404;
+            throw err;
         }
-
-        const newAdmission = await admissionService.createAdmission(value);
-        return res.status(201).json({
-            data: newAdmission,
-            meta: { timestamp: new Date().toISOString() },
-            error: null
-        });
-    } catch (err) {
-        next(err);
+        return successResponse(res, 200, 'Admission details retrieved', data);
+    } catch (error) {
+        next(error);
     }
 };
 
-const update = async (req, res, next) => {
+const createAdmission = async (req, res, next) => {
     try {
-        const { id } = req.params;
-        const { error, value } = updateAdmissionSchema.validate(req.body);
-        if (error) {
-            return res.status(400).json({
-                data: null,
-                meta: { timestamp: new Date().toISOString() },
-                error: error.details[0].message
-            });
-        }
-
-        const updated = await admissionService.updateAdmission(id, value);
-        if (!updated) {
-            return res.status(404).json({
-                data: null,
-                meta: { timestamp: new Date().toISOString() },
-                error: 'Admission record not found'
-            });
-        }
-
-        return res.status(200).json({
-            data: updated,
-            meta: { timestamp: new Date().toISOString() },
-            error: null
-        });
-    } catch (err) {
-        next(err);
-    }
-};
-
-const remove = async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        const deleted = await admissionService.deleteAdmission(id);
-        if (!deleted) {
-            return res.status(404).json({
-                data: null,
-                meta: { timestamp: new Date().toISOString() },
-                error: 'Admission record not found'
-            });
-        }
-
-        return res.status(200).json({
-            data: deleted,
-            meta: { timestamp: new Date().toISOString() },
-            error: null
-        });
-    } catch (err) {
-        next(err);
+        const data = await admissionsService.createAdmission(req.body);
+        return successResponse(res, 201, 'Admission record created successfully', data);
+    } catch (error) {
+        next(error);
     }
 };
 
 module.exports = {
-    getByInstitution,
-    create,
-    update,
-    remove
+    getAdmissions,
+    getAllAdmissions: getAdmissions,
+    getAdmissionById,
+    createAdmission
 };
