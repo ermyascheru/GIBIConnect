@@ -1,11 +1,10 @@
 const express = require('express');
-const router = express.Router();
-const scholarshipController = require('../controllers/scholarships.controller');
+const router = express.Router({ mergeParams: true });
+const scholarshipsController = require('../controllers/scholarships.controller');
+const { authenticate, authorize } = require('../middleware/auth.middleware');
 
-router.get('/', scholarshipController.getAll);
-router.get('/:id', scholarshipController.getById);
-router.post('/', scholarshipController.create);
-router.put('/:id', scholarshipController.update);
-router.delete('/:id', scholarshipController.remove);
+router.get('/', scholarshipsController.getScholarships);
+router.get('/:id', scholarshipsController.getScholarshipById);
+router.post('/', authenticate, authorize('admin'), scholarshipsController.createScholarship);
 
 module.exports = router;

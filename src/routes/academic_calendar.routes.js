@@ -1,10 +1,9 @@
 const express = require('express');
-const router = express.Router();
-const calendarController = require('../controllers/academic_calendar.controller');
+const router = express.Router({ mergeParams: true });
+const academicCalendarController = require('../controllers/academic_calendar.controller');
+const { authenticate, authorize } = require('../middleware/auth.middleware');
 
-router.get('/institution/:institutionId', calendarController.getByInstitution);
-router.post('/', calendarController.create);
-router.put('/:id', calendarController.update);
-router.delete('/:id', calendarController.remove);
+router.get('/', academicCalendarController.getEvents);
+router.post('/', authenticate, authorize('admin'), academicCalendarController.createEvent);
 
 module.exports = router;

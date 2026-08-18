@@ -1,87 +1,26 @@
-const calendarService = require('../services/academic_calendar.service');
-const { createCalendarSchema, updateCalendarSchema } = require('../validators/academic_calendar.validator');
+const academicCalendarService = require('../services/academic_calendar.service');
+const { successResponse } = require('../utils/response');
 
-const getByInstitution = async (req, res, next) => {
+const getEvents = async (req, res, next) => {
     try {
-        const { institutionId } = req.params;
-        const events = await calendarService.getEventsByInstitution(institutionId);
-        return res.status(200).json({ data: events, meta: { timestamp: new Date().toISOString() }, error: null });
-    } catch (err) {
-        next(err);
+        const data = await academicCalendarService.getAllEvents(req.query);
+        return successResponse(res, 200, 'Academic calendar events retrieved successfully', data);
+    } catch (error) {
+        next(error);
     }
 };
 
-const create = async (req, res, next) => {
+const createEvent = async (req, res, next) => {
     try {
-        const { error, value } = createCalendarSchema.validate(req.body);
-        if (error) {
-            return res.status(400).json({ data: null, meta: { timestamp: new Date().toISOString() }, error: error.details[0].message });
-        }
-        const newEvent = await calendarService.createEvent(value);
-        return res.status(201).json({ data: newEvent, meta: { timestamp: new Date().toISOString() }, error: null });
-    } catch (err) {
-        next(err);
+        const data = await academicCalendarService.createEvent(req.body);
+        return successResponse(res, 201, 'Calendar event created successfully', data);
+    } catch (error) {
+        next(error);
     }
 };
 
-const Joi = require('joi');
-
-// Add UUID parameter validation check
-const uuidSchema = Joi.string().uuid().required();
-
-const update = async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        
-        // Validate URL parameter
-        const { error: idError } = uuidSchema.validate(id);
-        if (idError) {
-            return res.status(400).json({
-                data: null,
-                meta: { timestamp: new Date().toISOString() },
-                error: 'Invalid UUID format provided in route path'
-            });
-        }
-
-        const { error, value } = updateCalendarSchema.validate(req.body);
-        if (error) {
-            return res.status(400).json({
-                data: null,
-                meta: { timestamp: new Date().toISOString() },
-                error: error.details[0].message
-            });
-        }
-
-        const updated = await calendarService.updateEvent(id, value);
-        if (!updated) {
-            return res.status(404).json({
-                data: null,
-                meta: { timestamp: new Date().toISOString() },
-                error: 'Calendar event not found'
-            });
-        }
-
-        return res.status(200).json({
-            data: updated,
-            meta: { timestamp: new Date().toISOString() },
-            error: null
-        });
-    } catch (err) {
-        next(err);
-    }
+module.exports = {
+    getEvents,
+    getAllEvents: getEvents,
+    createEvent
 };
-
-const remove = async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        const deleted = await calendarService.deleteEvent(id);
-        if (!deleted) {
-            return res.status(404).json({ data: null, meta: { timestamp: new Date().toISOString() }, error: 'Calendar event not found' });
-        }
-        return res.status(200).json({ data: deleted, meta: { timestamp: new Date().toISOString() }, error: null });
-    } catch (err) {
-        next(err);
-    }
-};
-
-module.exports = { getByInstitution, create, update, remove };
