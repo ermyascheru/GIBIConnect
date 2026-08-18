@@ -1,17 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const {
-    getInstitutions,
-    getInstitutionBySlug,
-    createInstitution,
-    updateInstitution,
-    deleteInstitution
-} = require('../controllers/institutions.controller');
+const institutionsController = require('../controllers/institutions.controller');
+const validate = require('../middleware/validation.middleware');
+const { createInstitutionSchema } = require('../validators/institution.validator');
+const { authenticate, authorize } = require('../middleware/auth.middleware');
 
-router.get('/', getInstitutions);
-router.get('/:slug', getInstitutionBySlug);
-router.post('/', createInstitution);
-router.put('/:id', updateInstitution);
-router.delete('/:id', deleteInstitution);
+router.get('/', institutionsController.getAllInstitutions);
+router.get('/:id', institutionsController.getInstitutionById);
+router.post('/', authenticate, authorize('admin'), validate(createInstitutionSchema), institutionsController.createInstitution);
 
 module.exports = router;

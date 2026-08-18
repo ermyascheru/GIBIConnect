@@ -1,80 +1,30 @@
-const bcrypt = require('bcrypt');
-const userRepo = require('../repositories/users.repository');
-const jwt = require('jsonwebtoken');
-const env = require('../config/env');
+const usersService = require('../services/users.service');
+const { successResponse } = require('../utils/response');
 
-async function register(req, res, next) {
+const getAllUsers = async (req, res, next) => {
     try {
-        const { name, email, password } = req.body;
-
-        const existingUser = await userRepo.findUserByEmail(email);
-
-        if (existingUser) {
-            return res.status(400).json({
-                data: null,
-                meta: { timestamp: new Date().toISOString() },
-                error: { code: 'EMAIL_IN_USE', message: 'A user with this email already exists' }
-            });
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUserData = {
-            name: name,
-            email: email,
-            password: hashedPassword
-        };
-
-        const createdUser = await userRepo.createUser(newUserData);
-
-        res.status(201).json({
-            data: createdUser,
-            meta: { timestamp: new Date().toISOString() },
-            error: null
-        });
+        const users = await usersService.getAllUsers(req.query);
+        return successResponse(res, 200, 'Users retrieved successfully', users);
     } catch (error) {
         next(error);
     }
-}
+};
 
-async function login(req, res, next) {
+const getUserById = async (req, res, next) => {
     try {
-        const { email, password } = req.body;
-
-        const user = await userRepo.findUserByEmail(email);
-
+        const user = await usersService.getUserById(req.params.id);
         if (!user) {
-            return res.status(401).json({
-                data: null,
-                meta: { timestamp: new Date().toISOString() },
-                error: { code: 'UNAUTHORIZED', message: 'Invalid email or password' }
-            });
+            const err = new Error('User not found');
+            err.statusCode = 404;
+            throw err;
         }
-
-        const isMatch = await bcrypt.compare(password, user.password);
-
-        if (!isMatch) {
-            return res.status(401).json({
-                data: null,
-                meta: { timestamp: new Date().toISOString() },
-                error: { code: 'UNAUTHORIZED', message: 'Invalid email or password' }
-            });
-        }
-
-        delete user.password;
-
-        const token = jwt.sign({ id: user.id, role: user.role }, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN });
-
-        res.status(200).json({
-            data: {
-                user: user,
-                token: token
-            },
-            meta: { timestamp: new Date().toISOString() },
-            error: null
-        });
+        return successResponse(res, 200, 'User profile retrieved successfully', user);
     } catch (error) {
         next(error);
     }
-}
+};
 
-module.exports = { register, login };
+module.exports = {
+    getAllUsers,
+    getUserById
+};

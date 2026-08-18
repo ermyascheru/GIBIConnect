@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const userRepository = require('../repositories/user.repository');
+const userRepository = require('../repositories/users.repository');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-key-change-in-env';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1d';
