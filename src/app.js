@@ -1,40 +1,39 @@
 const express = require('express');
 const cors = require('cors');
 
-const env = require('./config/env');
+// Middleware
+const errorHandler = require('./middleware/error.middleware');
+
+// Routes
 const healthRoutes = require('./routes/health.routes');
-const errorHandler = require('./middleware/errorHandler');
-const userRoutes = require('./routes/users.routes');
-const admissionRoutes = require('./routes/admissions.routes');
-const calendarRoutes = require('./routes/academic_calendar.routes');
-const scholarshipRoutes = require('./routes/scholarship.routes');
-const institutionRoutes = require('./routes/institutions.routes');
-const facultyRoutes = require('./routes/faculty.routes');
-const departmentRoutes = require('./routes/department.routes');
-const programRoutes = require('./routes/program.routes');
 const authRoutes = require('./routes/auth.routes');
-const { authenticate, authorize } = require('./middleware/auth.middleware');
+const usersRoutes = require('./routes/users.routes');
+const institutionsRoutes = require('./routes/institutions.routes');
+const facultiesRoutes = require('./routes/faculties.routes');
+const departmentsRoutes = require('./routes/departments.routes');
+const programsRoutes = require('./routes/programs.routes');
+const admissionsRoutes = require('./routes/admissions.routes');
+const scholarshipsRoutes = require('./routes/scholarships.routes');
+const calendarRoutes = require('./routes/academic_calendar.routes');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/health', healthRoutes);
-app.use('/api/auth', userRoutes);
-app.use('/api/admissions', admissionRoutes);
-app.use('/api/academic-calendar', calendarRoutes);
-app.use('/api/scholarships', scholarshipRoutes);
-app.use('/api/v1/institutions', institutionRoutes);
-app.use('/api/v1/institutions/:institutionId/faculties', facultyRoutes);
-app.use('/api/v1', facultyRoutes);
-app.use('/api/v1/faculties/:facultyId/departments', departmentRoutes);
-app.use('/api/v1/departments/:departmentId/programs', programRoutes)
-app.use('/api/v1/programs', programRoutes);
+// API Base Routes
+app.use('/api/v1/health', healthRoutes);
 app.use('/api/v1/auth', authRoutes);
-app.use('/api/auth', authRoutes);
+app.use('/api/v1/users', usersRoutes);
+app.use('/api/v1/institutions', institutionsRoutes);
+app.use('/api/v1/faculties', facultiesRoutes);
+app.use('/api/v1/departments', departmentsRoutes);
+app.use('/api/v1/programs', programsRoutes);
+app.use('/api/v1/admissions', admissionsRoutes);
+app.use('/api/v1/scholarships', scholarshipsRoutes);
+app.use('/api/v1/academic-calendar', calendarRoutes);
+
+// Global Error Handler
 app.use(errorHandler);
 
-app.listen(env.PORT, function(){
-    console.log(`Server running in ${env.NODE_ENV} mode on port ${env.PORT}`);
-})
+module.exports = app;

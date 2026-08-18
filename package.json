@@ -4,9 +4,9 @@
   "description": "Backend REST API for GIBIConnect Ethiopia",
   "main": "src/app.js",
   "scripts": {
-    "start": "node src/app.js",
-    "seed": "node src/seeds/seed.js"
-  },
+  "start": "node src/server.js",
+  "dev": "nodemon src/server.js"
+},
   "keywords": [],
   "author": "Fekadu",
   "license": "ISC",
