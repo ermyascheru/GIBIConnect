@@ -1,15 +1,17 @@
-import db from '../database/db.js';
+const db = require('../config/database');
 
-export class ResourceRepository {
-  static async findByCategory(categoryId, limit = 20, offset = 0) {
-    return db('resources')
-      .where({ category_id: categoryId, is_published: true })
-      .limit(limit)
-      .offset(offset);
-  }
-
-  static async linkTags(resourceId, tagIds) {
-    const records = tagIds.map(tagId => ({ resource_id: resourceId, tag_id: tagId }));
-    return db('resource_tags').insert(records);
+class ResourceRepository {
+  async findAll({ limit = 10, offset = 0, category }) {
+    const query = `
+      SELECT r.*, c.name AS category_name 
+      FROM resources r
+      LEFT JOIN resource_categories c ON r.category_id = c.id
+      WHERE ($1::text IS NULL OR c.slug = $1)
+      LIMIT $2 OFFSET $3;
+    `;
+    const { rows } = await db.query(query, [category || null, limit, offset]);
+    return rows;
   }
 }
+
+module.exports = new ResourceRepository();
