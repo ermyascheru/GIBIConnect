@@ -1,7 +1,7 @@
-import { Router } from 'express';
-import { globalSearch } from '../controllers/search.controller.js';
+const express = require('express');
+const router = express.Router();
+const searchController = require('../controllers/search.controller');
 
-const router = Router();
-router.get('/', globalSearch);
+router.get('/', searchController.search);
 
-export default router;
+module.exports = router;
