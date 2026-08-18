@@ -43,7 +43,19 @@ const login = async ({ email, password }) => {
     return { user, token };
 };
 
+const getUserById = async (id) => {
+    const user = await userRepository.findById(id);
+    if (!user) {
+        const error = new Error('User not found.');
+        error.statusCode = 404;
+        throw error;
+    }
+    delete user.password_hash;
+    return user;
+};
+
 module.exports = {
     register,
-    login
+    login,
+    getUserById
 };
