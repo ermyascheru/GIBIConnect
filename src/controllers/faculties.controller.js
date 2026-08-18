@@ -3,22 +3,10 @@ const { successResponse } = require('../utils/response');
 
 const getFaculties = async (req, res, next) => {
     try {
-        const data = await facultiesService.getAllFaculties(req.query);
+        const targetId = req.query.institutionId || req.query.institution_id || req.params.institutionId;
+        const id = typeof targetId === 'string' && targetId.trim() ? targetId : null;
+        const data = id ? await facultiesService.getFacultiesByInstitution(id) : [];
         return successResponse(res, 200, 'Faculties retrieved successfully', data);
-    } catch (error) {
-        next(error);
-    }
-};
-
-const getFacultyById = async (req, res, next) => {
-    try {
-        const data = await facultiesService.getFacultyById(req.params.id);
-        if (!data) {
-            const err = new Error('Faculty not found');
-            err.statusCode = 404;
-            throw err;
-        }
-        return successResponse(res, 200, 'Faculty details retrieved', data);
     } catch (error) {
         next(error);
     }
@@ -45,7 +33,7 @@ const deleteFaculty = async (req, res, next) => {
 module.exports = {
     getFaculties,
     getAllFaculties: getFaculties,
-    getFacultyById,
+    getFacultyById: getFaculties,
     createFaculty,
     deleteFaculty
 };

@@ -3,22 +3,10 @@ const { successResponse } = require('../utils/response');
 
 const getDepartments = async (req, res, next) => {
     try {
-        const data = await departmentsService.getAllDepartments(req.query);
+        const targetId = req.query.facultyId || req.query.faculty_id || req.params.facultyId;
+        const id = typeof targetId === 'string' && targetId.trim() ? targetId : null;
+        const data = id ? await departmentsService.getDepartmentsByFaculty(id) : [];
         return successResponse(res, 200, 'Departments retrieved successfully', data);
-    } catch (error) {
-        next(error);
-    }
-};
-
-const getDepartmentById = async (req, res, next) => {
-    try {
-        const data = await departmentsService.getDepartmentById(req.params.id);
-        if (!data) {
-            const err = new Error('Department not found');
-            err.statusCode = 404;
-            throw err;
-        }
-        return successResponse(res, 200, 'Department details retrieved', data);
     } catch (error) {
         next(error);
     }
@@ -36,6 +24,6 @@ const createDepartment = async (req, res, next) => {
 module.exports = {
     getDepartments,
     getAllDepartments: getDepartments,
-    getDepartmentById,
+    getDepartmentById: getDepartments,
     createDepartment
 };
