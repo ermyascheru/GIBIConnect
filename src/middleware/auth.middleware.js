@@ -1,32 +1,44 @@
 const jwt = require('jsonwebtoken');
-const env = require('../config/env');
 
-function authenticate(req, res, next) {
-    const authHeader = req.header('Authorization');
+const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-key-change-in-env';
+
+const authenticate = (req, res, next) => {
+    const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({
             data: null,
-            meta: { timestamp: new Date().toISOString() },
-            error: { code: 'UNAUTHORIZED', message: 'Access denied. No token provided.' }
+            error: { code: 'UNAUTHORIZED', message: 'Access token missing or invalid format.' }
         });
     }
-    //Split the string by the space to get JUST the token part
+
     const token = authHeader.split(' ')[1];
 
     try {
-        const decoded = jwt.verify(token, env.JWT_SECRET);
-
+        const decoded = jwt.verify(token, JWT_SECRET);
         req.user = decoded;
-
         next();
-    } catch (error) {
+    } catch (err) {
         return res.status(401).json({
             data: null,
-            meta: { timestamp: new Date().toISOString() },
-            error: { code: 'UNAUTHORIZED', message: 'Invalid or expired token.' }
+            error: { code: 'UNAUTHORIZED', message: 'Token is invalid or expired.' }
         });
     }
-}
+};
 
-module.exports = authenticate;
+const authorize = (...roles) => {
+    return (req, res, next) => {
+        if (!req.user || !roles.includes(req.user.role)) {
+            return res.status(403).json({
+                data: null,
+                error: { code: 'FORBIDDEN', message: 'You do not have permission to perform this action.' }
+            });
+        }
+        next();
+    };
+};
+
+module.exports = {
+    authenticate,
+    authorize
+};

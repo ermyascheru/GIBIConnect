@@ -93,7 +93,7 @@ const findById = async (id) => {
 };
 
 const create = async (departmentId, data) => {
-    const {
+    let {
         institution_id,
         name,
         slug,
@@ -105,6 +105,20 @@ const create = async (departmentId, data) => {
         status
     } = data;
 
+    // If institution_id wasn't provided in body, fetch it via department -> faculty
+    if (!institution_id) {
+        const instQuery = `
+            SELECT f.institution_id 
+            FROM departments d 
+            JOIN faculties f ON d.faculty_id = f.id 
+            WHERE d.id = $1
+        `;
+        const instResult = await db.query(instQuery, [departmentId]);
+        if (instResult.rows.length > 0) {
+            institution_id = instResult.rows[0].institution_id;
+        }
+    }
+
     const query = `
         INSERT INTO programs 
         (institution_id, department_id, name, slug, description, degree_level, study_mode, duration, admission_requirements, status)
@@ -113,7 +127,7 @@ const create = async (departmentId, data) => {
     `;
 
     const values = [
-        institution_id || null,
+        institution_id,
         departmentId,
         name,
         slug,

@@ -78,8 +78,17 @@ const createProgram = async (req, res, next) => {
             meta: { timestamp: new Date().toISOString() }
         });
     } catch (error) {
+        if (error.code === '23505') {
+            return res.status(409).json({
+                data: null,
+                error: { code: 'DUPLICATE_SLUG', message: 'A program with this slug already exists.' }
+            });
+        }
         if (error.statusCode === 404) {
-            return res.status(404).json({ data: null, error: { code: 'NOT_FOUND', message: error.message } });
+            return res.status(404).json({
+                data: null,
+                error: { code: 'NOT_FOUND', message: error.message }
+            });
         }
         next(error);
     }

@@ -12,6 +12,8 @@ const institutionRoutes = require('./routes/institution.routes');
 const facultyRoutes = require('./routes/faculty.routes');
 const departmentRoutes = require('./routes/department.routes');
 const programRoutes = require('./routes/program.routes');
+const authRoutes = require('./routes/auth.routes');
+const { authenticate, authorize } = require('./middleware/auth.middleware');
 
 const app = express();
 
@@ -29,6 +31,7 @@ app.use('/api/v1', facultyRoutes);
 app.use('/api/v1/faculties/:facultyId/departments', departmentRoutes);
 app.use('/api/v1/departments/:departmentId/programs', programRoutes)
 app.use('/api/v1/programs', programRoutes);
+app.use('/api/v1/auth', authRoutes);
 app.use(errorHandler);
 
 app.listen(env.PORT, function(){
