@@ -1,5 +1,5 @@
-const admissionService = require('../services/admission.service');
-const { createAdmissionSchema, updateAdmissionSchema } = require('../schemas/admission.schema');
+const admissionService = require('../services/admissions.service');
+const { createAdmissionSchema, updateAdmissionSchema } = require('../validators/admission.validator');
 
 const getByInstitution = async (req, res, next) => {
     try {

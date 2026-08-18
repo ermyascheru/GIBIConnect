@@ -1,5 +1,5 @@
-const facultyRepository = require('../repositories/faculty.repository');
-const institutionRepository = require('../repositories/institution.repository');
+const facultyRepository = require('../repositories/faculties.repository');
+const institutionRepository = require('../repositories/institutions.repository');
 
 const getFacultiesByInstitution = async (institutionId) => {
     const institution = await institutionRepository.findById(institutionId);

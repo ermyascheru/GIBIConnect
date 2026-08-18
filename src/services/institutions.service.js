@@ -1,4 +1,4 @@
-const institutionRepository = require('../repositories/institution.repository');
+const institutionRepository = require('../repositories/institutions.repository');
 
 const getAllInstitutions = async (queryParams) => {
     return await institutionRepository.findAll(queryParams);

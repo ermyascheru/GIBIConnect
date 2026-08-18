@@ -1,5 +1,5 @@
 const calendarService = require('../services/academic_calendar.service');
-const { createCalendarSchema, updateCalendarSchema } = require('../schemas/academic_calendar.schema');
+const { createCalendarSchema, updateCalendarSchema } = require('../validators/academic_calendar.validator');
 
 const getByInstitution = async (req, res, next) => {
     try {

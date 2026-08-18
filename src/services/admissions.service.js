@@ -1,4 +1,4 @@
-const admissionRepository = require('../repositories/admission.repository');
+const admissionRepository = require('../repositories/admissions.repository');
 
 const getAdmissionsByInstitution = async (institutionId) => {
     return await admissionRepository.findByInstitutionId(institutionId);

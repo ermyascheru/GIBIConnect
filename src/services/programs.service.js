@@ -1,5 +1,5 @@
-const programRepository = require('../repositories/program.repository');
-const departmentRepository = require('../repositories/department.repository');
+const programRepository = require('../repositories/programs.repository');
+const departmentRepository = require('../repositories/departments.repository');
 
 const getAllPrograms = async (queryParams) => {
     return await programRepository.findAll(queryParams);

@@ -7,7 +7,7 @@ const {
     getProgramById,
     createProgram,
     deleteProgram
-} = require('../controllers/program.controller');
+} = require('../controllers/programs.controller');
 
 // Public read routes
 router.get('/', (req, res, next) => {

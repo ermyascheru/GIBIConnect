@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const admissionController = require('../controllers/admission.controller');
+const admissionController = require('../controllers/admissions.controller');
 
 router.get('/institution/:institutionId', admissionController.getByInstitution);
 router.post('/', admissionController.create);

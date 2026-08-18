@@ -1,6 +1,6 @@
 const Joi = require('joi');
-const scholarshipService = require('../services/scholarship.service');
-const { createScholarshipSchema, updateScholarshipSchema } = require('../schemas/scholarship.schema');
+const scholarshipService = require('../services/scholarships.service');
+const { createScholarshipSchema, updateScholarshipSchema } = require('../validators/scholarship.validator');
 
 const uuidSchema = Joi.string().uuid().required();
 

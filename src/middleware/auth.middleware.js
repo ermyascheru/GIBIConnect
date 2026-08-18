@@ -26,4 +26,9 @@ const authorizeRoles = (...roles) => {
     };
 };
 
-module.exports = { authenticateToken, authorizeRoles };
+module.exports = {
+    authenticateToken,
+    authorizeRoles,
+    authenticate: authenticateToken, // Alias for routes using 'authenticate'
+    authorize: authorizeRoles         // Alias for routes using 'authorize'
+};

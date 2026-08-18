@@ -1,4 +1,4 @@
-const facultyService = require('../services/faculty.service');
+const facultyService = require('../services/faculties.service');
 
 const getFaculties = async (req, res, next) => {
     try {

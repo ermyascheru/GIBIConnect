@@ -1,4 +1,4 @@
-const institutionService = require('../services/institution.service');
+const institutionService = require('../services/institutions.service');
 
 const getInstitutions = async (req, res, next) => {
     try {

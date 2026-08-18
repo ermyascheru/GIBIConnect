@@ -6,7 +6,7 @@ const {
     createInstitution,
     updateInstitution,
     deleteInstitution
-} = require('../controllers/institution.controller');
+} = require('../controllers/institutions.controller');
 
 router.get('/', getInstitutions);
 router.get('/:slug', getInstitutionBySlug);
