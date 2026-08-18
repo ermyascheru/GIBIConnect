@@ -1,9 +1,15 @@
-import { AIRepository } from '../repositories/ai.repository.js';
+class AIService {
+  async processPrompt({ prompt, conversationId }) {
+    if (!prompt) {
+      throw new Error('Prompt is required');
+    }
 
-export class AIService {
-  static async generateContextualResponse(userId, prompt) {
-    const context = await AIRepository.fetchUserContext(userId);
-    // Vector search retrieval & LLM pipeline invocation
-    return { response: "AI processing complete.", contextUsed: context };
+    return {
+      response: `AI processing completed for prompt: "${prompt}"`,
+      conversationId: conversationId || `conv_${Date.now()}`,
+      timestamp: new Date().toISOString()
+    };
   }
 }
+
+module.exports = new AIService();
