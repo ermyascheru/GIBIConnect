@@ -1,19 +1,27 @@
-const db = require("../config/database");
+const db = require('../config/database');
 
 class ReviewsRepository {
-  async create({ userId, entityType, entityId, rating, comment }) {
+  async create({ institution_id, user_id, teaching_rating, facility_rating, campus_rating, administration_rating, comment }) {
     const query = `
-      INSERT INTO reviews (user_id, entity_type, entity_id, rating, comment)
-      VALUES ($1, $2, $3, $4, $5)
+      INSERT INTO reviews (
+        institution_id, user_id, teaching_rating, facility_rating, campus_rating, administration_rating, comment, status
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, 'pending')
       RETURNING *;
     `;
-    const { rows } = await db.query(query, [userId, entityType, entityId, rating, comment]);
+    const values = [institution_id, user_id, teaching_rating, facility_rating, campus_rating, administration_rating, comment || null];
+    const { rows } = await db.query(query, values);
     return rows[0];
   }
 
-  async findByEntity(entityType, entityId) {
-    const query = `SELECT * FROM reviews WHERE entity_type = $1 AND entity_id = $2 ORDER BY created_at DESC;`;
-    const { rows } = await db.query(query, [entityType, entityId]);
+  async findByInstitution(institutionId) {
+    const query = `
+      SELECT r.*, u.full_name AS reviewer_name 
+      FROM reviews r
+      LEFT JOIN users u ON r.user_id = u.id
+      WHERE r.institution_id = $1 AND r.status = 'approved'
+      ORDER BY r.created_at DESC;
+    `;
+    const { rows } = await db.query(query, [institutionId]);
     return rows;
   }
 }
