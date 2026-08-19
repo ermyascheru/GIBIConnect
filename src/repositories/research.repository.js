@@ -1,20 +1,22 @@
-const db = require('../config/database');
+const db = require("../config/db");
 
 class ResearchRepository {
-  async findAll({ limit = 10, offset = 0 }) {
-    try {
-      const query = 'SELECT * FROM research LIMIT $1 OFFSET $2;';
-      const { rows } = await db.query(query, [limit, offset]);
-      return rows;
-    } catch (err) {
-      try {
-        const query = 'SELECT * FROM research_papers LIMIT $1 OFFSET $2;';
-        const { rows } = await db.query(query, [limit, offset]);
-        return rows;
-      } catch (e) {
-        return [];
-      }
-    }
+  async findById(id) {
+    const query = `
+      SELECT 
+        r.id, 
+        r.abstract, 
+        r.citation_count, 
+        res.title, 
+        res.description, 
+        res.url, 
+        res.created_at
+      FROM research r
+      INNER JOIN resources res ON r.resource_id = res.id
+      WHERE r.id = $1;
+    `;
+    const { rows } = await db.query(query, [id]);
+    return rows[0] || null;
   }
 }
 
