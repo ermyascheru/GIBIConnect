@@ -1,29 +1,26 @@
-const db = require('../config/database');
+const db = require("../config/db");
 
-const findByEmail = async (email) => {
-    const query = 'SELECT * FROM users WHERE email = $1';
-    const result = await db.query(query, [email]);
-    return result.rows[0];
-};
+class UsersRepository {
+  async findAll({ page = 1, limit = 10, role, status } = {}) {
+    const offset = (page - 1) * limit;
+    const params = [];
+    let query = "SELECT id, email, role, status, created_at FROM users WHERE 1=1";
 
-const findById = async (id) => {
-    const query = 'SELECT id, full_name, email, role, created_at FROM users WHERE id = $1';
-    const result = await db.query(query, [id]);
-    return result.rows[0];
-};
+    if (role) {
+      params.push(role);
+      query += ` AND role = $${params.length}`;
+    }
+    if (status) {
+      params.push(status);
+      query += ` AND status = $${params.length}`;
+    }
 
-const create = async ({ full_name, email, password_hash, role = 'user' }) => {
-    const query = `
-        INSERT INTO users (full_name, email, password_hash, role)
-        VALUES ($1, $2, $3, $4)
-        RETURNING id, full_name, email, role, created_at
-    `;
-    const result = await db.query(query, [full_name, email, password_hash, role]);
-    return result.rows[0];
-};
+    params.push(limit, offset);
+    query += ` ORDER BY created_at DESC LIMIT $${params.length - 1} OFFSET $${params.length}`;
 
-module.exports = {
-    findByEmail,
-    findById,
-    create
-};
+    const { rows } = await db.query(query, params);
+    return rows;
+  }
+}
+
+module.exports = new UsersRepository();
