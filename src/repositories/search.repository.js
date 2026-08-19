@@ -1,16 +1,18 @@
-const db = require('../config/database');
+const db = require("../config/database");
 
 class SearchRepository {
-  async globalSearch(term) {
+  async searchAll(searchTerm) {
     const query = `
-      SELECT 'institution' AS type, id, name AS title FROM institutions WHERE name ILIKE $1
+      SELECT id, title, description, 'resource' AS type
+      FROM resources
+      WHERE search_vector @@ websearch_to_tsquery('english', $1)
       UNION ALL
-      SELECT 'program' AS type, id, name AS title FROM programs WHERE name ILIKE $1
-      UNION ALL
-      SELECT 'resource' AS type, id, title FROM resources WHERE title ILIKE $1
+      SELECT id, name AS title, overview AS description, 'institution' AS type
+      FROM institutions
+      WHERE search_vector @@ websearch_to_tsquery('english', $1)
       LIMIT 20;
     `;
-    const { rows } = await db.query(query, [`%${term}%`]);
+    const { rows } = await db.query(query, [searchTerm]);
     return rows;
   }
 }
