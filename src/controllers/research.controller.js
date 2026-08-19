@@ -1,11 +1,14 @@
 const researchService = require('../services/research.service');
-const { sendSuccess } = require('../utils/response');
 
 class ResearchController {
   async getAll(req, res, next) {
     try {
       const data = await researchService.getAllResearch(req.query);
-      return sendSuccess(res, data, 'Research papers retrieved successfully');
+      return res.status(200).json({
+        success: true,
+        message: 'Research papers retrieved successfully',
+        data
+      });
     } catch (error) {
       next(error);
     }

@@ -1,11 +1,14 @@
 const resourceService = require('../services/resources.service');
-const { sendSuccess } = require('../utils/response');
 
 class ResourceController {
   async getResources(req, res, next) {
     try {
       const data = await resourceService.getResources(req.query);
-      return sendSuccess(res, data, 'Resources retrieved successfully');
+      return res.status(200).json({
+        success: true,
+        message: 'Resources retrieved successfully',
+        data
+      });
     } catch (error) {
       next(error);
     }
