@@ -1,11 +1,8 @@
-const express = require('express');
-const router = express.Router({ mergeParams: true });
-const facultiesController = require('../controllers/faculties.controller');
-const { authenticate, authorize } = require('../middleware/auth.middleware');
+const express = require("express");
+const router = express.Router();
+const { getFaculties, getFacultyById } = require("../controllers/faculties.controller");
 
-router.get('/', facultiesController.getFaculties);
-router.get('/:id', facultiesController.getFaculties);
-router.post('/', authenticate, authorize('admin'), facultiesController.createFaculty);
-router.delete('/:id', authenticate, authorize('admin'), facultiesController.deleteFaculty);
+router.get("/", getFaculties);
+router.get("/:id", getFacultyById);
 
 module.exports = router;
