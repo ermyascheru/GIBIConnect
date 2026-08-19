@@ -1,29 +1,32 @@
-const db = require("../config/database");
+const db = require('../config/database');
 
 class AIService {
-  async handleQuery(userId, userMessage) {
-    // 1. Log conversation turn
+  async handleQuery(userId, userMessage, institutionId = null) {
     const convQuery = `
-      INSERT INTO ai_conversations (user_id, status)
-      VALUES ($1, 'active')
+      INSERT INTO ai_conversations (user_id, institution_context_id, title)
+      VALUES ($1, $2, $3)
       RETURNING id;
     `;
-    const { rows: convRows } = await db.query(convQuery, [userId || null]);
+    const title = userMessage.slice(0, 50);
+    const { rows: convRows } = await db.query(convQuery, [userId || null, institutionId || null, title]);
     const conversationId = convRows[0].id;
 
-    // 2. Log incoming user message
     await db.query(
-      `INSERT INTO ai_messages (conversation_id, sender, content) VALUES ($1, $2, $3);`,
-      [conversationId, "user", userMessage]
+      `INSERT INTO ai_messages (conversation_id, role, content) VALUES ($1, 'user', $2);`,
+      [conversationId, userMessage]
     );
 
-    // 3. Generate response with DB context
-    const aiResponse = `Assisting with request: "${userMessage}". System ready.`;
+    let contextData = null;
+    if (institutionId) {
+      const instRes = await db.query('SELECT name, description, city, region FROM institutions WHERE id = $1', [institutionId]);
+      contextData = instRes.rows[0] || null;
+    }
 
-    // 4. Log AI system response
+    const aiResponse = `GIBIConnect Academic Advisor response for: "${userMessage}"`;
+
     await db.query(
-      `INSERT INTO ai_messages (conversation_id, sender, content) VALUES ($1, $2, $3);`,
-      [conversationId, "assistant", aiResponse]
+      `INSERT INTO ai_messages (conversation_id, role, content, retrieved_context) VALUES ($1, 'assistant', $2, $3);`,
+      [conversationId, aiResponse, contextData ? JSON.stringify(contextData) : null]
     );
 
     return { conversationId, response: aiResponse };
