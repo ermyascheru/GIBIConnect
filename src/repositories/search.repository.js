@@ -1,4 +1,4 @@
-const db = require("../config/database");
+const db = require('../config/database');
 
 class SearchRepository {
   async searchAll(searchTerm) {
@@ -7,8 +7,12 @@ class SearchRepository {
       FROM resources
       WHERE search_vector @@ websearch_to_tsquery('english', $1)
       UNION ALL
-      SELECT id, name AS title, overview AS description, 'institution' AS type
+      SELECT id, name AS title, description, 'institution' AS type
       FROM institutions
+      WHERE search_vector @@ websearch_to_tsquery('english', $1)
+      UNION ALL
+      SELECT id, name AS title, description, 'program' AS type
+      FROM programs
       WHERE search_vector @@ websearch_to_tsquery('english', $1)
       LIMIT 20;
     `;
