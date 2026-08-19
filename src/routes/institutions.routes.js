@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const institutionsController = require('../controllers/institutions.controller');
 const validate = require('../middleware/validation.middleware');
-const { createInstitutionSchema } = require('../validators/institution.validator');
+const { createInstitutionSchema } = require('../validators/institutions.validator');
 const { authenticate, authorize } = require('../middleware/auth.middleware');
 
 router.get('/', institutionsController.getAllInstitutions);
