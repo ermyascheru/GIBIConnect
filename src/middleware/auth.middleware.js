@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const env = require('../config/env');
 
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
@@ -8,7 +9,7 @@ const authenticateToken = (req, res, next) => {
         return res.status(401).json({ message: 'Authentication token required' });
     }
 
-    jwt.verify(token, process.env.JWT_SECRET || 'supersecretkey', (err, user) => {
+    jwt.verify(token, env.JWT_SECRET, (err, user) => {
         if (err) {
             return res.status(403).json({ message: 'Invalid or expired token' });
         }
@@ -19,7 +20,7 @@ const authenticateToken = (req, res, next) => {
 
 const authorizeRoles = (...roles) => {
     return (req, res, next) => {
-        if (!roles.includes(req.user.role)) {
+        if (!req.user || !roles.includes(req.user.role)) {
             return res.status(403).json({ message: 'Access denied: insufficient permissions' });
         }
         next();
@@ -29,6 +30,6 @@ const authorizeRoles = (...roles) => {
 module.exports = {
     authenticateToken,
     authorizeRoles,
-    authenticate: authenticateToken, // Alias for routes using 'authenticate'
-    authorize: authorizeRoles         // Alias for routes using 'authorize'
+    authenticate: authenticateToken,
+    authorize: authorizeRoles
 };

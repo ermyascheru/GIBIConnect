@@ -1,9 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const userRepository = require('../repositories/users.repository');
-
-const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-key-change-in-env';
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1d';
+const env = require('../config/env');
 
 const register = async ({ full_name, email, password, role }) => {
     const existingUser = await userRepository.findByEmail(email);
@@ -17,7 +15,7 @@ const register = async ({ full_name, email, password, role }) => {
     const password_hash = await bcrypt.hash(password, salt);
 
     const user = await userRepository.create({ full_name, email, password_hash, role });
-    const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+    const token = jwt.sign({ id: user.id, role: user.role }, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN || '1d' });
 
     return { user, token };
 };
@@ -37,7 +35,7 @@ const login = async ({ email, password }) => {
         throw error;
     }
 
-    const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+    const token = jwt.sign({ id: user.id, role: user.role }, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN || '1d' });
 
     delete user.password_hash;
     return { user, token };
@@ -54,8 +52,4 @@ const getUserById = async (id) => {
     return user;
 };
 
-module.exports = {
-    register,
-    login,
-    getUserById
-};
+module.exports = { register, login, getUserById };

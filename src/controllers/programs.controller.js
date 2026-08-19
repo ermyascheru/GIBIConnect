@@ -13,11 +13,6 @@ const getPrograms = async (req, res, next) => {
 const getProgramById = async (req, res, next) => {
     try {
         const data = await programsService.getProgramById(req.params.id);
-        if (!data) {
-            const err = new Error('Program not found');
-            err.statusCode = 404;
-            throw err;
-        }
         return successResponse(res, 200, 'Program details retrieved', data);
     } catch (error) {
         next(error);
@@ -26,7 +21,8 @@ const getProgramById = async (req, res, next) => {
 
 const createProgram = async (req, res, next) => {
     try {
-        const data = await programsService.createProgram(req.body);
+        const departmentId = req.body.department_id || req.body.departmentId || req.params.departmentId;
+        const data = await programsService.createProgram(departmentId, req.body);
         return successResponse(res, 201, 'Program created successfully', data);
     } catch (error) {
         next(error);

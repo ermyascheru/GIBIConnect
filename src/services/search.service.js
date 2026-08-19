@@ -2,7 +2,7 @@ const searchRepository = require('../repositories/search.repository');
 
 class SearchService {
   async query(term) {
-    return await searchRepository.globalSearch(term);
+    return await searchRepository.searchAll(term);
   }
 }
 
