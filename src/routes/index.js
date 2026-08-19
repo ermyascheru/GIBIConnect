@@ -1,3 +1,6 @@
+const reviewsRoutes = require("./reviews.routes");
+const categoriesRoutes = require("./categories.routes");
+const facilitiesRoutes = require("./facilities.routes");
 const express = require('express');
 const router = express.Router();
 
@@ -13,5 +16,10 @@ router.use('/tuition', require('./tuition.routes'));
 router.use('/ai', require('./ai.routes'));
 router.use('/search', require('./search.routes'));
 router.use('/health', require('./health.routes'));
+
+
+router.use("/reviews", reviewsRoutes);
+router.use("/categories", categoriesRoutes);
+router.use("/facilities", facilitiesRoutes);
 
 module.exports = router;
