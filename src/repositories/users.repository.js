@@ -1,4 +1,4 @@
-const db = require("../config/db");
+const db = require("../config/database");
 
 class UsersRepository {
   async findAll({ page = 1, limit = 10, role, status } = {}) {
