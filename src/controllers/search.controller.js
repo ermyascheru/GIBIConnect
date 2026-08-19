@@ -1,12 +1,15 @@
 const searchService = require('../services/search.service');
-const { sendSuccess } = require('../utils/response');
 
 class SearchController {
   async search(req, res, next) {
     try {
       const { q } = req.query;
       const results = q ? await searchService.query(q) : [];
-      return sendSuccess(res, results, 'Search completed successfully');
+      return res.status(200).json({
+        success: true,
+        message: 'Search completed successfully',
+        data: results
+      });
     } catch (error) {
       next(error);
     }
