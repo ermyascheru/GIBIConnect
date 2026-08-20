@@ -1,25 +1,16 @@
-function requireRole(...allowedRoles) {
+function authorizeRoles(...allowedRoles) {
     return (req, res, next) => {
-        if (!req.user) {
-            return res.status(401).json({
-                data: null,
-                meta: { timestamp: new Date().toISOString() },
-                error: { code: 'UNAUTHORIZED', message: 'Authentication required' }
-            });
-        }
-
-        const userRole = req.user.role || 'user';
-
-        if (!allowedRoles.includes(userRole)) {
+        
+        if (!req.user || !allowedRoles.includes(req.user.role)) {
             return res.status(403).json({
                 data: null,
                 meta: { timestamp: new Date().toISOString() },
-                error: { code: 'FORBIDDEN', message: 'Forbidden: Insufficient permissions' }
+                error: { code: 'FORBIDDEN', message: 'Access denied. Admin privileges required.' }
             });
         }
-
+        
         next();
     };
 }
 
-module.exports = { requireRole };
+module.exports = authorizeRoles;

@@ -8,6 +8,6 @@ module.exports = {
     DB_NAME: process.env.DB_NAME || 'gibiconnect_db',
     DB_USER: process.env.DB_USER || 'postgres',
     DB_PASSWORD: process.env.DB_PASSWORD || 'postgres',
-    JWT_SECRET: process.env.JWT_SECRET || 'gibi_connect_default_secret_key_2026',
-    JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '24h'
-};
+    JWT_SECRET: process.env.JWT_SECRET,
+    JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN
+}

@@ -1,16 +1,16 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const userRepo = require('../repositories/user.repository');
+const jwt = require('jsonwebtoken');
 const env = require('../config/env');
 
 async function register(req, res, next) {
     try {
-        const { name, email, password, role } = req.body;
+        const { name, email, password } = req.body;
 
         const existingUser = await userRepo.findUserByEmail(email);
 
         if (existingUser) {
-            return res.status(409).json({
+            return res.status(400).json({
                 data: null,
                 meta: { timestamp: new Date().toISOString() },
                 error: { code: 'EMAIL_IN_USE', message: 'A user with this email already exists' }
@@ -21,8 +21,7 @@ async function register(req, res, next) {
         const newUserData = {
             name: name,
             email: email,
-            password: hashedPassword,
-            role: role || 'user'
+            password: hashedPassword
         };
 
         const createdUser = await userRepo.createUser(newUserData);
@@ -61,23 +60,13 @@ async function login(req, res, next) {
             });
         }
 
-        const userProfile = {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-            created_at: user.created_at
-        };
+        delete user.password;
 
-        const token = jwt.sign(
-            { id: user.id, email: user.email, role: user.role },
-            env.JWT_SECRET,
-            { expiresIn: env.JWT_EXPIRES_IN }
-        );
+        const token = jwt.sign({ id: user.id, role: user.role }, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN });
 
         res.status(200).json({
             data: {
-                user: userProfile,
+                user: user,
                 token: token
             },
             meta: { timestamp: new Date().toISOString() },
@@ -88,45 +77,4 @@ async function login(req, res, next) {
     }
 }
 
-async function getMe(req, res, next) {
-    try {
-        const user = await userRepo.findUserById(req.user.id);
-        if (!user) {
-            return res.status(404).json({
-                data: null,
-                meta: { timestamp: new Date().toISOString() },
-                error: { code: 'NOT_FOUND', message: 'User not found' }
-            });
-        }
-
-        res.status(200).json({
-            data: user,
-            meta: { timestamp: new Date().toISOString() },
-            error: null
-        });
-    } catch (error) {
-        next(error);
-    }
-}
-
-async function getAdminData(req, res, next) {
-    try {
-        res.status(200).json({
-            data: {
-                message: 'Welcome to the Admin Dashboard',
-                user: req.user
-            },
-            meta: { timestamp: new Date().toISOString() },
-            error: null
-        });
-    } catch (error) {
-        next(error);
-    }
-}
-
-module.exports = {
-    register,
-    login,
-    getMe,
-    getAdminData
-};
+module.exports = { register, login };

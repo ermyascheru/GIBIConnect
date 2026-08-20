@@ -11,33 +11,20 @@ function authenticate(req, res, next) {
             error: { code: 'UNAUTHORIZED', message: 'Access denied. No token provided.' }
         });
     }
-
+    //Split the string by the space to get JUST the token part
     const token = authHeader.split(' ')[1];
-
-    if (!token) {
-        return res.status(401).json({
-            data: null,
-            meta: { timestamp: new Date().toISOString() },
-            error: { code: 'UNAUTHORIZED', message: 'Access denied. No token provided.' }
-        });
-    }
 
     try {
         const decoded = jwt.verify(token, env.JWT_SECRET);
+
         req.user = decoded;
+
         next();
     } catch (error) {
-        if (error.name === 'TokenExpiredError') {
-            return res.status(401).json({
-                data: null,
-                meta: { timestamp: new Date().toISOString() },
-                error: { code: 'UNAUTHORIZED', message: 'Token expired.' }
-            });
-        }
         return res.status(401).json({
             data: null,
             meta: { timestamp: new Date().toISOString() },
-            error: { code: 'UNAUTHORIZED', message: 'Invalid token.' }
+            error: { code: 'UNAUTHORIZED', message: 'Invalid or expired token.' }
         });
     }
 }

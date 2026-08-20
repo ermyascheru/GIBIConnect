@@ -4,8 +4,7 @@
   "description": "Backend REST API for GIBIConnect Ethiopia",
   "main": "src/app.js",
   "scripts": {
-    "start": "node src/app.js",
-    "test": "node --test tests/auth.test.js"
+    "start": "node src/app.js"
   },
   "keywords": [],
   "author": "Fekadu",
@@ -13,13 +12,11 @@
   "type": "commonjs",
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "joi": "^18.2.3",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.23.0"
-  },
-  "devDependencies": {
-    "supertest": "^7.2.2"
   }
 }
