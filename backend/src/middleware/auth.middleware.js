@@ -1,18 +1,30 @@
 const jwt = require('jsonwebtoken');
 const env = require('../config/env');
 
-function authenticate(req, res, next) {
+function extractToken(req) {
     const authHeader = req.header('Authorization');
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({
-            data: null,
-            meta: { timestamp: new Date().toISOString() },
-            error: { code: 'UNAUTHORIZED', message: 'Access denied. No token provided.' }
-        });
+        return null;
     }
-    //Split the string by the space to get JUST the token part
-    const token = authHeader.split(' ')[1];
+
+    return authHeader.split(' ')[1];
+}
+
+function unauthorized(res, message) {
+    return res.status(401).json({
+        data: null,
+        meta: { timestamp: new Date().toISOString() },
+        error: { code: 'UNAUTHORIZED', message }
+    });
+}
+
+function authenticate(req, res, next) {
+    const token = extractToken(req);
+
+    if (!token) {
+        return unauthorized(res, 'Access denied. No token provided.');
+    }
 
     try {
         const decoded = jwt.verify(token, env.JWT_SECRET);
@@ -21,12 +33,30 @@ function authenticate(req, res, next) {
 
         next();
     } catch (error) {
-        return res.status(401).json({
-            data: null,
-            meta: { timestamp: new Date().toISOString() },
-            error: { code: 'UNAUTHORIZED', message: 'Invalid or expired token.' }
-        });
+        if (error.name === 'TokenExpiredError') {
+            return unauthorized(res, 'Your session has expired. Please log in again.');
+        }
+
+        return unauthorized(res, 'Invalid or expired token.');
     }
 }
 
+function optionalAuthenticate(req, res, next) {
+    const token = extractToken(req);
+
+    if (!token) {
+        return next();
+    }
+
+    try {
+        req.user = jwt.verify(token, env.JWT_SECRET);
+    } catch (error) {
+        req.user = undefined;
+    }
+
+    next();
+}
+
 module.exports = authenticate;
+module.exports.authenticate = authenticate;
+module.exports.optionalAuthenticate = optionalAuthenticate;
