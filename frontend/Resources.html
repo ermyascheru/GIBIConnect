@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Educational Resources & Documents — GIBI-Connect</title>
+  <link rel="icon" type="image/jpeg" href="/logo.jpg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-image: linear-gradient(to bottom, rgba(2, 6, 23, 0.88), rgba(2, 6, 23, 0.94)), url('/images/Butler-Exterior-2-scaled.jpg');
+      background-size: cover;
+      background-position: center top;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="/" class="flex items-center gap-2.5">
+          <img src="/logo.jpg" alt="GIBI-Connect Logo" class="w-10 h-10 rounded-xl object-cover border border-slate-200 shadow-xs">
+          <div>
+            <span class="text-lg font-bold text-slate-900 tracking-tight">GIBI-<span class="text-blue-600">Connect</span></span>
+            <span class="block text-[10px] text-slate-400 -mt-1 font-medium">University & College Directory</span>
+          </div>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-1 text-sm font-medium">
+          <a href="/institutions" class="px-3 py-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors">Institutions</a>
+          <a href="/programs" class="px-3 py-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors">Programs</a>
+          <a href="admissions.html" class="px-3 py-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors">Admissions</a>
+          <a href="Scholarships.html" class="px-3 py-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors">Scholarships</a>
+          <a href="Resources.html" class="px-3 py-2 rounded-lg text-blue-600 bg-blue-50 font-semibold transition-colors">Resources</a>
+          <a href="/ai" class="px-3 py-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors flex items-center gap-1">
+            <span class="text-blue-600">✦</span> AI Consultant
+          </a>
+        </nav>
+
+        <div class="flex items-center gap-3">
+          <button id="open-upload-modal-btn" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+            Upload Resource
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Header -->
+  <section class="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 text-white py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="max-w-3xl space-y-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-xs font-semibold text-blue-200">
+          <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+          <span>Verified Institutional Documents & Handbooks</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">
+          Educational Resources & Guides Library
+        </h1>
+        <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+          Download approved admission handbooks, university curricula, national scholarship templates, and accredited institutional reports.
+        </p>
+
+        <!-- Search Bar -->
+        <div class="pt-4 max-w-2xl">
+          <div class="relative flex items-center">
+            <input
+              id="resource-search-input"
+              type="text"
+              placeholder="Search guides, curricula, calendars, scholarship forms..."
+              class="w-full bg-white text-slate-900 pl-11 pr-24 py-3 rounded-xl border-0 shadow-lg text-sm focus:ring-2 focus:ring-blue-400 outline-none"
+            >
+            <div class="absolute left-3.5 text-slate-400 pointer-events-none">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <button
+              id="resource-search-btn"
+              class="absolute right-2 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs rounded-lg shadow-sm transition-colors"
+            >
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Body -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      
+      <!-- Filter Sidebar -->
+      <aside class="lg:col-span-1 space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-200">
+            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+              Filter Resources
+            </h3>
+            <button id="reset-resources-filter" class="text-xs font-semibold text-blue-600 hover:underline cursor-pointer">Reset</button>
+          </div>
+
+          <!-- Document Category -->
+          <div class="py-4 border-b border-slate-100">
+            <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2.5">Category</h4>
+            <div class="space-y-2 text-xs text-slate-600">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" name="category" value="Admission Guide" checked class="rounded text-blue-600 border-slate-300 filter-checkbox">
+                <span>Admission Guides</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" name="category" value="Curriculum" checked class="rounded text-blue-600 border-slate-300 filter-checkbox">
+                <span>Curriculum & Handbooks</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" name="category" value="Scholarship Form" checked class="rounded text-blue-600 border-slate-300 filter-checkbox">
+                <span>Scholarship Forms</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" name="category" value="Academic Calendar" checked class="rounded text-blue-600 border-slate-300 filter-checkbox">
+                <span>Academic Calendars</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" name="category" value="Policy Report" checked class="rounded text-blue-600 border-slate-300 filter-checkbox">
+                <span>Policy & Accreditation</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- File Format -->
+          <div class="py-4 border-b border-slate-100">
+            <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2.5">File Format</h4>
+            <div class="space-y-2 text-xs text-slate-600">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" name="format" value="PDF" checked class="rounded text-blue-600 border-slate-300 filter-checkbox">
+                <span>PDF Document (.pdf)</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" name="format" value="DOCX" checked class="rounded text-blue-600 border-slate-300 filter-checkbox">
+                <span>Word / Form (.docx)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Institution Filter -->
+          <div class="pt-4">
+            <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2.5">Institution Scope</h4>
+            <select id="resource-institution-select" class="w-full text-xs border border-slate-300 rounded-lg p-2 bg-white text-slate-700 outline-none">
+              <option value="">All Higher Ed Institutions</option>
+              <option value="Addis Ababa University">Addis Ababa University</option>
+              <option value="Adama Science & Technology University">Adama Science & Technology (ASTU)</option>
+              <option value="Unity University">Unity University</option>
+              <option value="Ministry of Education">Ministry of Education</option>
+            </select>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Resources Column -->
+      <section class="lg:col-span-3 space-y-6">
+        <div class="flex items-center justify-between">
+          <p class="text-xs text-slate-600" id="resources-count-text">Showing <strong>5</strong> Verified Resources</p>
+          <div class="flex items-center gap-2 text-xs">
+            <span class="text-slate-500">Sort by:</span>
+            <select id="resources-sort-select" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-slate-700 text-xs outline-none">
+              <option value="date">Latest Upload</option>
+              <option value="downloads">Most Downloaded</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="resources-list-container" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <!-- Populated by js/resources.js -->
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Document Preview Modal -->
+  <div id="document-preview-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl flex flex-col">
+      <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+        <div>
+          <span id="preview-category" class="text-[10px] uppercase font-bold text-blue-600 tracking-wider">Admission Guide</span>
+          <h3 id="preview-title" class="text-lg font-bold text-slate-900 mt-0.5">AAU 2026/2027 Official Admission Handbook</h3>
+        </div>
+        <button id="close-preview-btn" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-4 text-xs text-slate-600 leading-relaxed flex-1 bg-slate-50/50">
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 space-y-2">
+          <h4 class="font-bold text-slate-800 text-sm">Document Abstract / Contents</h4>
+          <p id="preview-description">Official admission booklet outlining minimum grade score thresholds, application deadlines, campus registration dates, and tuition payment details for all faculties.</p>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div class="p-3 bg-white rounded-xl border border-slate-200">
+            <span class="text-[10px] text-slate-400 block uppercase font-bold">Format</span>
+            <span id="preview-format" class="font-bold text-slate-800">PDF Document</span>
+          </div>
+          <div class="p-3 bg-white rounded-xl border border-slate-200">
+            <span class="text-[10px] text-slate-400 block uppercase font-bold">Size</span>
+            <span id="preview-size" class="font-bold text-slate-800">2.4 MB</span>
+          </div>
+          <div class="p-3 bg-white rounded-xl border border-slate-200">
+            <span class="text-[10px] text-slate-400 block uppercase font-bold">Verification</span>
+            <span class="font-bold text-emerald-600 flex items-center gap-1">
+              <span>✓</span> Verified
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 bg-white border-t border-slate-100 flex items-center justify-end gap-3">
+        <button id="modal-close-action" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl cursor-pointer">Close</button>
+        <button id="modal-download-action" class="px-5 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm flex items-center gap-1.5 cursor-pointer">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+          Download File
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upload Modal -->
+  <div id="upload-resource-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl p-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div>
+          <h3 class="text-base font-bold text-slate-900">Upload Educational Resource</h3>
+          <p class="text-[11px] text-slate-500">Authorized upload subject to institutional verification.</p>
+        </div>
+        <button id="close-upload-btn" class="text-slate-400 hover:text-slate-600 p-1 cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <form id="resource-upload-form" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Document Title *</label>
+          <input type="text" id="upload-title" placeholder="e.g. AAU Computer Science 4-Year Curriculum" required class="w-full p-2.5 border border-slate-300 rounded-xl outline-none focus:border-blue-500">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Category *</label>
+          <select id="upload-category" required class="w-full p-2.5 border border-slate-300 rounded-xl bg-white outline-none">
+            <option value="Admission Guide">Admission Guide</option>
+            <option value="Curriculum">Curriculum & Handbook</option>
+            <option value="Scholarship Form">Scholarship Form</option>
+            <option value="Academic Calendar">Academic Calendar</option>
+            <option value="Policy Report">Policy & Accreditation Report</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Affiliated Institution *</label>
+          <select id="upload-institution" required class="w-full p-2.5 border border-slate-300 rounded-xl bg-white outline-none">
+            <option value="Addis Ababa University">Addis Ababa University</option>
+            <option value="Adama Science & Technology University">Adama Science & Technology University</option>
+            <option value="Unity University">Unity University</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Select File (PDF, DOCX, Max 25MB) *</label>
+          <input type="file" id="upload-file" required class="w-full p-2 border border-dashed border-slate-300 rounded-xl cursor-pointer">
+        </div>
+
+        <div class="pt-3 flex items-center justify-end gap-2 border-t border-slate-100">
+          <button type="button" id="cancel-upload-btn" class="px-4 py-2 font-medium text-slate-600 hover:bg-slate-100 rounded-xl cursor-pointer">Cancel</button>
+          <button type="submit" class="px-5 py-2 font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm cursor-pointer">Submit for Verification</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 text-xs mt-auto py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-slate-500">
+      &copy; 2026 GIBIConnect Platform. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="js/resources.js"></script>
+</body>
+</html>

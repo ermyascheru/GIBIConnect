@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+/* Full-page bright & visible background for ST-Network */
+@layer base {
+  body {
+    @apply bg-slate-100 text-slate-900 min-h-screen antialiased;
+    background-image: 
+      linear-gradient(to bottom, rgba(248, 250, 252, 0.75), rgba(241, 245, 249, 0.85)),
+      url('/images/Butler-Exterior-2-scaled.jpg');
+    background-size: cover;
+    background-position: center top;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+  }
+}
