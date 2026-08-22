@@ -338,11 +338,10 @@ GIBI Connect can be expanded in the future with additional features such as:
 
 | No. | Full Name                        | Student ID           | Responsibility                   |
 | --: | -------------------------------- | -------------------- | -------------------------------- |
-|   1 |      Ermiyas Cheru               |     CTC-5723-26      |        Database and AI           |
-|   2 |      Fekadu Alemnew              |     CTC-4438-26      |         Backend                  |
-|   3 |      Ezra Michael                |     CTC-3205-26      |         frontend                 |
-|   4 |      Ezana Girmay                |     CTC-7612-26      |         frontend                 |
-|   5 |      Elsabeth Berhanu            |     CTC-1036-26      |         Backend                  |
+|   1 |      Ermiyas Cheru               |     CTC-5723-26      |        Database and AI/RAG       |
+Backend/API|   3 |      Ezra Michael     |     CTC-3205-26      |        UI/UX + Components        |
+|   4 |      Ezana Girmay                |     CTC-7612-26      |        Frontend Pages            |
+|   5 |      Elsabeth Berhanu            |     CTC-1036-26      |    Auth + Admin + Testing        |
 
 ### Team Members
 

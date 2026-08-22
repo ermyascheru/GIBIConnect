@@ -1,24 +1,41 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
-
-const env = require('./config/env');
-const healthRoutes = require('./routes/health.routes');
-const errorHandler = require('./middleware/errorHandler');
-const institutionRoutes = require('./routes/institution.routes');
-const userRoutes = require('./routes/user.routes');
-const programRoutes = require('./routes/program.routes');
+const morgan = require('morgan');
+const routes = require('./routes');
+const errorHandler = require('./middleware/error.middleware');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: process.env.CLIENT_URL || '*', credentials: true }));
+app.use(morgan('dev'));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use('/api/health', healthRoutes);
-app.use('/api/institutions', institutionRoutes);
-app.use('/api/auth', userRoutes);
-app.use('/api/programs', programRoutes);
+// Serve API Routes
+app.use('/api', routes);
+
+// Serve Frontend Static SPA Assets & Routes
+const frontendDir = path.resolve(__dirname, '../../frontend');
+app.use(express.static(frontendDir));
+
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    return next();
+  }
+  res.sendFile(path.join(frontendDir, 'index.html'));
+});
+
+// Centralized 404 handler for API endpoints
+app.use((req, res, next) => {
+  res.status(404).json({
+    success: false,
+    message: 'API endpoint not found',
+    data: null,
+    error: { code: 'NOT_FOUND', path: req.originalUrl }
+  });
+});
+
 app.use(errorHandler);
 
-app.listen(env.PORT, function(){
-    console.log(`Server running in ${env.NODE_ENV} mode on port ${env.PORT}`);
-})
+module.exports = app;
