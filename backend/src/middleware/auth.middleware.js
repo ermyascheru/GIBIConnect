@@ -1,32 +1,38 @@
 const jwt = require('jsonwebtoken');
-const env = require('../config/env');
+const { errorResponse } = require('../utils/response');
 
-function authenticate(req, res, next) {
-    const authHeader = req.header('Authorization');
+const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-jwt-token-key-change-in-env';
 
+const authenticate = (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({
-            data: null,
-            meta: { timestamp: new Date().toISOString() },
-            error: { code: 'UNAUTHORIZED', message: 'Access denied. No token provided.' }
-        });
+      return errorResponse(res, 401, 'Authentication token missing or invalid');
     }
-    //Split the string by the space to get JUST the token part
+
     const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    return errorResponse(res, 401, 'Invalid or expired token', { code: 'TOKEN_INVALID', message: err.message });
+  }
+};
 
-    try {
-        const decoded = jwt.verify(token, env.JWT_SECRET);
-
-        req.user = decoded;
-
-        next();
-    } catch (error) {
-        return res.status(401).json({
-            data: null,
-            meta: { timestamp: new Date().toISOString() },
-            error: { code: 'UNAUTHORIZED', message: 'Invalid or expired token.' }
-        });
+const authorize = (...allowedRoles) => {
+  return (req, res, next) => {
+    if (!req.user || !allowedRoles.includes(req.user.role)) {
+      return errorResponse(res, 403, 'Forbidden: Insufficient privileges', {
+        code: 'FORBIDDEN',
+        requiredRoles: allowedRoles,
+        currentRole: req.user ? req.user.role : null
+      });
     }
-}
+    next();
+  };
+};
 
-module.exports = authenticate;
+module.exports = {
+  authenticate,
+  authorize
+};
