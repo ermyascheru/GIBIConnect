@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Console - GIBIConnect</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-tertiary-fixed-variant": "#653e00",
+            "surface-container-lowest": "#ffffff",
+            "surface-container": "#eceef0",
+            "surface-bright": "#f7f9fb",
+            "surface-container-low": "#f2f4f6",
+            "on-secondary-fixed-variant": "#005236",
+            "background": "#f7f9fb",
+            "inverse-on-surface": "#eff1f3",
+            "on-secondary-fixed": "#002113",
+            "secondary-fixed": "#6ffbbe",
+            "on-primary-container": "#7c839b",
+            "secondary-container": "#e6f4ea",
+            "tertiary-fixed-dim": "#ffb95f",
+            "on-surface": "#191c1e",
+            "on-primary-fixed-variant": "#3f465c",
+            "tertiary-container": "#2a1700",
+            "tertiary": "#000000",
+            "outline-variant": "#c6c6cd",
+            "on-primary-fixed": "#131b2e",
+            "on-secondary": "#ffffff",
+            "on-error-container": "#93000a",
+            "surface-tint": "#565e74",
+            "primary": "#0F172A",
+            "on-background": "#191c1e",
+            "primary-fixed": "#dae2fd",
+            "primary-container": "#131b2e",
+            "inverse-surface": "#2d3133",
+            "surface-container-highest": "#e0e3e5",
+            "inverse-primary": "#bec6e0",
+            "surface": "#f7f9fb",
+            "on-secondary-container": "#006c49",
+            "on-error": "#ffffff",
+            "surface-dim": "#d8dadc",
+            "secondary-fixed-dim": "#4edea3",
+            "tertiary-fixed": "#ffddb8",
+            "error": "#ba1a1a",
+            "primary-fixed-dim": "#bec6e0",
+            "on-tertiary": "#ffffff",
+            "outline": "#76777d",
+            "on-tertiary-fixed": "#2a1700",
+            "error-container": "#ffdad6",
+            "surface-container-high": "#e6e8ea",
+            "secondary": "#10B981",
+            "on-tertiary-container": "#b87500",
+            "on-primary": "#ffffff",
+            "surface-variant": "#e0e3e5",
+            "on-surface-variant": "#45464d"
+          },
+          fontFamily: {
+            "headline-lg": ["Manrope", "sans-serif"],
+            "headline-md": ["Manrope", "sans-serif"],
+            "display-lg": ["Manrope", "sans-serif"],
+            "body-md": ["Work Sans", "sans-serif"],
+            "label-md": ["Work Sans", "sans-serif"],
+            "body-lg": ["Work Sans", "sans-serif"],
+            "label-sm": ["Work Sans", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { overflow-y: scroll; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-fade-in { animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+    html.dark { background-color: #0b0f17; color: #f1f5f9; }
+    html.dark body { background-color: #0b0f17; color: #f1f5f9; }
+    html.dark header, html.dark .bg-surface-container-lowest, html.dark #search-drawer { background-color: #151c28 !important; border-color: rgba(255, 255, 255, 0.12) !important; color: #f1f5f9 !important; }
+    html.dark .bg-surface-container-low, html.dark footer { background-color: #1a2232 !important; color: #e2e8f0 !important; }
+    html.dark .bg-surface-container { background-color: #232d3f !important; }
+    html.dark .text-primary, html.dark .text-on-surface, html.dark h1, html.dark h2, html.dark h3, html.dark h4 { color: #f8fafc !important; }
+    html.dark .text-on-surface-variant { color: #94a3b8 !important; }
+    html.dark .border-outline-variant\/10, html.dark .border-outline-variant\/15, html.dark .border-outline-variant\/20, html.dark .border-outline-variant\/25, html.dark .border-outline-variant\/30 { border-color: rgba(255, 255, 255, 0.12) !important; }
+    html.dark input, html.dark select { background-color: #1e293b !important; color: #f8fafc !important; }
+    html.dark input::placeholder { color: #64748b !important; }
+  </style>
+  <script type="module" src="js/theme.js"></script>
+  <script type="module" src="js/navigation.js"></script>
+</head>
+
+<body class="bg-background text-on-background font-body-md text-sm min-h-screen flex flex-col pt-[56px] antialiased">
+  
+<!-- Navigation Header -->
+<header class="bg-surface-container-lowest/95 backdrop-blur-md text-primary fixed top-0 w-full z-50 border-b border-outline-variant/15 shadow-2xs transition-all duration-200">
+  <div class="flex justify-between items-center h-[56px] px-3 sm:px-4 md:px-8 w-full max-w-7xl mx-auto gap-2 sm:gap-4">
+    <!-- Brand Logo -->
+    <a href="explore.html" class="flex items-center gap-2 sm:gap-2.5 flex-shrink-0 group py-1">
+      <img 
+        src="assets/gibi_logo-removebg-preview.png" 
+        alt="GIBIConnect Logo" 
+        class="h-9 w-9 sm:h-10 sm:w-10 max-h-[40px] max-w-[40px] object-contain drop-shadow-xs group-hover:scale-105 transition-transform"
+      >
+      <span class="font-headline-md text-base sm:text-lg font-extrabold tracking-tight">
+        <span class="text-[#10B981]">GIBI</span><span class="text-[#0F172A] dark:text-slate-100">Connect</span>
+      </span>
+    </a>
+
+    <!-- Nav Links -->
+    <nav class="hidden lg:flex items-center font-label-md text-xs font-medium h-full gap-5">
+      <a class="text-on-surface-variant hover:text-[#10B981] border-b-2 border-transparent h-full flex items-center px-1 transition-colors" href="explore.html">Explore</a>
+      <a class="text-on-surface-variant hover:text-[#10B981] border-b-2 border-transparent h-full flex items-center px-1 transition-colors" href="institutions.html">Institutions</a>
+      <a class="text-on-surface-variant hover:text-[#10B981] border-b-2 border-transparent h-full flex items-center px-1 transition-colors" href="programs.html">Programs</a>
+      <a class="text-on-surface-variant hover:text-[#10B981] border-b-2 border-transparent h-full flex items-center px-1 transition-colors" href="resources.html">Resources</a>
+      <a class="text-on-surface-variant hover:text-[#10B981] border-b-2 border-transparent h-full flex items-center px-1 transition-colors" href="admissions.html">Admissions</a>
+      <a class="text-on-surface-variant hover:text-[#10B981] border-b-2 border-transparent h-full flex items-center px-1 transition-colors" href="scholarships.html">Scholarships</a>
+      <a id="navbar-admin-link" class="text-amber-400 font-bold border-b-2 border-amber-400 h-full flex items-center px-1 transition-colors hidden" href="admin.html">Admin</a>
+    </nav>
+
+    <!-- Right Controls -->
+    <div class="flex items-center gap-1.5 sm:gap-2.5">
+      <!-- Search Trigger -->
+      <div class="relative group hidden sm:flex items-center">
+        <div onclick="toggleSearchDrawer()" class="flex items-center bg-surface-container-low hover:bg-surface-container rounded-full p-1.5 transition-all duration-300 w-8 group-hover:w-44 overflow-hidden cursor-pointer border border-outline-variant/15">
+          <span class="material-symbols-outlined text-[18px] text-on-surface-variant shrink-0 ml-0.5">search</span>
+          <span class="text-[11px] text-on-surface-variant whitespace-nowrap ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">Search GIBI...</span>
+        </div>
+      </div>
+
+      <button class="sm:hidden text-on-surface-variant hover:text-[#10B981] transition-colors p-1 cursor-pointer" onclick="toggleSearchDrawer()">
+        <span class="material-symbols-outlined text-[18px]">search</span>
+      </button>
+
+      <!-- Theme Switcher -->
+      <button id="theme-toggle-btn" onclick="toggleTheme()" class="p-1.5 rounded-lg text-on-surface-variant hover:text-[#10B981] hover:bg-surface-container transition-all flex items-center justify-center cursor-pointer" title="Toggle Theme">
+        <span class="material-symbols-outlined text-[18px] sm:text-[20px]" id="theme-toggle-icon">dark_mode</span>
+      </button>
+
+      <!-- AI Advisor Header Link -->
+      <a href="ai-advisor.html" class="group hidden md:flex items-center gap-1.5 bg-gradient-to-r from-emerald-50 to-slate-100 dark:from-slate-800/90 dark:to-emerald-950/40 hover:from-emerald-100 hover:to-emerald-50 dark:hover:from-slate-800 dark:hover:to-emerald-900/60 text-slate-800 dark:text-emerald-300 border border-emerald-300/60 dark:border-emerald-700/50 hover:border-emerald-500/80 px-3 py-1.5 rounded-xl font-label-md transition-all duration-300 font-bold text-xs shadow-2xs hover:shadow-md hover:shadow-emerald-500/15 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer">
+        <span class="material-symbols-outlined text-[16px] text-[#10B981] group-hover:rotate-12 group-hover:scale-110 transition-transform duration-300">auto_awesome</span>
+        <span class="tracking-tight">AI Advisor</span>
+        <span class="h-1.5 w-1.5 rounded-full bg-[#10B981] animate-pulse ml-0.5"></span>
+      </a>
+
+      <!-- User Slot -->
+      <div id="navbar-user-slot"></div>
+    </div>
+  </div>
+</header>
+
+<!-- Command Search Drawer Modal -->
+<div id="search-drawer" class="fixed top-0 left-0 w-full h-[380px] bg-white dark:bg-[#151c28] z-[100] transform transition-transform duration-300 shadow-2xl border-b border-slate-200 dark:border-slate-800 -translate-y-full flex flex-col">
+  <div class="max-w-3xl w-full mx-auto px-4 pt-6 pb-2 relative flex flex-col flex-grow overflow-hidden">
+    <div class="flex items-center justify-between gap-3 mb-3">
+      <div class="relative w-full group">
+        <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant group-focus-within:text-[#10B981] transition-colors">search</span>
+        <input id="drawer-search-input" oninput="handleCategorizedSearch(this.value)" class="w-full bg-surface-container rounded-xl border border-transparent pl-11 pr-10 py-2.5 text-xs text-on-surface focus:ring-2 focus:ring-[#10B981] focus:bg-surface-container-lowest transition-all outline-none" placeholder="Search across institutions, degree programs, scholarships..." type="text">
+      </div>
+      <button class="text-on-surface-variant hover:text-primary transition-colors p-1.5 rounded-lg hover:bg-surface-container cursor-pointer" onclick="toggleSearchDrawer()">
+        <span class="material-symbols-outlined text-[22px]">close</span>
+      </button>
+    </div>
+
+    <div id="drawer-results-view" class="hidden flex-grow overflow-y-auto pr-1 space-y-4 scrollbar-hide text-xs pb-3">
+      <div>
+        <div class="flex items-center justify-between mb-1.5 pb-1 border-b border-outline-variant/10">
+          <span class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[14px] text-[#10B981]">assured_workload</span> Institutions
+          </span>
+          <a href="institutions.html" class="text-[11px] text-[#10B981] font-bold hover:underline flex items-center gap-0.5">
+            View all <span class="material-symbols-outlined text-[13px]">arrow_forward</span>
+          </a>
+        </div>
+        <div id="drawer-institutions-list" class="grid grid-cols-1 sm:grid-cols-2 gap-1.5"></div>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between mb-1.5 pb-1 border-b border-outline-variant/10">
+          <span class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[14px] text-purple-400">menu_book</span> Programs
+          </span>
+          <a href="programs.html" class="text-[11px] text-[#10B981] font-bold hover:underline flex items-center gap-0.5">
+            View all <span class="material-symbols-outlined text-[13px]">arrow_forward</span>
+          </a>
+        </div>
+        <div id="drawer-programs-list" class="grid grid-cols-1 sm:grid-cols-2 gap-1.5"></div>
+      </div>
+    </div>
+
+    <div id="drawer-default-view" class="flex flex-col justify-center flex-grow">
+      <p class="text-xs text-on-surface-variant mb-2">Popular quick searches:</p>
+      <div class="flex flex-wrap gap-2 items-center">
+        <button onclick="applyPopularSearch('Computer Science')" class="bg-surface-container hover:bg-emerald-50 hover:text-[#10B981] dark:hover:bg-emerald-950/60 px-3 py-1.5 rounded-lg text-xs text-on-surface transition-colors border border-outline-variant/10 flex items-center gap-1 cursor-pointer">
+          <span class="material-symbols-outlined text-[14px]">search</span> Computer Science
+        </button>
+        <button onclick="applyPopularSearch('Addis Ababa')" class="bg-surface-container hover:bg-emerald-50 hover:text-[#10B981] dark:hover:bg-emerald-950/60 px-3 py-1.5 rounded-lg text-xs text-on-surface transition-colors border border-outline-variant/10 flex items-center gap-1 cursor-pointer">
+          <span class="material-symbols-outlined text-[14px]">location_on</span> Addis Ababa
+        </button>
+        <button onclick="applyPopularSearch('Medicine')" class="bg-surface-container hover:bg-emerald-50 hover:text-[#10B981] dark:hover:bg-emerald-950/60 px-3 py-1.5 rounded-lg text-xs text-on-surface transition-colors border border-outline-variant/10 flex items-center gap-1 cursor-pointer">
+          <span class="material-symbols-outlined text-[14px]">medical_services</span> Medicine & Health
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <main class="flex-grow w-full max-w-7xl mx-auto px-4 md:px-6 pt-6 pb-8 flex flex-col gap-6">
+    <div id="admin-restricted-view" class="hidden p-16 text-center rounded-3xl border border-outline-variant/15 bg-surface-container-lowest">
+      <span class="material-symbols-outlined text-[48px] text-rose-500 mx-auto mb-2">shield_alert</span>
+      <h2 class="text-lg font-bold text-primary">Access Restricted</h2>
+      <p class="text-xs text-on-surface-variant mt-1">Administrator privileges required to view the management console.</p>
+      <a href="explore.html" class="inline-block mt-4 px-4 py-2 rounded-xl bg-[#10B981] text-slate-950 font-bold text-xs">Return to Explore</a>
+    </div>
+
+    <div id="admin-main-view" class="space-y-6">
+      <div class="flex items-center justify-between pb-3 border-b border-outline-variant/10">
+        <div>
+          <h1 class="font-headline-lg text-xl sm:text-2xl font-extrabold text-primary flex items-center gap-2">
+            <span class="material-symbols-outlined text-amber-400 text-[26px]">shield_person</span> Platform Admin Console
+          </h1>
+          <p class="text-xs text-on-surface-variant mt-0.5">Moderation workspace for educational materials and user roles.</p>
+        </div>
+        <span class="px-3 py-1 rounded-lg bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs font-bold uppercase">
+          Admin Privilege Active
+        </span>
+      </div>
+
+      <!-- Metrics -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="p-4 rounded-2xl border border-outline-variant/15 bg-surface-container-lowest">
+          <span class="text-xs text-on-surface-variant font-bold uppercase">Universities</span>
+          <div class="text-2xl font-extrabold text-primary mt-1">18</div>
+        </div>
+        <div class="p-4 rounded-2xl border border-outline-variant/15 bg-surface-container-lowest">
+          <span class="text-xs text-on-surface-variant font-bold uppercase">Programs</span>
+          <div class="text-2xl font-extrabold text-primary mt-1">114</div>
+        </div>
+        <div class="p-4 rounded-2xl border border-outline-variant/15 bg-surface-container-lowest">
+          <span class="text-xs text-on-surface-variant font-bold uppercase">Resources</span>
+          <div class="text-2xl font-extrabold text-primary mt-1">39</div>
+        </div>
+        <div class="p-4 rounded-2xl border border-outline-variant/15 bg-surface-container-lowest">
+          <span class="text-xs text-on-surface-variant font-bold uppercase">Users</span>
+          <div id="admin-user-count" class="text-2xl font-extrabold text-primary mt-1">26</div>
+        </div>
+      </div>
+
+      <!-- Moderation Queue -->
+      <div class="rounded-2xl p-6 border border-outline-variant/15 bg-surface-container-lowest">
+        <h3 class="font-bold text-sm text-primary mb-4 flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-amber-400 text-[18px]">pending_actions</span> Resource Moderation Queue
+        </h3>
+        <div id="moderation-queue" class="space-y-3">
+          <p class="text-xs text-on-surface-variant">✓ All uploaded materials are verified and approved.</p>
+        </div>
+      </div>
+
+      <!-- User Registry Table -->
+      <div class="rounded-2xl p-6 border border-outline-variant/15 bg-surface-container-lowest">
+        <h3 class="font-bold text-sm text-primary mb-4 flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[#10B981] text-[18px]">group</span> Registered System Users
+        </h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="uppercase text-[10px] bg-surface-container-low text-on-surface-variant">
+              <tr><th class="p-3">User</th><th class="p-3">Email</th><th class="p-3">Role</th><th class="p-3">Status</th></tr>
+            </thead>
+            <tbody id="admin-users-tbody" class="divide-y divide-outline-variant/10">
+              <tr><td colspan="4" class="p-4 text-center text-on-surface-variant">Loading user records...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+<footer class="bg-surface-container-low border-t border-outline-variant/15 py-8 mt-12 text-xs text-on-surface-variant">
+  <div class="max-w-7xl mx-auto px-4 md:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <img src="assets/gibi_logo-removebg-preview.png" alt="GIBIConnect" class="h-6 w-6 object-contain">
+      <span class="font-headline-md font-bold text-primary"><span class="text-[#10B981]">GIBI</span>Connect</span>
+      <span class="text-[11px] text-slate-400 ml-2">© 2026 Ethiopian Higher Education Network</span>
+    </div>
+    <div class="flex flex-wrap items-center gap-5 text-[11px]">
+      <a href="explore.html" class="hover:text-[#10B981] transition">Explore</a>
+      <a href="institutions.html" class="hover:text-[#10B981] transition">Institutions</a>
+      <a href="programs.html" class="hover:text-[#10B981] transition">Programs</a>
+      <a href="resources.html" class="hover:text-[#10B981] transition">Resources</a>
+      <a href="admissions.html" class="hover:text-[#10B981] transition">Admissions</a>
+      <a href="scholarships.html" class="hover:text-[#10B981] transition">Scholarships</a>
+      <a href="ai-advisor.html" class="hover:text-[#10B981] transition">AI Advisor</a>
+    </div>
+  </div>
+</footer>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>
