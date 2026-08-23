@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admissions | GIBIConnect</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+    <header class="bg-blue-900 text-white p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">GIBIConnect</h1>
+            <nav>
+                <a href="admissions.html" class="px-3 hover:text-blue-200">Admissions</a>
+                <a href="Scholarships.html" class="px-3 hover:text-blue-200">Scholarships</a>
+                <a href="Resources.html" class="px-3 hover:text-blue-200">Resources</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto mt-8 p-4">
+        <h2 class="text-3xl font-bold mb-6 text-blue-900">University Admissions</h2>
+        
+        <!-- Search and Filter -->
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-8 flex gap-4">
+            <input type="text" id="searchInput" placeholder="Search universities or programs..." class="flex-1 p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500">
+            <button id="searchBtn" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Search</button>
+        </div>
+
+        <!-- Admissions List -->
+        <div id="admissionsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Populated by JS -->
+        </div>
+    </main>
+
+    <script src="js/admissions.js"></script>
+</body>
+</html>
