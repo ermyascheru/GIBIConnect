@@ -195,7 +195,7 @@ The backend will expose RESTful API endpoints that the frontend can use to commu
 
 ## 8. Frontend System
 
-The user interface will be developed using **React with Vite**, with **TypeScript and Tailwind CSS** used to create a structured and responsive interface.
+The user interface will be developed using **HTML/CSS/JS**, with **TypeScript and Tailwind CSS** used to create a structured and responsive interface.
 
 The frontend will provide users with access to the platform's major features.
 
