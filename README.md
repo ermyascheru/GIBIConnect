@@ -13,7 +13,6 @@ The platform will provide students with educational information while also using
 GIBI Connect will use a modern web architecture consisting of a **React + Vite frontend, Node.js and Express.js backend, PostgreSQL database, and AI-powered consultation system**. These components will work together to provide a secure, scalable, and user-friendly platform.
 
 ---
-
 ## 2. Problem Statement
 
 Students face several challenges when trying to obtain educational information and guidance.
@@ -27,7 +26,6 @@ Another challenge is that existing platforms may provide information without off
 **GIBI Connect addresses these problems by combining centralized educational information with an AI-powered consultation system in one platform.**
 
 ---
-
 ## 3. Project Objectives
 
 ### General Objective
