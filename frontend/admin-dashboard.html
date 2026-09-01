@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GIBIConnect Admin Dashboard</title>
+    <link rel="stylesheet" href="css/admin-dashboard.css" />
+  </head>
+  <body>
+    <div class="admin-container">
+      <!-- Sidebar Navigation -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h2>Admin Panel</h2>
+          <button id="sidebarToggle" class="toggle-btn">☰</button>
+        </div>
+        <nav class="sidebar-nav">
+          <ul>
+            <li>
+              <a href="#" data-section="dashboard" class="nav-link active"
+                >📊 Dashboard</a
+              >
+            </li>
+            <li>
+              <a href="#" data-section="files" class="nav-link"
+                >📁 File Manager</a
+              >
+            </li>
+            <li>
+              <a href="#" data-section="database" class="nav-link"
+                >💾 Database</a
+              >
+            </li>
+            <li>
+              <a href="#" data-section="users" class="nav-link">👥 Users</a>
+            </li>
+            <li>
+              <a href="#" data-section="settings" class="nav-link"
+                >⚙️ Settings</a
+              >
+            </li>
+          </ul>
+        </nav>
+        <div class="sidebar-footer">
+          <button id="logoutBtn" class="logout-btn">🚪 Logout</button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Top Bar -->
+        <div class="topbar">
+          <div class="topbar-left">
+            <h1 id="pageTitle">Dashboard</h1>
+          </div>
+          <div class="topbar-right">
+            <span id="userInfo" class="user-info"></span>
+            <img
+              id="userAvatar"
+              src="assets/default-avatar.png"
+              alt="User"
+              class="avatar"
+            />
+          </div>
+        </div>
+
+        <!-- Content Sections -->
+        <div class="content-wrapper">
+          <!-- Dashboard Section -->
+          <section id="dashboard" class="content-section active">
+            <div class="dashboard-grid">
+              <div class="stat-card">
+                <h3>Total Files</h3>
+                <p id="totalFiles" class="stat-value">0</p>
+                <small>All managed files</small>
+              </div>
+              <div class="stat-card">
+                <h3>Total Users</h3>
+                <p id="totalUsers" class="stat-value">0</p>
+                <small>System users</small>
+              </div>
+              <div class="stat-card">
+                <h3>Database Size</h3>
+                <p id="dbSize" class="stat-value">0 MB</p>
+                <small>Current size</small>
+              </div>
+              <div class="stat-card">
+                <h3>System Status</h3>
+                <p id="systemStatus" class="stat-value">✓ Online</p>
+                <small>Backend healthy</small>
+              </div>
+            </div>
+
+            <div class="recent-activity">
+              <h2>Recent Activity</h2>
+              <div id="activityLog" class="activity-list">
+                <p>Loading activity...</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- File Manager Section -->
+          <section id="files" class="content-section">
+            <div class="file-manager">
+              <div class="file-header">
+                <div class="search-box">
+                  <input
+                    type="text"
+                    id="searchFiles"
+                    placeholder="Search files..."
+                    class="search-input"
+                  />
+                </div>
+                <div class="file-actions">
+                  <button id="uploadBtn" class="btn btn-primary">
+                    ⬆️ Upload File
+                  </button>
+                  <button id="refreshBtn" class="btn btn-secondary">
+                    🔄 Refresh
+                  </button>
+                </div>
+              </div>
+
+              <div id="uploadArea" class="upload-area" style="display: none">
+                <div class="upload-container">
+                  <h3>Upload Files</h3>
+                  <div class="drop-zone" id="dropZone">
+                    <p>Drag and drop files here or click to select</p>
+                    <input
+                      type="file"
+                      id="fileInput"
+                      multiple
+                      style="display: none"
+                    />
+                  </div>
+                  <div
+                    id="uploadProgress"
+                    class="upload-progress"
+                    style="display: none"
+                  >
+                    <div class="progress-bar" id="progressBar"></div>
+                    <p id="progressText">0%</p>
+                  </div>
+                  <div class="upload-buttons">
+                    <button id="cancelUploadBtn" class="btn btn-secondary">
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="file-list-container">
+                <table class="file-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Size</th>
+                      <th>Uploaded</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="fileTableBody">
+                    <tr>
+                      <td colspan="5">Loading files...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- Database Section -->
+          <section id="database" class="content-section">
+            <div class="database-panel">
+              <h2>Database Management</h2>
+
+              <div class="db-stats">
+                <div class="stat-box">
+                  <h4>Tables</h4>
+                  <p id="tableCount">0</p>
+                </div>
+                <div class="stat-box">
+                  <h4>Total Records</h4>
+                  <p id="recordCount">0</p>
+                </div>
+                <div class="stat-box">
+                  <h4>Last Backup</h4>
+                  <p id="lastBackup">Never</p>
+                </div>
+              </div>
+
+              <div class="db-actions">
+                <button id="backupBtn" class="btn btn-success">
+                  💾 Create Backup
+                </button>
+                <button id="exportBtn" class="btn btn-info">
+                  📤 Export Data
+                </button>
+                <button id="viewSchemaBtn" class="btn btn-secondary">
+                  📋 View Schema
+                </button>
+              </div>
+
+              <div id="queryPanel" class="query-panel">
+                <h3>Database Query</h3>
+                <textarea
+                  id="sqlQuery"
+                  placeholder="Enter SQL query (SELECT only)"
+                  class="sql-input"
+                ></textarea>
+                <button id="executeQueryBtn" class="btn btn-primary">
+                  Execute
+                </button>
+                <div id="queryResult" class="query-result"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Users Section -->
+          <section id="users" class="content-section">
+            <div class="users-panel">
+              <h2>User Management</h2>
+
+              <div class="users-filter">
+                <input
+                  type="text"
+                  id="searchUsers"
+                  placeholder="Search users..."
+                  class="search-input"
+                />
+                <select id="roleFilter" class="select-input">
+                  <option value="">All Roles</option>
+                  <option value="user">User</option>
+                  <option value="moderator">Moderator</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+
+              <div class="users-list-container">
+                <table class="users-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Role</th>
+                      <th>Status</th>
+                      <th>Created</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="usersTableBody">
+                    <tr>
+                      <td colspan="6">Loading users...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- Settings Section -->
+          <section id="settings" class="content-section">
+            <div class="settings-panel">
+              <h2>Settings</h2>
+
+              <div class="settings-group">
+                <h3>Application Settings</h3>
+                <div class="setting-item">
+                  <label>App Name</label>
+                  <input type="text" id="appName" class="setting-input" />
+                </div>
+                <div class="setting-item">
+                  <label>Environment</label>
+                  <select id="environment" class="select-input">
+                    <option>development</option>
+                    <option>production</option>
+                    <option>staging</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="settings-group">
+                <h3>Security</h3>
+                <div class="setting-item">
+                  <label>
+                    <input type="checkbox" id="enableMFA" /> Enable Multi-Factor
+                    Authentication
+                  </label>
+                </div>
+                <div class="setting-item">
+                  <label>
+                    <input type="checkbox" id="enableAudit" /> Enable Audit
+                    Logging
+                  </label>
+                </div>
+              </div>
+
+              <div class="settings-actions">
+                <button id="saveSettingsBtn" class="btn btn-success">
+                  💾 Save Settings
+                </button>
+                <button id="resetSettingsBtn" class="btn btn-secondary">
+                  ↺ Reset to Default
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <!-- Modal for editing files -->
+    <div id="editModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Edit File</h2>
+          <button class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>File Name</label>
+            <input type="text" id="editFileName" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label>Content</label>
+            <textarea id="editFileContent" class="form-textarea"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="saveBtnFile" class="btn btn-success">Save</button>
+          <button id="cancelBtnFile" class="btn btn-secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast" style="display: none"></div>
+
+    <script src="js/admin-dashboard.js"></script>
+  </body>
+</html>
