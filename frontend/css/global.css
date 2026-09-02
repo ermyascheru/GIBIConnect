@@ -1,0 +1,102 @@
+/* GIBIConnect Global Stylesheet */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Work+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --primary: #0F172A;
+  --emerald: #10B981;
+  --emerald-dark: #0da271;
+  --surface: #F8FAFC;
+  --surface-card: #FFFFFF;
+  --text-main: #0F172A;
+  --text-muted: #64748B;
+  --border: rgba(15, 23, 42, 0.1);
+}
+
+html.dark {
+  --primary: #F8FAFC;
+  --surface: #0B0E14;
+  --surface-card: #151C28;
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
+  --border: rgba(255, 255, 255, 0.1);
+}
+
+/* Base resets & typography */
+body {
+  font-family: 'Work Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6, .font-headline {
+  font-family: 'Manrope', sans-serif;
+}
+
+/* Responsive Navigation Bar Spacing */
+header {
+  height: 58px;
+}
+
+@media (max-width: 640px) {
+  header {
+    height: 54px;
+  }
+}
+
+/* Mobile Slide-Out Navigation Drawer */
+#mobile-nav-panel {
+  will-change: transform;
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#mobile-nav-backdrop {
+  will-change: opacity;
+  transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Touch targets */
+button, a {
+  touch-action: manipulation;
+}
+
+/* Smooth custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 185, 129, 0.5);
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Dark Mode Overrides for Tailwind Utilities */
+html.dark .bg-surface-container-lowest { background-color: #151c28 !important; }
+html.dark .bg-surface-container-low { background-color: #1c2433 !important; }
+html.dark .bg-surface-container { background-color: #232d3f !important; }
+html.dark .bg-surface-container-high { background-color: #2a364b !important; }
+html.dark .text-primary, html.dark .text-on-surface, html.dark h1, html.dark h2, html.dark h3, html.dark h4 { color: #f8fafc !important; }
+html.dark .text-on-surface-variant { color: #94a3b8 !important; }
+html.dark .border-outline-variant\/10, 
+html.dark .border-outline-variant\/15, 
+html.dark .border-outline-variant\/20, 
+html.dark .border-outline-variant\/25, 
+html.dark .border-outline-variant\/30 { border-color: rgba(255, 255, 255, 0.12) !important; }
+html.dark input, html.dark select { background-color: #1e293b !important; color: #f8fafc !important; }
+html.dark input::placeholder { color: #64748b !important; }

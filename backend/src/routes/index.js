@@ -13,5 +13,6 @@ router.use('/academic_calendar', require('./academic_calendar.routes'));
 router.use('/search', require('./search.routes'));
 router.use('/ai', require('./ai.routes'));
 router.use('/health', require('./health.routes'));
+router.use('/admin', require('./admin.routes'));
 
 module.exports = router;

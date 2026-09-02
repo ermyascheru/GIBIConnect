@@ -1,10 +1,9 @@
 {
-  "name": "GIBIConnect",
-  "short_name": "GIBI",
-  "description": "Ethiopian Higher Education Directory & Grounded AI Academic Advisor",
-  "start_url": "/",
+  "name": "GIBIConnect - Ethiopian Higher Education",
+  "short_name": "GIBIConnect",
+  "start_url": "explore.html",
   "display": "standalone",
-  "background_color": "#0b0f17",
+  "background_color": "#0F172A",
   "theme_color": "#10B981",
   "orientation": "portrait-primary",
   "icons": [
@@ -20,6 +19,5 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ],
-  "screenshots": []
+  ]
 }

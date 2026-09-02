@@ -8,6 +8,7 @@ const { authenticate, authorize } = require('../middleware/auth.middleware');
 router.get('/', institutionsController.getAllInstitutions);
 router.get('/:id', institutionsController.getInstitutionById);
 router.get('/:id/faculties', institutionsController.getInstitutionFaculties);
+router.get('/:id/departments', institutionsController.getInstitutionFaculties);
 router.get('/:id/programs', institutionsController.getInstitutionPrograms);
 router.get('/:id/admissions', institutionsController.getInstitutionAdmissions);
 router.get('/:id/tuition', institutionsController.getInstitutionTuition);
@@ -15,6 +16,7 @@ router.get('/:id/scholarships', institutionsController.getInstitutionScholarship
 router.get('/:id/facilities', institutionsController.getInstitutionFacilities);
 router.get('/:id/reviews', institutionsController.getInstitutionReviews);
 router.get('/:id/resources', institutionsController.getInstitutionResources);
+router.get('/:id/calendar', institutionsController.getInstitutionCalendar);
 router.post('/', authenticate, authorize('admin'), validate(createInstitutionSchema), institutionsController.createInstitution);
 
 module.exports = router;
