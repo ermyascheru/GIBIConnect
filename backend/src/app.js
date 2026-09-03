@@ -7,13 +7,24 @@ const errorHandler = require('./middleware/error.middleware');
 
 const app = express();
 
-app.use(cors({ origin: process.env.CLIENT_URL || '*', credentials: true }));
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl, or same-origin) or any local dev server
+    callback(null, true);
+  },
+  credentials: true
+}));
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve API Routes
 app.use('/api', routes);
+
+// Admin Dashboard Route
+app.get('/admin-dashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../frontend/admin-dashboard.html'));
+});
 
 // Serve Frontend Static SPA Assets & Routes
 const frontendDir = path.resolve(__dirname, '../../frontend');

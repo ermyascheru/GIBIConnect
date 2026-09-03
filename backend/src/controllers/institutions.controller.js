@@ -121,6 +121,19 @@ const getInstitutionResources = async (req, res, next) => {
   }
 };
 
+const getInstitutionCalendar = async (req, res, next) => {
+  try {
+    const db = require('../config/database');
+    const { rows } = await db.query(
+      'SELECT * FROM academic_calendar WHERE institution_id = $1 ORDER BY start_date ASC',
+      [req.params.id]
+    );
+    return successResponse(res, 200, 'Academic calendar retrieved', rows);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const createInstitution = async (req, res, next) => {
   try {
     const data = await institutionsRepository.create(req.body);
@@ -141,5 +154,6 @@ module.exports = {
   getInstitutionFacilities,
   getInstitutionReviews,
   getInstitutionResources,
+  getInstitutionCalendar,
   createInstitution
 };

@@ -52,7 +52,7 @@ const parseMultipart = (req, res, next) => {
 
       const boundaryBuffer = Buffer.from(`--${boundary}`);
       const body = {};
-      let uploadedFile = null;
+      const files = [];
 
       let start = 0;
       while (start < buffer.length) {
@@ -66,7 +66,7 @@ const parseMultipart = (req, res, next) => {
         const headerEnd = part.indexOf('\r\n\r\n');
         if (headerEnd !== -1) {
           const headerStr = part.slice(0, headerEnd).toString('utf8');
-          const bodyBuffer = part.slice(headerEnd + 4, part.length - 2); // strip trailing CRLF
+          const bodyBuffer = part.slice(headerEnd + 4, part.length - 2);
 
           const nameMatch = headerStr.match(/name="([^"]+)"/);
           const filenameMatch = headerStr.match(/filename="([^"]+)"/);
@@ -81,7 +81,7 @@ const parseMultipart = (req, res, next) => {
               return errorResponse(res, 400, `Unsupported file extension: .${fileExtension}`);
             }
 
-            uploadedFile = {
+            const fileObj = {
               fieldname: nameMatch[1],
               originalname: originalFilename,
               mimetype: mimeType,
@@ -89,6 +89,8 @@ const parseMultipart = (req, res, next) => {
               size: bodyBuffer.length,
               fileExtension
             };
+
+            files.push(fileObj);
           } else if (nameMatch) {
             body[nameMatch[1]] = bodyBuffer.toString('utf8').trim();
           }
@@ -98,7 +100,10 @@ const parseMultipart = (req, res, next) => {
       }
 
       req.body = { ...body, ...req.body };
-      req.file = uploadedFile;
+      req.files = files;
+      if (files.length > 0) {
+        req.file = files[0];
+      }
       next();
     } catch (err) {
       return errorResponse(res, 500, `Multipart parsing error: ${err.message}`);
@@ -110,8 +115,16 @@ const parseMultipart = (req, res, next) => {
   });
 };
 
-module.exports = {
-  parseMultipart,
-  ALLOWED_EXTENSIONS,
-  ALLOWED_MIME_TYPES
-};
+function uploadMiddleware(req, res, next) {
+  return parseMultipart(req, res, next);
+}
+
+uploadMiddleware.array = () => (req, res, next) => parseMultipart(req, res, next);
+uploadMiddleware.single = () => (req, res, next) => parseMultipart(req, res, next);
+uploadMiddleware.fields = () => (req, res, next) => parseMultipart(req, res, next);
+uploadMiddleware.none = () => (req, res, next) => next();
+uploadMiddleware.parseMultipart = parseMultipart;
+uploadMiddleware.ALLOWED_EXTENSIONS = ALLOWED_EXTENSIONS;
+uploadMiddleware.ALLOWED_MIME_TYPES = ALLOWED_MIME_TYPES;
+
+module.exports = uploadMiddleware;

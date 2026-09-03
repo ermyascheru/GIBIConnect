@@ -40,7 +40,7 @@ class InstitutionsRepository {
     values.push(limit, offset);
     const dataQuery = `
       SELECT id, name, slug, description, type, ownership, logo_url, cover_image_url, 
-             city, region, accreditation, status
+             website_url, city, region, accreditation, status
       FROM institutions
       ${whereClause}
       ORDER BY name ASC

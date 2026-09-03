@@ -1,2 +1,189 @@
-<!-- Scholar sign-in & registration portal -->
-<!-- To be moved from Elsa's Role/login.html -->
+<!-- GIBIConnect Login Page -->
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In / Register — GIBIConnect</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/auth.css">
+</head>
+<body class="bg-background text-on-background font-body-md text-sm min-h-screen flex flex-col antialiased">
+  <div class="fixed top-4 right-4 z-50">
+    <button id="theme-toggle-btn" onclick="toggleTheme()" class="p-2 rounded-full bg-surface-container-lowest/80 dark:bg-slate-800/80 backdrop-blur-md text-on-surface-variant hover:text-[#10B981] transition-all shadow-md flex items-center justify-center border border-outline-variant/20 cursor-pointer" title="Toggle Theme">
+      <span class="material-symbols-outlined text-[20px]" id="theme-toggle-icon">dark_mode</span>
+    </button>
+  </div>
+
+  <div class="min-h-screen flex flex-col lg:flex-row w-full">
+    <!-- LEFT SHOWCASE COLUMN -->
+    <div class="w-full lg:w-3/5 bg-gradient-to-b from-[#0b0f17] via-[#0F172A] to-[#0b0f17] text-white p-8 sm:p-12 lg:p-16 flex flex-col justify-between items-center relative overflow-hidden border-b lg:border-b-0 lg:border-r border-slate-800">
+      <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div class="w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[120px]"></div>
+      </div>
+      <div class="hidden lg:block"></div>
+
+      <div class="my-auto py-12 flex flex-col items-center text-center z-10 space-y-5 animate-fade-in">
+        <div class="relative group">
+          <div class="absolute -inset-2 bg-gradient-to-r from-emerald-500/20 to-transparent rounded-full blur-xl opacity-75 group-hover:opacity-100 transition duration-500"></div>
+          <img src="../assets/logos/gibi_logo-removebg-preview.png" alt="GIBIConnect Logo" onerror="this.src='../assets/gibi_logo-removebg-preview.png'" class="relative h-24 w-24 sm:h-32 sm:w-32 object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-300">
+        </div>
+        <div>
+          <h1 class="font-headline-md text-3xl sm:text-5xl font-extrabold tracking-tight">
+            <span class="text-[#10B981]">GIBI</span><span class="text-white">Connect</span>
+          </h1>
+          <p class="text-xs sm:text-sm text-slate-400 font-medium tracking-widest uppercase mt-2">
+            Ethiopian Higher Education Directory & Grounded AI
+          </p>
+        </div>
+      </div>
+      <div class="z-10 text-[11px] text-slate-500">© 2026 GIBIConnect. All rights reserved.</div>
+    </div>
+
+    <!-- RIGHT AUTHENTICATION COLUMN -->
+    <div class="w-full lg:w-2/5 flex items-center justify-center px-6 py-8 sm:px-10 lg:px-8 xl:px-12 bg-surface-container-lowest overflow-y-auto">
+      <div class="w-full max-w-sm space-y-4 my-auto animate-fade-in">
+        
+        <!-- Tab Switcher -->
+        <div class="flex p-1 bg-surface-container-low rounded-2xl border border-outline-variant/15 text-xs font-bold w-full">
+          <button id="tab-signin" onclick="setAuthMode('login')" class="flex-1 py-2 rounded-xl bg-surface-container-lowest text-primary shadow-xs transition-all font-bold">Sign In</button>
+          <button id="tab-signup" onclick="setAuthMode('register')" class="flex-1 py-2 rounded-xl text-on-surface-variant hover:text-primary transition-all">Register</button>
+        </div>
+
+        <div>
+          <h2 id="auth-heading" class="font-headline-lg text-xl sm:text-2xl font-extrabold text-primary tracking-tight">Welcome back</h2>
+          <p id="auth-subtext" class="text-xs text-on-surface-variant mt-0.5">Sign in to access your scholar workspace.</p>
+        </div>
+
+        <div id="auth-error-banner" class="hidden p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-500 text-xs flex items-center gap-2">
+          <span class="material-symbols-outlined text-[16px]">error</span>
+          <span id="auth-error-msg"></span>
+        </div>
+
+        <form id="auth-form" class="space-y-3 w-full">
+          <div id="field-fullname" class="hidden space-y-1">
+            <label class="block text-xs font-bold text-primary">Full Name</label>
+            <div class="relative w-full">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">person</span>
+              <input id="input-fullname" type="text" placeholder="e.g. Abebe Bikila" class="w-full bg-surface-container-low border border-outline-variant/25 rounded-xl py-2.5 pl-10 pr-4 text-xs text-primary focus:ring-2 focus:ring-[#10B981] outline-none">
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-bold text-primary">Email Address</label>
+            <div class="relative w-full">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">mail</span>
+              <input id="input-email" type="email" required placeholder="name@university.edu.et" class="w-full bg-surface-container-low border border-outline-variant/25 rounded-xl py-2.5 pl-10 pr-4 text-xs text-primary focus:ring-2 focus:ring-[#10B981] outline-none">
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-bold text-primary">Password</label>
+            <div class="relative w-full">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">lock</span>
+              <input id="input-password" type="password" required placeholder="••••••••" class="w-full bg-surface-container-low border border-outline-variant/25 rounded-xl py-2.5 pl-10 pr-10 text-xs text-primary focus:ring-2 focus:ring-[#10B981] outline-none">
+              <button type="button" onclick="const p=document.getElementById('input-password'); p.type = p.type==='password'?'text':'password';" class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary">
+                <span class="material-symbols-outlined text-[18px]">visibility</span>
+              </button>
+            </div>
+          </div>
+
+          <button id="auth-submit-btn" type="submit" class="w-full py-2.5 rounded-xl bg-[#10B981] hover:bg-[#0da271] text-slate-950 font-bold text-xs transition shadow-md flex items-center justify-center gap-2 cursor-pointer mt-2">
+            Sign In to GIBIConnect
+          </button>
+        </form>
+
+        <div class="pt-2 text-center">
+          <a href="explore.html" class="text-xs text-on-surface-variant hover:text-[#10B981] font-semibold transition">
+            Continue exploring as guest →
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { handleLogin, handleRegister } from '../js/auth/auth.js';
+
+    let currentMode = 'login';
+    window.setAuthMode = function(mode) {
+      currentMode = mode;
+      const tabIn = document.getElementById('tab-signin');
+      const tabUp = document.getElementById('tab-signup');
+      const nameField = document.getElementById('field-fullname');
+      const heading = document.getElementById('auth-heading');
+      const subtext = document.getElementById('auth-subtext');
+      const btn = document.getElementById('auth-submit-btn');
+      const errBanner = document.getElementById('auth-error-banner');
+      if (errBanner) errBanner.classList.add('hidden');
+
+      if (mode === 'login') {
+        tabIn.className = 'flex-1 py-2 rounded-xl bg-surface-container-lowest text-primary shadow-xs transition-all font-bold';
+        tabUp.className = 'flex-1 py-2 rounded-xl text-on-surface-variant hover:text-primary transition-all';
+        nameField.classList.add('hidden');
+        heading.textContent = 'Welcome back';
+        subtext.textContent = 'Sign in to access your scholar workspace.';
+        btn.textContent = 'Sign In to GIBIConnect';
+      } else {
+        tabUp.className = 'flex-1 py-2 rounded-xl bg-surface-container-lowest text-primary shadow-xs transition-all font-bold';
+        tabIn.className = 'flex-1 py-2 rounded-xl text-on-surface-variant hover:text-primary transition-all';
+        nameField.classList.remove('hidden');
+        heading.textContent = 'Create Scholar Account';
+        subtext.textContent = 'Join the nationwide academic network across Ethiopia.';
+        btn.textContent = 'Create Student Account';
+      }
+    };
+
+    document.getElementById('auth-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('input-email').value;
+      const password = document.getElementById('input-password').value;
+      const fullName = document.getElementById('input-fullname')?.value || '';
+      const btn = document.getElementById('auth-submit-btn');
+      const errBanner = document.getElementById('auth-error-banner');
+      const errText = document.getElementById('auth-error-msg');
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="material-symbols-outlined text-[16px] animate-spin">sync</span> Processing...';
+      if (errBanner) errBanner.classList.add('hidden');
+
+      let res;
+      if (currentMode === 'login') {
+        res = await handleLogin(email, password);
+      } else {
+        res = await handleRegister(fullName, email, password);
+      }
+
+      btn.disabled = false;
+      btn.textContent = currentMode === 'login' ? 'Sign In to GIBIConnect' : 'Create Student Account';
+
+      if (!res.success) {
+        if (errBanner && errText) {
+          errText.textContent = res.message || 'Authentication failed. Please check your credentials.';
+          errBanner.classList.remove('hidden');
+        }
+      } else {
+        window.location.href = 'explore.html';
+      }
+    });
+
+    window.toggleTheme = function() {
+      const html = document.documentElement;
+      const isDark = html.classList.contains('dark');
+      const icon = document.getElementById('theme-toggle-icon');
+      if (isDark) {
+        html.classList.remove('dark');
+        localStorage.setItem('gibi_theme', 'light');
+        if (icon) icon.textContent = 'light_mode';
+      } else {
+        html.classList.add('dark');
+        localStorage.setItem('gibi_theme', 'dark');
+        if (icon) icon.textContent = 'dark_mode';
+      }
+    };
+  </script>
+</body>
+</html>

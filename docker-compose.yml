@@ -1,0 +1,157 @@
+services:
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: ${DB_NAME:-gibiconnect}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+      # Canonical schema
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+
+      # pgvector RAG table
+      - ./database/migrations/003_rag_vector_chunks.sql:/docker-entrypoint-initdb.d/02_rag.sql:ro
+
+      # Development/demo data
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/03_seed.sql:ro
+
+      # Image URLs
+      - ./database/migrations/004_populate_institution_and_facility_images.sql:/docker-entrypoint-initdb.d/04_images.sql:ro
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-gibiconnect}"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    restart: unless-stopped
+
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-gibiconnect}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+
+      JWT_SECRET: ${JWT_SECRET:-super-secret-jwt-key}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+
+      CLIENT_URL: ${CLIENT_URL:-http://localhost}
+
+      OLLAMA_BASE_URL: http://ollama:11434
+      LLM_PROVIDER: ollama
+      LLM_MODEL: ${LLM_MODEL:-llama3.2}
+      EMBEDDING_PROVIDER: ollama
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-nomic-embed-text}
+
+      VECTOR_DIMENSION: 768
+      RAG_TOP_K: 5
+      RAG_SIMILARITY_THRESHOLD: 0.50
+
+      CHUNK_SIZE: 500
+      CHUNK_OVERLAP: 60
+      MIN_CHUNK_LENGTH: 30
+
+      AI_TEMPERATURE: 0.2
+      AI_MAX_TOKENS: 500
+      AI_TIMEOUT: 90000
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
+
+    expose:
+      - "5000"
+
+    volumes:
+      - app_uploads:/app/storage/uploads
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "node -e \"fetch('http://127.0.0.1:5000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
+    restart: unless-stopped
+
+    depends_on:
+      backend:
+        condition: service_healthy
+
+    ports:
+      - "80:80"
+
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+
+    volumes:
+      - ollama_data:/root/.ollama
+
+    expose:
+      - "11434"
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "ollama list >/dev/null 2>&1"
+        ]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 20s
+
+  ollama-init:
+    image: ollama/ollama:latest
+
+    depends_on:
+      ollama:
+        condition: service_healthy
+
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+
+    entrypoint: ["/bin/sh", "-c"]
+
+    command:
+      - |
+        ollama pull ${LLM_MODEL:-llama3.2}
+        ollama pull ${EMBEDDING_MODEL:-nomic-embed-text}
+
+    restart: "no"
+
+volumes:
+  pgdata:
+  ollama_data:
+  app_uploads:
