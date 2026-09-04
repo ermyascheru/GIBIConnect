@@ -115,9 +115,12 @@ The user interface is built using **HTML5, JavaScript ES Modules (`type="module"
 
 ---
 
-## 9. System Architecture Diagram
 
-```text
+## 9. System Architecture
+
+GIBIConnect follows a layered, decoupled system architecture:
+
+* text
 [ CLIENT / BROWSER LAYER ]
    ├── explore.html | institutions.html | programs.html | ai-advisor.html | profile.html
    └── Vanilla JS ES Modules (api.js, navigation.js, auth.js) + Tailwind CSS
@@ -133,20 +136,32 @@ The user interface is built using **HTML5, JavaScript ES Modules (`type="module"
 [ DATABASE LAYER (PostgreSQL 16) ]   [ LOCAL AI ENGINE (Ollama on localhost:11434) ]
    ├── Relational Tables (11 Core)      ├── nomic-embed-text (Embeddings)
    ├── pgvector (HNSW Index, 768-dim)   └── Llama 3.2 (Grounded Synthesis)
-   └── Full-Text & Trigram Indexes
-10. Security & Quality Assurance
-Cryptographic Security: Passwords salted and hashed with bcrypt (10 rounds); sensitive configurations managed via isolated .env files.
-SQL Injection Immunity: 100% of database queries execute via parameterized statements ($1, $2, ...).
-Comprehensive Automated Test Suite: A 32-point test harness (backend/tests/full_system_test_suite.js) verifying Unit logic, Database constraints, API endpoints, AI/RAG retrieval, and Integration flows with a 100% Pass Rate.
-11. Expected Benefits
-For Students: Single access point for verified university directories, cut-off marks, fee transparency, and reliable AI guidance.
-For Universities: Structured digital presence to showcase accredited curricula, research output, and official admission timelines.
-For Educational Planning: Eliminates misinformation and empowers students to make data-backed academic decisions.
-12. Future Enhancements
-Dedicated GPU Worker Nodes: High-throughput concurrent LLM inference streams.
-Multi-Language Support: Native user interface and AI consultation in Amharic, Afaan Oromoo, and Tigrinya.
-Mobile Applications: Cross-platform Flutter / React Native mobile apps with offline bookmark synchronization.
-Automated PDF OCR Pipeline: Direct ingestion and semantic vectorization of scanned university documents.
+   └── Full-Text & Trigram Indexes 
+---
+
+---
+### 10. Security & Quality Assurance
+* **Cryptographic Security**: Passwords salted and hashed with bcrypt (10 rounds); sensitive configurations managed via isolated .env files.
+* **SQL Injection Immunity**: 100% of database queries execute via parameterized statements ($1, $2, ...).
+* **Input Validation**: Strict Joi schema validation on all incoming request payloads before reaching database layers.
+* **Role-Based Access Control (RBAC)**: Stateless JWT authentication enforcing user privilege boundaries (user, moderator, admin).
+* **Comprehensive Automated Test Suite**: A 32-point test harness (backend/tests/full_system_test_suite.js) verifying Unit logic, Database constraints, API endpoints, AI/RAG retrieval, and Integration flows with a 100% Pass Rate.
+### 11. Expected Benefits
+### For Students
+* **Single Access Point**: Centralized access to verified university directories, degree curricula, cut-off marks, and fee structures.
+* **Personalized AI Guidance**: Real-time conversational guidance grounded strictly in official institutional data.
+* **Transparent Comparison**: Clear, side-by-side comparison of degree programs and tuition across public and private institutions.
+### For Educational Institutions
+* **Structured Digital Presence**: Authoritative platform to publish verified academic calendars, admissions criteria, and research publications.
+* **Reduced Inquiry Overhead**: Automated AI answering of repetitive admission, scholarship, and program inquiries.
+### For Educational Planning
+* **Elimination of Misinformation**: Anchors student expectations in verified facts, reducing dropouts and uninformed academic choices.
+### 12. Future Enhancements
+* **Dedicated GPU Worker Nodes**: High-throughput concurrent LLM inference streams for nationwide deployment.
+* **Multi-Language Support**: Native user interface and AI consultation in Amharic, Afaan Oromoo, and Tigrinya.
+* **Cross-Platform Mobile Apps**: Flutter / React Native applications with offline bookmark and resource synchronization.
+* **Automated PDF OCR Pipeline**: Direct ingestion, chunking, and semantic vectorization of scanned university prospectuses and syllabi.
+* **Entrance Exam Scoring Simulator**: Interactive cut-off score predictor based on historical matriculation trends.
 13. Project Team & Responsibilities
 No.	Full Name	Student ID	Core Project Responsibility
 1	Ermiyas Cheru	CTC-5723-26	Database Design, pgvector & AI/RAG Orchestration
@@ -154,7 +169,7 @@ No.	Full Name	Student ID	Core Project Responsibility
 3	Ezra Michael	CTC-3205-26	UI/UX Design, CSS Styling & Reusable Components
 4	Ezana Girmay	CTC-7612-26	Frontend Pages, Routing & Search Integration
 5	Elsabeth Berhanu	CTC-1036-26	Authentication, Admin Console & Quality Assurance Testing
-14. Conclusion
-GIBIConnect delivers an integrated, scalable, and intelligent educational platform that solves higher-education information fragmentation in Ethiopia.
+### 14. Conclusion
+* GIBIConnect delivers an integrated, scalable, and intelligent educational platform that resolves the severe information fragmentation in Ethiopian higher education.
 
-By combining relational data modeling in PostgreSQL 16, hardware-accelerated semantic search in pgvector, modern performant frontend views, and grounded local AI reasoning via Llama 3.2 and Ollama, GIBIConnect establishes an authoritative, zero-hallucination digital companion that empowers scholars to explore opportunities, compare institutions, and make confident decisions about their academic future
+* By combining relational data modeling in PostgreSQL 16, hardware-accelerated semantic search in pgvector, modern performant frontend views, and grounded local AI reasoning via Llama 3.2 and Ollama, GIBIConnect establishes an authoritative, zero-hallucination digital companion that empowers students to explore opportunities, compare institutions, and make confident decisions about their academic future.
