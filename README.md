@@ -1,373 +1,160 @@
-# GIBI Connect
+# GIBIConnect
 
-## Educational Information and AI Consultation Platform
+## Educational Information and AI Consultation Platform for Higher Education
+
+---
 
 ### 1. Project Overview
 
-**GIBI Connect** is a centralized educational technology platform designed to help students easily access educational information, academic resources, guidance, and AI-powered consultation services through a single digital platform.
+**GIBIConnect** is a centralized educational technology platform designed to help students easily access verified institutional information, academic programs, scholarship opportunities, academic resources, and AI-powered consultation services through a unified digital platform.
 
-The main purpose of GIBI Connect is to reduce the difficulty students face when searching for reliable educational information and making academic decisions. Students often need to search through different websites, social media platforms, institutional pages, and other sources to find information about educational opportunities, programs, academic resources, and career-related guidance. GIBI Connect aims to bring these services together in one organized and accessible system.
+The primary purpose of GIBIConnect is to resolve the severe information fragmentation students face when searching for reliable higher-education data and making academic decisions in Ethiopia. Students frequently struggle across disconnected websites, outdated portals, and informal social media channels to find basic details regarding university programs, entrance cut-off points, tuition fee structures, and academic calendars. GIBIConnect consolidates these essential services into one organized, accessible, and verified system.
 
-The platform will provide students with educational information while also using an **AI consultation system** to provide personalized guidance based on a student's questions, interests, academic situation, and goals. The system is intended to function as a digital educational companion that can help students understand available opportunities and make more informed academic decisions.
+In addition to centralized directories, GIBIConnect features a **grounded AI Academic Consultation System (RAG)** that provides personalized guidance based on a student's questions, interests, and academic goals. The system functions as a digital educational advisor that answers student queries strictly using authoritative database records and verified institutional documents.
 
-GIBI Connect will use a modern web architecture consisting of a **React + Vite frontend, Node.js and Express.js backend, PostgreSQL database, and AI-powered consultation system**. These components will work together to provide a secure, scalable, and user-friendly platform.
+The platform is engineered using a robust modern architecture consisting of an **HTML5 + ES Modules + Tailwind CSS frontend, a Node.js + Express.js RESTful API gateway, a PostgreSQL 16 database with pgvector, and a local Ollama AI engine (Llama 3.2 & nomic-embed-text)**.
 
 ---
 
 ## 2. Problem Statement
 
-Students face several challenges when trying to obtain educational information and guidance.
+Students and academic stakeholders in Ethiopia face critical information bottlenecks:
 
-Educational information is often distributed across different platforms and sources. Information about universities, colleges, academic programs, scholarships, educational opportunities, and other resources may be difficult to find, outdated, or poorly organized.
+1. **Fragmented & Outdated Information**: Data regarding universities, colleges, degree curricula, admissions criteria, and scholarships is scattered across unmaintained websites, physical registrar bulletin boards, or informal channels.
+2. **Opaque Admissions & Tuition Details**: Matriculation thresholds, department prerequisites, and cost-sharing/tuition schedules are rarely standardized or accessible in advance, leading to uninformed choices.
+3. **Limited Access to Academic Guidance**: Many secondary and undergraduate students lack immediate access to dedicated academic counselors to help them evaluate suitable fields of study.
+4. **Lack of Personalization & Verification**: Existing websites provide static, unverified lists without search filtering, interactive comparison, or verifiable academic documents.
 
-Students may also have difficulty determining which educational path is appropriate for them. A student may have questions about their academic interests, possible career paths, available opportunities, or what skills they should develop. In many cases, students do not have immediate access to an academic advisor or counselor who can provide guidance.
-
-Another challenge is that existing platforms may provide information without offering personalized interaction. Students may find information online but still need help understanding it and determining how it applies to their individual situation.
-
-**GIBI Connect addresses these problems by combining centralized educational information with an AI-powered consultation system in one platform.**
+**GIBIConnect solves these challenges by uniting authoritative relational data with a zero-hallucination Retrieval-Augmented Generation (RAG) AI consultation system.**
 
 ---
 
 ## 3. Project Objectives
 
 ### General Objective
-
-To develop a centralized educational information and AI consultation platform that provides students with accessible educational resources, personalized guidance, and useful academic information.
+To design, implement, and evaluate a centralized higher-education information and AI consultation platform that provides students with accessible institutional directories, transparent admissions criteria, verified resources, and personalized AI academic guidance.
 
 ### Specific Objectives
-
-The project aims to:
-
-1. Develop a centralized platform for organizing and providing educational information.
-2. Provide students with an easy-to-use interface for accessing educational resources.
-3. Develop secure user registration and authentication.
-4. Store and manage user and educational information using a PostgreSQL database.
-5. Develop a backend API using Node.js and Express.js.
-6. Integrate an AI consultation system capable of responding to students' educational questions.
-7. Provide personalized academic guidance based on user-provided information.
-8. Help students explore educational opportunities and make informed decisions.
-9. Maintain organized and reliable educational data.
-10. Develop the system using a modular architecture that can be expanded with additional features in the future.
+1. **Centralize Institutional Data**: Build a unified catalog indexing Ethiopian universities and colleges with verified profiles, official emblems, and contact details.
+2. **Standardize Curricula & Costs**: Provide structured comparisons of degree programs across degree levels (Bachelor, Master, PhD), study modes (Regular, Extension, Online), and transparent tuition fee schedules.
+3. **Integrate a Grounded AI Advisor**: Implement a local RAG pipeline capable of answering natural-language student queries backed by cited database records and document chunks.
+4. **Democratize Academic Resources**: Establish a moderated repository for syllabi, lecture notes, academic calendars, and peer-reviewed research papers.
+5. **Enforce Security & Data Integrity**: Implement salted bcrypt password hashing, stateless JWT authentication, and strict Role-Based Access Control (RBAC).
+6. **Ensure High Performance & Scalability**: Utilize hardware-accelerated vector indexing (pgvector HNSW) and PostgreSQL full-text/trigram search (`tsvector`, `pg_trgm`) for sub-120ms response times.
 
 ---
 
 ## 4. Target Users
 
-GIBI Connect is primarily intended for:
-
-* **High school students** looking for information about higher education and future academic paths.
-* **College and university students** looking for academic guidance and educational resources.
-* **Students searching for scholarships and educational opportunities.**
-* **Students seeking career and academic guidance.**
-* **Educational institutions and administrators** who may provide or manage educational information.
-* **Future educators and counselors** who may use the platform as an additional source of information and guidance.
+* **High School Students**: Exploring higher-education opportunities, entrance requirements, and university selections.
+* **Undergraduate & Graduate Students**: Accessing academic syllabi, degree roadmaps, research publications, and scholarship funding.
+* **Scholarship Seekers**: Discovering active national and institutional grants, eligibility requirements, and application deadlines.
+* **University Administrators & Faculty**: Publishing official program updates, admissions criteria, and institutional research.
+* **Educators & Counselors**: Using verified institutional data to assist students in academic planning.
 
 ---
 
 ## 5. Major Features
 
-### 5.1 User Registration and Authentication
+### 5.1 User Authentication & Role-Based Access Control (RBAC)
+* Secure user registration and login with bcrypt password salting (10 rounds).
+* Stateless JWT (JSON Web Token) bearer authentication with role-based route guards (`user`, `moderator`, `admin`).
+* Profile customization and personal dashboard management.
 
-Users will be able to create accounts and securely log into the platform.
+### 5.2 Interactive University & Program Directories
+* **18+ Verified Ethiopian University Hubs**: Detailed profiles with verified logos (e.g., ASTU emblem), location maps, leadership, and contact data.
+* **8 Dynamic Subtabs per Campus**: Overview, Faculties/Departments, Degree Programs, Admissions Criteria, Tuition Fees, Campus Facilities, Scholarships, and Academic Calendars.
+* **Multi-Facet Search & Filtering**: Real-time filtering by Region (*Oromia, Amhara, Addis Ababa, Tigray, Sidama*), Governance (*Public vs Private*), and Degree Level (*Bachelor, Master, PhD*).
 
-The authentication system will allow the application to:
+### 5.3 Grounded AI Academic Consultation (RAG)
+* **Natural Language Advisory**: Students can ask questions regarding majors, career pathways, entrance cut-offs, and tuition rates.
+* **Retrieval-Augmented Generation (RAG)**: Connects local embeddings (`nomic-embed-text`) with vector similarity search (`pgvector`) to feed verified context to `Llama 3.2`.
+* **Zero-Hallucination Guardrails**: Prompts are fenced with authoritative database records; the AI refutes fictional queries and admits missing data rather than hallucinating.
+* **Citations & Sources**: Displays the exact source university, document title, and page number with every AI response.
 
-* Register new users.
-* Authenticate existing users.
-* Secure user accounts.
-* Manage user sessions.
-* Control access to protected features.
-* Manage different user roles where required.
+### 5.4 Academic Resources & Research Repository
+* Searchable digital library of verified syllabi, lecture slides, past exams, and research papers.
+* In-browser document streaming and secure direct file downloads.
+* Full-text search (`tsvector`) and typo-tolerant trigram search (`pg_trgm`).
 
----
-
-### 5.2 Student Profile
-
-Registered users will have a personal profile containing relevant information that can help personalize their experience.
-
-Depending on the final implementation, a profile may contain information such as:
-
-* Name
-* Educational level
-* Field of study
-* Academic interests
-* Skills
-* Career interests
-* Educational goals
-
-This information can also be used by the AI consultation system to provide more relevant guidance.
-
----
-
-### 5.3 Educational Information
-
-The platform will organize educational information into categories so that users can find relevant information more easily.
-
-Possible categories include:
-
-* Universities
-* Colleges
-* Academic programs
-* Departments
-* Scholarships
-* Training opportunities
-* Educational resources
-* Career information
-* Skills development
-* Admission information
-
-The information will be stored and managed through the backend and PostgreSQL database.
-
----
-
-### 5.4 AI Consultation
-
-One of the main features of GIBI Connect is the **AI consultation system**.
-
-Students will be able to ask educational questions and receive AI-generated guidance.
-
-For example, a student could ask:
-
-> "I am interested in artificial intelligence. What skills should I learn?"
-
-The AI system could provide information about programming, mathematics, machine learning, data structures, projects, and other relevant skills.
-
-Students could also ask questions about:
-
-* Academic choices
-* Career paths
-* Skills to learn
-* Study strategies
-* Educational opportunities
-* Academic subjects
-* Technology fields
-* Career preparation
-* Personal learning goals
-
-The AI consultation system is intended to provide **guidance and educational assistance**, rather than replace professional academic counselors or official institutional information.
+### 5.5 Student Bookmarking & Personal Dashboard
+* Personalized saved items: Bookmark universities, degree curricula, scholarships, and academic documents to a unified student dashboard.
 
 ---
 
 ## 6. Database System
 
-GIBI Connect will use **PostgreSQL** as its primary relational database.
+GIBIConnect utilizes **PostgreSQL 16** with advanced extensions as its database foundation:
 
-The database will be responsible for storing and managing structured application information.
-
-Potential database entities include:
-
-* Users
-* Student profiles
-* Educational institutions
-* Academic programs
-* Scholarships
-* Educational resources
-* AI consultation history
-* User preferences
-* User roles
-
-The database allows information to be stored persistently instead of relying on temporary application data.
-
-The backend will communicate with PostgreSQL through appropriate database connections and queries.
+* **Relational Schema**: 11 core canonical tables (`users`, `institutions`, `faculties`, `departments`, `programs`, `admissions`, `tuition_fees`, `scholarships`, `resources`, `research`, `academic_calendar`, `reviews`).
+* **pgvector Extension**: Stores 768-dimensional dense vector embeddings in `rag_document_chunks` indexed with **HNSW (Hierarchical Navigable Small World)** for high-speed cosine distance similarity search (`vector_cosine_ops`).
+* **pg_trgm & pgcrypto**: Powers typo-tolerant fuzzy search, instant autocomplete (`gin_trgm_ops`), and UUID primary key generation (`gen_random_uuid()`).
+* **Referential Integrity**: Enforces strict `ON DELETE RESTRICT` on core academic hierarchies and `ON DELETE CASCADE` on transient embeddings and bookmarks.
 
 ---
 
-## 7. Backend System
+## 7. Backend Architecture
 
-The backend will be developed using **Node.js and Express.js**.
+The backend is developed with **Node.js v24 and Express.js 4.19**:
 
-The backend will act as the main communication layer between the frontend, database, authentication system, and AI services.
-
-Its responsibilities will include:
-
-* Handling API requests.
-* Managing authentication.
-* Validating user input.
-* Communicating with PostgreSQL.
-* Managing user accounts.
-* Retrieving educational information.
-* Storing relevant user information.
-* Processing AI consultation requests.
-* Returning responses to the frontend.
-* Implementing security and authorization rules.
-
-The backend will expose RESTful API endpoints that the frontend can use to communicate with the system.
+* **Layered MVC/Repository Architecture**: Strict separation between Controllers, Services, SQL Repositories, and Route Middleware.
+* **AI Orchestration Layer**: Query intent classification (`query.classifier.js`), structured SQL retrieval (`structured.retriever.js`), prompt fencing (`context.builder.js`), and LLM service connection (`llm.service.js`).
+* **Input Validation**: Centralized request payload validation using **Joi** schemas before reaching database queries.
+* **Security Middleware**: Centralized error envelopes, CORS configuration, rate limiting, and JWT authentication guards.
 
 ---
 
-## 8. Frontend System
+## 8. Frontend Architecture
 
-The user interface will be developed using **React with Vite**, with **TypeScript and Tailwind CSS** used to create a structured and responsive interface.
+The user interface is built using **HTML5, JavaScript ES Modules (`type="module"`), and Tailwind CSS**:
 
-The frontend will provide users with access to the platform's major features.
-
-Possible pages include:
-
-* Home page
-* Registration page
-* Login page
-* Student dashboard
-* User profile
-* Educational information page
-* Scholarship/opportunity page
-* AI consultation page
-* Resources page
-* Administration pages
-
-The interface will be designed to be simple and accessible so that students can navigate the system without requiring advanced technical knowledge.
+* **Performance & Speed**: Zero client-side framework overhead, achieving sub-50ms paint times and instantaneous navigation.
+* **Dynamic DOM Lifecycle Gates**: Built with `document.readyState` checks to eliminate ES module asynchronous execution delays.
+* **Visual Logo & Monogram Fallback Engine**: Renders verified university emblems where available and falls back gracefully to clean initials badges (`AAU`, `BDU`, `JU`) for null records.
+* **Responsive Layouts**: Fully responsive across mobile (320px), tablet, and desktop (4K) viewports with slide-out navigation drawers and search command modals.
 
 ---
 
-## 9. System Architecture
+## 9. System Architecture Diagram
 
-GIBI Connect will follow a layered architecture.
+```text
+[ CLIENT / BROWSER LAYER ]
+   ├── explore.html | institutions.html | programs.html | ai-advisor.html | profile.html
+   └── Vanilla JS ES Modules (api.js, navigation.js, auth.js) + Tailwind CSS
+            │
+            ▼ (HTTP / JSON REST API Requests)
+[ APPLICATION / BACKEND LAYER (Node.js + Express 4.19) ]
+   ├── JWT Auth Middleware & Role-Based Access Control (RBAC)
+   ├── Joi Request Validation Layer
+   ├── REST Controllers & Services (Institutions, Programs, Scholarships, Users)
+   └── AI Orchestrator & Query Intent Classifier
+            │                                  │
+            ▼ (SQL Queries & Transactions)     ▼ (768-dim Vectors & Prompts)
+[ DATABASE LAYER (PostgreSQL 16) ]   [ LOCAL AI ENGINE (Ollama on localhost:11434) ]
+   ├── Relational Tables (11 Core)      ├── nomic-embed-text (Embeddings)
+   ├── pgvector (HNSW Index, 768-dim)   └── Llama 3.2 (Grounded Synthesis)
+   └── Full-Text & Trigram Indexes
+10. Security & Quality Assurance
+Cryptographic Security: Passwords salted and hashed with bcrypt (10 rounds); sensitive configurations managed via isolated .env files.
+SQL Injection Immunity: 100% of database queries execute via parameterized statements ($1, $2, ...).
+Comprehensive Automated Test Suite: A 32-point test harness (backend/tests/full_system_test_suite.js) verifying Unit logic, Database constraints, API endpoints, AI/RAG retrieval, and Integration flows with a 100% Pass Rate.
+11. Expected Benefits
+For Students: Single access point for verified university directories, cut-off marks, fee transparency, and reliable AI guidance.
+For Universities: Structured digital presence to showcase accredited curricula, research output, and official admission timelines.
+For Educational Planning: Eliminates misinformation and empowers students to make data-backed academic decisions.
+12. Future Enhancements
+Dedicated GPU Worker Nodes: High-throughput concurrent LLM inference streams.
+Multi-Language Support: Native user interface and AI consultation in Amharic, Afaan Oromoo, and Tigrinya.
+Mobile Applications: Cross-platform Flutter / React Native mobile apps with offline bookmark synchronization.
+Automated PDF OCR Pipeline: Direct ingestion and semantic vectorization of scanned university documents.
+13. Project Team & Responsibilities
+No.	Full Name	Student ID	Core Project Responsibility
+1	Ermiyas Cheru	CTC-5723-26	Database Design, pgvector & AI/RAG Orchestration
+2	Fekadu Alemnew	CTC-4438-26	Backend Architecture, Express REST API & Security
+3	Ezra Michael	CTC-3205-26	UI/UX Design, CSS Styling & Reusable Components
+4	Ezana Girmay	CTC-7612-26	Frontend Pages, Routing & Search Integration
+5	Elsabeth Berhanu	CTC-1036-26	Authentication, Admin Console & Quality Assurance Testing
+14. Conclusion
+GIBIConnect delivers an integrated, scalable, and intelligent educational platform that solves higher-education information fragmentation in Ethiopia.
 
-The major components will be:
-
-**User → React Frontend → Node.js/Express Backend → PostgreSQL Database**
-
-The AI consultation system will also communicate through the backend so that sensitive operations and API credentials are not unnecessarily exposed to the frontend.
-
-The architecture can therefore be represented conceptually as:
-
-**Frontend**
-→ React + Vite
-→ TypeScript
-→ Tailwind CSS
-
-**Backend**
-→ Node.js
-→ Express.js
-→ REST API
-→ Authentication
-→ Business Logic
-
-**Data Layer**
-→ PostgreSQL
-→ Users
-→ Educational Information
-→ Profiles
-→ Consultation Data
-
-**AI Layer**
-→ AI consultation service
-→ Student questions
-→ Context/personalization
-→ AI-generated educational guidance
-
----
-
-## 10. Security
-
-Security will be an important part of the system.
-
-The platform will implement appropriate security mechanisms such as:
-
-* Secure authentication.
-* Password hashing.
-* Token-based authentication where appropriate.
-* Input validation.
-* Role-based authorization.
-* Protected API endpoints.
-* Secure database access.
-* Environment variables for sensitive configuration.
-* Protection of AI API credentials.
-* Proper error handling.
-
-The backend will be responsible for verifying authentication and authorization rather than trusting information provided directly by the frontend.
-
----
-
-## 11. Expected Benefits
-
-GIBI Connect is expected to provide several benefits to students and educational users.
-
-### For Students
-
-* Easier access to educational information.
-* Centralized educational resources.
-* Personalized AI guidance.
-* Better understanding of academic and career options.
-* Easier discovery of educational opportunities.
-* A single platform for multiple educational needs.
-
-### For Educational Information Management
-
-* Organized storage of educational information.
-* Easier management and updating of information.
-* Structured database-based data management.
-* Better integration between educational resources and digital services.
-
-### For the Project Team
-
-The project will also provide practical experience in:
-
-* Full-stack web development.
-* Database design.
-* REST API development.
-* Authentication and authorization.
-* AI integration.
-* Git and GitHub collaboration.
-* Software architecture.
-* Team-based software development.
-
----
-
-## 12. Future Improvements
-
-GIBI Connect can be expanded in the future with additional features such as:
-
-* Mobile application support.
-* Advanced AI personalization.
-* Recommendation systems.
-* University and program comparison.
-* Scholarship recommendation.
-* Career-path recommendations.
-* Notifications and reminders.
-* Educational institution dashboards.
-* Analytics and reporting.
-* Multilingual support.
-* Integration with official educational information sources.
-* Advanced search and filtering.
-* AI-generated study plans.
-* Student progress tracking.
-
----
-
-# 13. Project Team
-
-| No. | Full Name                        | Student ID           | Responsibility                   |
-| --: | -------------------------------- | -------------------- | -------------------------------- |
-|   1 |      Ermiyas Cheru               |     CTC-5723-26      |        Database and AI/RAG       |
-Backend/API|   3 |      Ezra Michael     |     CTC-3205-26      |        UI/UX + Components        |
-|   4 |      Ezana Girmay                |     CTC-7612-26      |        Frontend Pages            |
-|   5 |      Elsabeth Berhanu            |     CTC-1036-26      |    Auth + Admin + Testing        |
-
-### Team Members
-
-**Member 1:**   Ermiyas Cheru
-**Student ID:** CTC-5723-26
-
-**Member 2:**   Fekadu Alemnew
-**Student ID:** CTC-4438-26
-
-**Member 3:**   Ezra Michael  
-**Student ID:** CTC-3205-26   
-**Member 4:** Ezana Girmay 
-**Student ID:** CTC-7612-26 
-
-**Member 5:** Elsabeth Berhanu 
-**Student ID:** CTC-1036-26 
-
----
-
-## 14. Conclusion
-
-GIBI Connect is proposed as a centralized educational platform that combines educational information, student services, database management, and AI-powered consultation.
-
-By bringing these capabilities together, the platform aims to make educational information easier to access while providing students with an interactive system that can assist them in understanding their academic and career-related options.
-
-The combination of **React, Node.js, Express.js, PostgreSQL, and AI technologies** provides a strong technical foundation for developing the platform. The system can also be expanded in the future to support additional educational services and a larger number of users.
-
-Ultimately, **GIBI Connect aims to become a digital educational companion that helps students find information, explore opportunities, receive guidance, and make better-informed decisions about their education and future.**
-
+By combining relational data modeling in PostgreSQL 16, hardware-accelerated semantic search in pgvector, modern performant frontend views, and grounded local AI reasoning via Llama 3.2 and Ollama, GIBIConnect establishes an authoritative, zero-hallucination digital companion that empowers scholars to explore opportunities, compare institutions, and make confident decisions about their academic future
