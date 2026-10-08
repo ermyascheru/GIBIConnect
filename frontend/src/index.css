@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#FAF9F6] text-slate-800 font-sans antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer utilities {
+  .hero-heading {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(38px, 6vw, 72px);
+    font-weight: 700;
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+  }
+
+  .hero-body {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(16px, 2.2vw, 22px);
+    font-weight: 400;
+    line-height: 1.45;
+  }
+
+  .btn-base {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  /* Universal scrollbar hide utility */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
