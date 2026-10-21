@@ -1,4 +1,4 @@
-import express from "express";
+﻿import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import { checkDatabaseConnection } from "./config/database";
@@ -10,6 +10,7 @@ import resourceRoutes from "./modules/resources/routes/resource.routes";
 import financeRoutes from "./modules/finance/routes/finance.routes";
 import authRoutes from "./modules/auth/routes/auth.routes";
 import userRoutes from "./modules/users/routes/user.routes";
+import eventRoutes from "./modules/events/routes/event.routes";
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use("/api/v1/resources", resourceRoutes);
 app.use("/api/v1/finance", financeRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/events", eventRoutes);
 
 app.get("/api/v1/health", async (_req, res): Promise<void> => {
   try {
