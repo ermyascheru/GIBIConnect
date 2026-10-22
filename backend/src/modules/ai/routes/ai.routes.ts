@@ -1,4 +1,4 @@
-import { Router } from "express";
+﻿import { Router } from "express";
 import { requireAuth } from "../../../middleware/auth.middleware";
 
 import multer from "multer";
@@ -34,7 +34,7 @@ router.patch("/conversations/:id", requireAuth, renameConversationController);
 router.delete("/conversations/:id", requireAuth, deleteConversationController);
 
 
-// Additional AI features — login required
+// Additional AI features â€” login required
 router.post("/advisor/chat", requireAuth, advisorChatController);
 
 router.post("/tutor/lesson", requireAuth, tutorLessonController);
