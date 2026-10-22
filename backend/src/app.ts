@@ -12,6 +12,7 @@ import authRoutes from "./modules/auth/routes/auth.routes";
 import userRoutes from "./modules/users/routes/user.routes";
 import eventRoutes from "./modules/events/routes/event.routes";
 import marketplaceRoutes from "./modules/marketplace/routes/marketplace.routes";
+import aiRoutes from "./modules/ai/routes/ai.routes";
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/events", eventRoutes);
 app.use("/api/v1/marketplace", marketplaceRoutes);
+app.use("/api/v1/ai", aiRoutes);
 
 app.get("/api/v1/health", async (_req, res): Promise<void> => {
   try {
