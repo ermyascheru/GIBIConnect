@@ -9,6 +9,9 @@ import {
   tutorQuizController,
   generateVisualController,
   uploadDocumentController,
+  ragRetrieveController,
+  listDocumentsController,
+  getDocumentController,
 } from "../controllers/ai.features.controller";
 
 const upload = multer({
@@ -34,7 +37,7 @@ router.patch("/conversations/:id", requireAuth, renameConversationController);
 router.delete("/conversations/:id", requireAuth, deleteConversationController);
 
 
-// Additional AI features â€” login required
+// Additional AI features Ã¢â‚¬â€ login required
 router.post("/advisor/chat", requireAuth, advisorChatController);
 
 router.post("/tutor/lesson", requireAuth, tutorLessonController);
@@ -48,5 +51,9 @@ router.post(
   upload.single("file"),
   uploadDocumentController
 );
+
+router.post("/retrieve", requireAuth, ragRetrieveController);
+router.get("/documents", requireAuth, listDocumentsController);
+router.get("/document/:id", requireAuth, getDocumentController);
 
 export default router;

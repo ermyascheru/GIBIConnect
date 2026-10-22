@@ -164,3 +164,33 @@ export async function uploadDocumentController(
     return handleError(res, error);
   }
 }
+
+export async function ragRetrieveController(req: Request, res: Response) {
+  try {
+    const query = z.string().trim().min(1).parse(req.body?.query);
+    const { ragRetriever } = await import("../rag.retriever.js");
+    const intent = ragRetriever.classifyQueryIntent(query);
+    const results = await ragRetriever.retrieveTopK(query);
+    return res.json({ query, intent, results });
+  } catch (error) {
+    return handleError(res, error);
+  }
+}
+
+export async function listDocumentsController(_req: Request, res: Response) {
+  try {
+    return res.json({ documents: documentRAGService.listDocuments() });
+  } catch (error) {
+    return handleError(res, error);
+  }
+}
+
+export async function getDocumentController(req: Request, res: Response) {
+  try {
+    const document = documentRAGService.getDocument(String(req.params.id));
+    if (!document) return res.status(404).json({ message: "Document not found" });
+    return res.json({ document });
+  } catch (error) {
+    return handleError(res, error);
+  }
+}
