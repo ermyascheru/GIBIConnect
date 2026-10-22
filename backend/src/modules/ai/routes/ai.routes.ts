@@ -1,4 +1,4 @@
-﻿import { Router } from "express";
+import { Router } from "express";
 import { requireAuth } from "../../../middleware/auth.middleware";
 
 import multer from "multer";
