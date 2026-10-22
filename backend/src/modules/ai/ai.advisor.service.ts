@@ -12,7 +12,7 @@
 
 import type { Response } from 'express';
 import { ragRetriever } from './rag.retriever.js';
-import { llmClient } from './services/llm.client.js';
+import { llmClient } from './llm.client.js';
 import { aiTutorService } from './ai.tutor.service.js';
 import { documentRAGService, type ScoredDocumentChunk } from './document.rag.service.js';
 import { educationalImageGeneratorService, type AcademicSubject, type VisualStyle } from './image.generator.service.js';
@@ -802,5 +802,3 @@ ${verifiedContextText}
 }
 
 export const aiAdvisorService = new AIAdvisorService();
-
-

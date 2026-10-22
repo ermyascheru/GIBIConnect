@@ -1,5 +1,5 @@
-﻿import { AcademicEvent, EventQuery } from "../types/event.types";
-
+import { AcademicEvent, EventQuery } from "../types/event.types";
+import { prisma } from "../../../db";
 
 const FALLBACK_EVENTS: AcademicEvent[] = [
   {
@@ -100,6 +100,64 @@ const FALLBACK_EVENTS: AcademicEvent[] = [
 ];
 
 export const findEvents = async (query: EventQuery): Promise<AcademicEvent[]> => {
+  try {
+    const where: any = {};
+
+    if (query.category && query.category !== "ALL") {
+      where.category = query.category;
+    }
+    if (query.institutionId) {
+      where.institutionId = query.institutionId;
+    }
+    if (query.isVirtual !== undefined) {
+      where.isVirtual = query.isVirtual;
+    }
+    if (query.search) {
+      where.OR = [
+        { title: { contains: query.search, mode: "insensitive" } },
+        { description: { contains: query.search, mode: "insensitive" } },
+        { location: { contains: query.search, mode: "insensitive" } },
+      ];
+    }
+
+    const events = await prisma.academicEvent.findMany({
+      where,
+      include: {
+        institution: {
+          select: {
+            code: true,
+            nameEn: true,
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    if (events && events.length > 0) {
+      return events.map((ev) => ({
+        id: ev.id,
+        institutionId: ev.institutionId,
+        institutionCode: ev.institution?.code || null,
+        institutionName: ev.institution?.nameEn || null,
+        title: ev.title,
+        category: ev.category as any,
+        dateGregorian: ev.dateGregorian,
+        dateEthiopic: ev.dateEthiopic,
+        time: ev.time,
+        location: ev.location,
+        isVirtual: ev.isVirtual,
+        image: ev.image,
+        description: ev.description,
+        registrationOpen: ev.registrationOpen,
+        attendeesCount: ev.attendeesCount,
+        createdAt: ev.createdAt.toISOString(),
+        updatedAt: ev.updatedAt.toISOString(),
+      }));
+    }
+  } catch (err: any) {
+    console.warn("[EventRepository] Falling back to curated academic events:", err?.message || err);
+  }
+
   // Fallback filtering
   return FALLBACK_EVENTS.filter((ev) => {
     if (query.category && query.category !== "ALL" && ev.category !== query.category) {
@@ -125,6 +183,43 @@ export const findEvents = async (query: EventQuery): Promise<AcademicEvent[]> =>
 };
 
 export const findEventById = async (id: string): Promise<AcademicEvent | null> => {
+  try {
+    const ev = await prisma.academicEvent.findUnique({
+      where: { id },
+      include: {
+        institution: {
+          select: {
+            code: true,
+            nameEn: true,
+          },
+        },
+      },
+    });
+
+    if (ev) {
+      return {
+        id: ev.id,
+        institutionId: ev.institutionId,
+        institutionCode: ev.institution?.code || null,
+        institutionName: ev.institution?.nameEn || null,
+        title: ev.title,
+        category: ev.category as any,
+        dateGregorian: ev.dateGregorian,
+        dateEthiopic: ev.dateEthiopic,
+        time: ev.time,
+        location: ev.location,
+        isVirtual: ev.isVirtual,
+        image: ev.image,
+        description: ev.description,
+        registrationOpen: ev.registrationOpen,
+        attendeesCount: ev.attendeesCount,
+        createdAt: ev.createdAt.toISOString(),
+        updatedAt: ev.updatedAt.toISOString(),
+      };
+    }
+  } catch (err: any) {
+    console.warn("[EventRepository] Fallback event lookup:", err?.message || err);
+  }
+
   return FALLBACK_EVENTS.find((ev) => ev.id === id) || null;
 };
-

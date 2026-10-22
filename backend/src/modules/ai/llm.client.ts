@@ -7,6 +7,7 @@
  *    (Guarantees 100% uptime in local dev even before Ollama/Gemini keys are started)
  */
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 export interface LLMGenerationOptions {
   systemPrompt: string;

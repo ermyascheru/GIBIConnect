@@ -1,4 +1,4 @@
-﻿import { Request, Response } from "express";
+import { Request, Response } from "express";
 import { 
   getTutors, 
   getTutorById,
@@ -113,7 +113,7 @@ export const getBookingsController = async (req: Request, res: Response): Promis
 };
 
 export const updateBookingStatusController = async (req: Request, res: Response): Promise<void> => {
-  const bookingId = String(req.params.bookingId);
+  const { bookingId } = req.params;
   const { status } = req.body;
 
   if (!status || !['REQUESTED', 'CONFIRMED', 'COMPLETED', 'CANCELLED'].includes(status)) {
@@ -149,4 +149,3 @@ export const updateBookingStatusController = async (req: Request, res: Response)
     timestamp: new Date().toISOString(),
   });
 };
-

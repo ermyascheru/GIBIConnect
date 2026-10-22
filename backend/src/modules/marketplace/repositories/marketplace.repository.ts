@@ -1,5 +1,5 @@
-﻿import { TutorProfile, MarketplaceQuery, TutorBooking } from "../types/marketplace.types";
-
+import { TutorProfile, MarketplaceQuery, TutorBooking } from "../types/marketplace.types";
+import { prisma } from "../../../db";
 import pool from "../../../config/database";
 
 // Fallback high-quality curated Ethiopian university peer tutors
@@ -87,6 +87,67 @@ const FALLBACK_TUTORS: TutorProfile[] = [
 ];
 
 export const findTutors = async (query: MarketplaceQuery): Promise<TutorProfile[]> => {
+  try {
+    const where: any = {};
+
+    if (query.university) {
+      where.universityName = { contains: query.university, mode: "insensitive" };
+    }
+    if (query.specialty) {
+      where.specialtySubjects = { has: query.specialty };
+    }
+    if (query.isVerified !== undefined) {
+      where.isVerified = query.isVerified;
+    }
+    if (query.maxHourlyRate !== undefined) {
+      where.hourlyRateEtb = { lte: query.maxHourlyRate };
+    }
+    if (query.minRating !== undefined) {
+      where.ratingAverage = { gte: query.minRating };
+    }
+    if (query.search) {
+      where.OR = [
+        { universityName: { contains: query.search, mode: "insensitive" } },
+        { bio: { contains: query.search, mode: "insensitive" } },
+        { user: { fullName: { contains: query.search, mode: "insensitive" } } },
+      ];
+    }
+
+    const tutors = await prisma.tutorProfile.findMany({
+      where,
+      include: {
+        user: {
+          select: {
+            fullName: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: [{ isVerified: "desc" }, { ratingAverage: "desc" }],
+    });
+
+    if (tutors && tutors.length > 0) {
+      return tutors.map((t) => ({
+        id: t.id,
+        userId: t.userId,
+        name: t.user.fullName,
+        email: t.user.email,
+        universityName: t.universityName,
+        specialtySubjects: t.specialtySubjects,
+        ratingAverage: t.ratingAverage,
+        reviewsCount: t.reviewsCount,
+        hourlyRateEtb: t.hourlyRateEtb,
+        isVerified: t.isVerified,
+        bio: t.bio,
+        avatarUrl: `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80`,
+        createdAt: t.createdAt.toISOString(),
+        updatedAt: t.updatedAt.toISOString(),
+      }));
+    }
+  } catch (err: any) {
+    console.warn("[MarketplaceRepository] Falling back to curated tutors:", err?.message || err);
+  }
+
   // Fallback filtering
   return FALLBACK_TUTORS.filter((t) => {
     if (query.university && !t.universityName.toLowerCase().includes(query.university.toLowerCase())) {
@@ -118,6 +179,41 @@ export const findTutors = async (query: MarketplaceQuery): Promise<TutorProfile[
 };
 
 export const findTutorById = async (id: string): Promise<TutorProfile | null> => {
+  try {
+    const t = await prisma.tutorProfile.findUnique({
+      where: { id },
+      include: {
+        user: {
+          select: {
+            fullName: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    if (t) {
+      return {
+        id: t.id,
+        userId: t.userId,
+        name: t.user.fullName,
+        email: t.user.email,
+        universityName: t.universityName,
+        specialtySubjects: t.specialtySubjects,
+        ratingAverage: t.ratingAverage,
+        reviewsCount: t.reviewsCount,
+        hourlyRateEtb: t.hourlyRateEtb,
+        isVerified: t.isVerified,
+        bio: t.bio,
+        avatarUrl: `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80`,
+        createdAt: t.createdAt.toISOString(),
+        updatedAt: t.updatedAt.toISOString(),
+      };
+    }
+  } catch (err: any) {
+    console.warn("[MarketplaceRepository] Fallback tutor lookup:", err?.message || err);
+  }
+
   return FALLBACK_TUTORS.find((t) => t.id === id) || null;
 };
 
@@ -227,5 +323,4 @@ export const updateBookingStatus = async (
   }
   return null;
 };
-
 

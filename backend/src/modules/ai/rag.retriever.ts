@@ -8,7 +8,7 @@
  */
 
 import { VERIFIED_RAG_CORPUS } from './rag.corpus.js';
-import { llmClient } from './services/llm.client.js';
+import { llmClient } from './llm.client.js';
 import pool from '../../config/database.js';
 import type {
   RAGDocumentChunk,
@@ -393,5 +393,3 @@ ${instNamesList}
 }
 
 export const ragRetriever = new HybridRAGRetriever();
-
-

@@ -6,7 +6,7 @@
 
 import { documentParserService, type ParsedDocument } from './document.parser.js';
 import { documentChunkerService, type DocumentChunk } from './document.chunker.js';
-import { llmClient } from './services/llm.client.js';
+import { llmClient } from './llm.client.js';
 
 export interface ScoredDocumentChunk {
   chunk: DocumentChunk;
@@ -454,5 +454,3 @@ export class DocumentRAGService {
 }
 
 export const documentRAGService = new DocumentRAGService();
-
-
