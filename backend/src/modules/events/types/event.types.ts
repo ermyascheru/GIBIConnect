@@ -1,27 +1,16 @@
-﻿export const EVENT_CATEGORIES = [
-  "DEADLINE",
-  "CONFERENCE",
-  "ORIENTATION",
-  "HACKATHON",
-  "CAREER",
-  "WORKSHOP",
-] as const;
-
-export type EventCategory = (typeof EVENT_CATEGORIES)[number];
-
 export interface AcademicEvent {
   id: string;
-  institutionId: string | null;
-  institutionCode: string | null;
-  institutionName: string | null;
+  institutionId?: string | null;
+  institutionCode?: string | null;
+  institutionName?: string | null;
   title: string;
-  category: EventCategory;
+  category: 'DEADLINE' | 'CONFERENCE' | 'ORIENTATION' | 'HACKATHON' | 'CAREER' | 'WORKSHOP';
   dateGregorian: string;
   dateEthiopic: string;
-  time: string | null;
+  time?: string | null;
   location: string;
   isVirtual: boolean;
-  image: string | null;
+  image?: string | null;
   description: string;
   registrationOpen: boolean;
   attendeesCount: number;
@@ -30,7 +19,7 @@ export interface AcademicEvent {
 }
 
 export interface EventQuery {
-  category?: EventCategory | "ALL";
+  category?: string;
   institutionId?: string;
   isVirtual?: boolean;
   search?: string;

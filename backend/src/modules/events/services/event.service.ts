@@ -1,9 +1,10 @@
-﻿import {
-  findEventById,
-  findEvents,
-} from "../repositories/event.repository";
-import type { EventQuery } from "../types/event.types";
+import { AcademicEvent, EventQuery } from "../types/event.types";
+import { findEvents, findEventById } from "../repositories/event.repository";
 
-export const getEvents = (query: EventQuery) => findEvents(query);
+export const getEvents = async (query: EventQuery): Promise<AcademicEvent[]> => {
+  return findEvents(query);
+};
 
-export const getEventById = (id: string) => findEventById(id);
+export const getEventById = async (id: string): Promise<AcademicEvent | null> => {
+  return findEventById(id);
+};

@@ -1,17 +1,8 @@
-﻿import type { Request, Response } from "express";
-import {
-  getEventById,
-  getEvents,
-} from "../services/event.service";
-import {
-  eventParamsSchema,
-  eventQuerySchema,
-} from "../validators/event.validator";
+import { Request, Response } from "express";
+import { getEvents, getEventById } from "../services/event.service";
+import { eventQuerySchema, eventParamsSchema } from "../validators/event.validator";
 
-export const getEventsController = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const getEventsController = async (req: Request, res: Response): Promise<void> => {
   const query = eventQuerySchema.parse(req.query);
   const events = await getEvents(query);
 
@@ -22,10 +13,7 @@ export const getEventsController = async (
   });
 };
 
-export const getEventByIdController = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const getEventByIdController = async (req: Request, res: Response): Promise<void> => {
   const { eventId } = eventParamsSchema.parse(req.params);
   const event = await getEventById(eventId);
 
@@ -34,7 +22,7 @@ export const getEventByIdController = async (
       success: false,
       error: {
         code: "EVENT_NOT_FOUND",
-        message: "Event not found",
+        message: "Academic event not found",
       },
       timestamp: new Date().toISOString(),
     });

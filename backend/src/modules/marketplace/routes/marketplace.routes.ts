@@ -1,9 +1,19 @@
-﻿import { Router } from "express";
-import { getTutorsController, getTutorController, createBookingController, getBookingsController, updateBookingController } from "../controllers/marketplace.controller";
+import { Router } from "express";
+import { 
+  getTutorsController, 
+  getTutorByIdController,
+  createBookingController,
+  getBookingsController,
+  updateBookingStatusController,
+} from "../controllers/marketplace.controller";
+
 const router = Router();
+
 router.get("/tutors", getTutorsController);
-router.get("/tutors/:tutorId", getTutorController);
+router.get("/tutors/:tutorId", getTutorByIdController);
+
 router.post("/bookings", createBookingController);
 router.get("/bookings", getBookingsController);
-router.patch("/bookings/:bookingId", updateBookingController);
+router.patch("/bookings/:bookingId", updateBookingStatusController);
+
 export default router;

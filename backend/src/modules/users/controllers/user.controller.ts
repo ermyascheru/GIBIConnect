@@ -1,6 +1,11 @@
-import type { Request, Response } from "express";
+import type { Response } from "express";
 import type { AuthenticatedRequest } from "../../../middleware/auth.middleware";
-import { getUserById, getUsers } from "../services/user.service";
+import { 
+  getUserById, 
+  getUsers, 
+  getUserBookmarks, 
+  toggleBookmark 
+} from "../services/user.service";
 import { userParamsSchema, userQuerySchema } from "../validators/user.validator";
 
 export const getUsersController = async (
@@ -112,6 +117,92 @@ export const getUserByIdController = async (
   res.json({
     success: true,
     data: user,
+    timestamp: new Date().toISOString(),
+  });
+};
+
+export const getBookmarksController = async (
+  req: AuthenticatedRequest,
+  res: Response
+): Promise<void> => {
+  if (!req.user) {
+    res.status(401).json({
+      success: false,
+      error: { code: "UNAUTHORIZED", message: "Authentication required" },
+      timestamp: new Date().toISOString(),
+    });
+    return;
+  }
+
+  const bookmarks = await getUserBookmarks(req.user.id);
+
+  res.json({
+    success: true,
+    data: bookmarks,
+    timestamp: new Date().toISOString(),
+  });
+};
+
+export const addBookmarkController = async (
+  req: AuthenticatedRequest,
+  res: Response
+): Promise<void> => {
+  if (!req.user) {
+    res.status(401).json({
+      success: false,
+      error: { code: "UNAUTHORIZED", message: "Authentication required" },
+      timestamp: new Date().toISOString(),
+    });
+    return;
+  }
+
+  const { type, itemId } = req.body;
+  if (!type || !itemId || (type !== "INSTITUTION" && type !== "RESOURCE")) {
+    res.status(400).json({
+      success: false,
+      error: { code: "INVALID_BODY", message: "Must provide type ('INSTITUTION' | 'RESOURCE') and itemId" },
+      timestamp: new Date().toISOString(),
+    });
+    return;
+  }
+
+  await toggleBookmark(req.user.id, type, itemId, "ADD");
+
+  res.json({
+    success: true,
+    message: "Bookmark saved successfully",
+    timestamp: new Date().toISOString(),
+  });
+};
+
+export const removeBookmarkController = async (
+  req: AuthenticatedRequest,
+  res: Response
+): Promise<void> => {
+  if (!req.user) {
+    res.status(401).json({
+      success: false,
+      error: { code: "UNAUTHORIZED", message: "Authentication required" },
+      timestamp: new Date().toISOString(),
+    });
+    return;
+  }
+
+  const { type, itemId } = req.body;
+  if (!type || !itemId || (type !== "INSTITUTION" && type !== "RESOURCE")) {
+    res.status(400).json({
+      success: false,
+      error: { code: "INVALID_BODY", message: "Must provide type ('INSTITUTION' | 'RESOURCE') and itemId" },
+      timestamp: new Date().toISOString(),
+    });
+    return;
+  }
+
+  await toggleBookmark(req.user.id, type, itemId, "REMOVE");
+
+  res.json({
+    success: true,
+    message: "Bookmark removed successfully",
     timestamp: new Date().toISOString(),
   });
 };

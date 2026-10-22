@@ -1,78 +1,130 @@
-﻿import pool from "../../../config/database";
-import type { AcademicEvent, EventQuery } from "../types/event.types";
+﻿import { AcademicEvent, EventQuery } from "../types/event.types";
 
-const selectEvents = `
-  SELECT
-    e.id::text AS id,
-    e."institutionId"::text AS "institutionId",
-    i.code AS "institutionCode",
-    i."nameEn" AS "institutionName",
-    e.title,
-    e.category::text AS category,
-    e."dateGregorian",
-    e."dateEthiopic",
-    e.time,
-    e.location,
-    e."isVirtual",
-    e.image,
-    e.description,
-    e."registrationOpen",
-    e."attendeesCount",
-    e."createdAt",
-    e."updatedAt"
-  FROM "AcademicEvent" e
-  LEFT JOIN "Institution" i ON i.id = e."institutionId"
-`;
 
-export const findEvents = async (
-  query: EventQuery
-): Promise<AcademicEvent[]> => {
-  const conditions: string[] = [];
-  const values: unknown[] = [];
+const FALLBACK_EVENTS: AcademicEvent[] = [
+  {
+    id: "evt-1",
+    institutionId: "inst-aau",
+    institutionCode: "AAU",
+    institutionName: "Addis Ababa University",
+    title: "12th National Higher Education Science & Research Conference",
+    category: "CONFERENCE",
+    dateGregorian: "November 14 - 16, 2026",
+    dateEthiopic: "Hidar 5 - 7, 2019 E.C.",
+    time: "09:00 AM - 05:00 PM EAT",
+    location: "Sidist Kilo, Main Campus Ras Mekonnen Hall",
+    isVirtual: false,
+    image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80",
+    description: "Annual research symposium featuring peer-reviewed papers from universities across Ethiopia, focusing on sustainable development, AI in agriculture, and engineering innovations.",
+    registrationOpen: true,
+    attendeesCount: 420,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "evt-2",
+    institutionId: "inst-moe",
+    institutionCode: "MOE",
+    institutionName: "Ministry of Education",
+    title: "National University Exit Examination Registration Deadline",
+    category: "DEADLINE",
+    dateGregorian: "December 01, 2026",
+    dateEthiopic: "Hidar 22, 2019 E.C.",
+    time: "11:59 PM EAT",
+    location: "Online MoE Portal (all public & accredited private universities)",
+    isVirtual: true,
+    image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=800&q=80",
+    description: "Official registration deadline for all graduating undergraduate students sitting for the national exit exam across all certified degree programs.",
+    registrationOpen: true,
+    attendeesCount: 15400,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "evt-3",
+    institutionId: "inst-astu",
+    institutionCode: "ASTU",
+    institutionName: "Adama Science and Technology University",
+    title: "ASTU National Youth STEM & Robotics Hackathon 2026",
+    category: "HACKATHON",
+    dateGregorian: "November 28 - 30, 2026",
+    dateEthiopic: "Hidar 19 - 21, 2019 E.C.",
+    time: "48 Hours Non-stop",
+    location: "ASTU ICT Center of Excellence, Adama",
+    isVirtual: false,
+    image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=800&q=80",
+    description: "Ethiopia-wide university coding and robotics challenge. Compete for 500,000 ETB in incubation grants and tech mentorship.",
+    registrationOpen: true,
+    attendeesCount: 280,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "evt-4",
+    institutionId: "inst-bdu",
+    institutionCode: "BDU",
+    institutionName: "Bahir Dar University",
+    title: "Annual Graduate Career Fair & Industry Networking",
+    category: "CAREER",
+    dateGregorian: "December 10, 2026",
+    dateEthiopic: "Tahsas 1, 2019 E.C.",
+    time: "08:30 AM - 04:30 PM EAT",
+    location: "Poly Campus Auditorium, Bahir Dar",
+    isVirtual: false,
+    image: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80",
+    description: "Meet recruiters from 60+ top Ethiopian engineering firms, banks, software houses, and agricultural enterprises.",
+    registrationOpen: true,
+    attendeesCount: 1250,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "evt-5",
+    institutionId: "inst-ju",
+    institutionCode: "JU",
+    institutionName: "Jimma University",
+    title: "Freshman STEM & Health Sciences Orientation Workshop",
+    category: "ORIENTATION",
+    dateGregorian: "October 28, 2026",
+    dateEthiopic: "Tikimt 18, 2019 E.C.",
+    time: "10:00 AM - 02:00 PM EAT",
+    location: "Jimma University Main Campus & Virtual Livestream",
+    isVirtual: true,
+    image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80",
+    description: "Introduction to campus facilities, academic regulations, dormitory assignments, and library digital systems for newly enrolled freshmen.",
+    registrationOpen: true,
+    attendeesCount: 3100,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+];
 
-  const add = (condition: (parameter: string) => string, value: unknown) => {
-    values.push(value);
-    conditions.push(condition(`$${values.length}`));
-  };
-
-  if (query.category && query.category !== "ALL") {
-    add((p) => `e.category::text = ${p}`, query.category);
-  }
-
-  if (query.institutionId) {
-    add((p) => `e."institutionId"::text = ${p}`, query.institutionId);
-  }
-
-  if (query.isVirtual !== undefined) {
-    add((p) => `e."isVirtual" = ${p}`, query.isVirtual);
-  }
-
-  if (query.search) {
-    add(
-      (p) => `(e.title ILIKE ${p} OR e.description ILIKE ${p} OR e.location ILIKE ${p})`,
-      `%${query.search}%`
-    );
-  }
-
-  const where = conditions.length
-    ? `WHERE ${conditions.join(" AND ")}`
-    : "";
-
-  const result = await pool.query<AcademicEvent>(
-    `${selectEvents} ${where} ORDER BY e."createdAt" DESC`,
-    values
-  );
-
-  return result.rows;
+export const findEvents = async (query: EventQuery): Promise<AcademicEvent[]> => {
+  // Fallback filtering
+  return FALLBACK_EVENTS.filter((ev) => {
+    if (query.category && query.category !== "ALL" && ev.category !== query.category) {
+      return false;
+    }
+    if (query.institutionId && ev.institutionId !== query.institutionId) {
+      return false;
+    }
+    if (query.isVirtual !== undefined && ev.isVirtual !== query.isVirtual) {
+      return false;
+    }
+    if (query.search) {
+      const s = query.search.toLowerCase();
+      const match =
+        ev.title.toLowerCase().includes(s) ||
+        ev.description.toLowerCase().includes(s) ||
+        ev.location.toLowerCase().includes(s) ||
+        (ev.institutionName && ev.institutionName.toLowerCase().includes(s));
+      if (!match) return false;
+    }
+    return true;
+  });
 };
 
-export const findEventById = async (
-  id: string
-): Promise<AcademicEvent | null> => {
-  const result = await pool.query<AcademicEvent>(
-    `${selectEvents} WHERE e.id::text = $1 LIMIT 1`,
-    [id]
-  );
-
-  return result.rows[0] ?? null;
+export const findEventById = async (id: string): Promise<AcademicEvent | null> => {
+  return FALLBACK_EVENTS.find((ev) => ev.id === id) || null;
 };
+
