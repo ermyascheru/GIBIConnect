@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>GIBIConnect</title>
+  <script>
+    if (localStorage.getItem('gibi_token')) {
+      window.location.href = 'explore.html';
+    } else {
+      window.location.href = 'login.html';
+    }
+  </script>
+</head>
+<body></body>
+</html>

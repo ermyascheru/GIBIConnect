@@ -1,175 +1,191 @@
-# GIBIConnect
+# GIBIConnect — Higher Education Intelligence & Grounded AI Academic Advising Platform
 
-## Educational Information and AI Consultation Platform for Higher Education
+[![Vercel Deployment](https://img.shields.io/badge/Frontend-Vercel-black?style=flat&logo=vercel)](https://vercel.com)
+[![Render Backend](https://img.shields.io/badge/Backend-Render-46E3B7?style=flat&logo=render)](https://render.com)
+[![Neon Database](https://img.shields.io/badge/Database-Neon%20Postgres-00E599?style=flat&logo=postgresql)](https://neon.tech)
+[![React 19](https://img.shields.io/badge/React-19.0-61DAFB?style=flat&logo=react)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?style=flat&logo=typescript)](https://www.typescriptlang.org)
+[![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=flat&logo=vite)](https://vitejs.dev)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-38B2AC?style=flat&logo=tailwind-css)](https://tailwindcss.com)
 
----
+GIBIConnect is Ethiopia’s premier digital higher-education platform, connecting secondary school seniors, university students, and parents with verified institutional data, 5-year degree curricula, admissions criteria, statutory cost-sharing calculators, and grounded AI academic advising.
 
-### 1. Project Overview
-
-**GIBIConnect** is a centralized educational technology platform designed to help students easily access verified institutional information, academic programs, scholarship opportunities, academic resources, and AI-powered consultation services through a unified digital platform.
-
-The primary purpose of GIBIConnect is to resolve the severe information fragmentation students face when searching for reliable higher-education data and making academic decisions in Ethiopia. Students frequently struggle across disconnected websites, outdated portals, and informal social media channels to find basic details regarding university programs, entrance cut-off points, tuition fee structures, and academic calendars. GIBIConnect consolidates these essential services into one organized, accessible, and verified system.
-
-In addition to centralized directories, GIBIConnect features a **grounded AI Academic Consultation System (RAG)** that provides personalized guidance based on a student's questions, interests, and academic goals. The system functions as a digital educational advisor that answers student queries strictly using authoritative database records and verified institutional documents.
-
-The platform is engineered using a robust modern architecture consisting of an **HTML5 + ES Modules + Tailwind CSS frontend, a Node.js + Express.js RESTful API gateway, a PostgreSQL 16 database with pgvector, and a local Ollama AI engine (Llama 3.2 & nomic-embed-text)**.
+The platform eliminates severe information fragmentation across Ethiopian universities by providing an authoritative single source of truth backed by relational data, vector embeddings, and an interactive modern web application.
 
 ---
 
-## 2. Problem Statement
+## 1. Core Platform Capabilities
 
-Students and academic stakeholders in Ethiopia face critical information bottlenecks:
+### 1.1 Verified Higher Education Institutional Directory
+* Comprehensive coverage of **18+ accredited Ethiopian institutions**, including flagship research universities (AAU, ASTU, AASTU, UoG, BDU, JU, HU, MU, AMU, HRU, DMU, DDU) and private institutions (St. Mary's, Addis Ababa Medical College).
+* Authentic campus photography: main entrance gates, academic quadrangles, laboratories, and student life imagery.
+* Detailed breakdowns of academic faculties, departments, active campus facilities, and leadership.
 
-1. **Fragmented & Outdated Information**: Data regarding universities, colleges, degree curricula, admissions criteria, and scholarships is scattered across unmaintained websites, physical registrar bulletin boards, or informal channels.
-2. **Opaque Admissions & Tuition Details**: Matriculation thresholds, department prerequisites, and cost-sharing/tuition schedules are rarely standardized or accessible in advance, leading to uninformed choices.
-3. **Limited Access to Academic Guidance**: Many secondary and undergraduate students lack immediate access to dedicated academic counselors to help them evaluate suitable fields of study.
-4. **Lack of Personalization & Verification**: Existing websites provide static, unverified lists without search filtering, interactive comparison, or verifiable academic documents.
+### 1.2 Official Admissions & EUEE Cut-Off Thresholds
+* Authentic 2016/2017 E.C. national university entrance examination (EUEE/ESEE) matriculation cut-off points across Natural Science and Social Science streams.
+* Transparent gender quotas (Male vs. Female thresholds) and affirmative action quotas for candidates from developing/emerging regions (Afar, Somali, Benishangul-Gumuz, Gambella, and pastoralist areas).
+* Competitive department allocation guidelines (e.g., Freshman Year CGPA thresholds for Software, Electrical, Civil, and Mechanical Engineering).
 
-**GIBIConnect solves these challenges by uniting authoritative relational data with a zero-hallucination Retrieval-Augmented Generation (RAG) AI consultation system.**
+### 1.3 Grounded AI Academic Advisor & STEM Tutor
+* **Zero-Hallucination Retrieval-Augmented Generation (RAG)**: Answers student queries strictly grounded in official Ministry of Education documents and university registry records.
+* **Typo & Phrasing Invariance**: Robust entity resolution and token boundary matching that handles colloquial queries (e.g. *"cutoff point of engineering in goder university"*, *"aastu software marks"*, *"how much is aau medicine tuition"*).
+* **Multi-Question & Multi-Institution Support**: Automatically decomposes compound prompts (e.g. *"What is the cutoff for engineering in Gondar and what about AAU medicine?"*) and answers every sub-question in structured sections.
+* **6-Stage Freshman STEM Tutor**: Interactive, step-by-step tutoring modules for freshman courses:
+  - **Calculus I & II (MATH1011)**: Limits, derivatives, integration, optimization.
+  - **General Physics (PHYS1011)**: 2D projectile motion kinematics, vector algebra, work-energy theorems.
+  - **Introduction to Computer Science (COSC1011)**: Pointers, dynamic memory, arrays, recursion.
+  - **General Chemistry (CHEM1011)**: Reaction dynamics, pH calculation, chemical equilibrium.
+* **KaTeX LaTeX Math Rendering**: Clear formatting for all mathematical equations ($...$ and $$...$$).
 
----
+### 1.4 Statutory Cost-Sharing Calculator (Proclamation No. 650/2009)
+* Calculates student tuition subsidies, dormitory expenses, and cafeteria meal costs under Ethiopian Federal Higher Education Proclamation No. 650/2009 and Regulation No. 154/2008.
+* Clarifies the **100% upfront government tuition subsidy** for regular public university students.
+* Models post-graduation income-contingent repayment schedules (10% monthly payroll deduction upon formal employment).
 
-## 3. Project Objectives
+### 1.5 Academic Programs & Curricula Catalog
+* Explores 114+ accredited degree programs across STEM, Health Sciences, Business, Natural Sciences, and Social Sciences.
+* Detailed 5-year degree roadmaps, semester course sequences, and ECTS credit distributions.
 
-### General Objective
-To design, implement, and evaluate a centralized higher-education information and AI consultation platform that provides students with accessible institutional directories, transparent admissions criteria, verified resources, and personalized AI academic guidance.
-
-### Specific Objectives
-1. **Centralize Institutional Data**: Build a unified catalog indexing Ethiopian universities and colleges with verified profiles, official emblems, and contact details.
-2. **Standardize Curricula & Costs**: Provide structured comparisons of degree programs across degree levels (Bachelor, Master, PhD), study modes (Regular, Extension, Online), and transparent tuition fee schedules.
-3. **Integrate a Grounded AI Advisor**: Implement a local RAG pipeline capable of answering natural-language student queries backed by cited database records and document chunks.
-4. **Democratize Academic Resources**: Establish a moderated repository for syllabi, lecture notes, academic calendars, and peer-reviewed research papers.
-5. **Enforce Security & Data Integrity**: Implement salted bcrypt password hashing, stateless JWT authentication, and strict Role-Based Access Control (RBAC).
-6. **Ensure High Performance & Scalability**: Utilize hardware-accelerated vector indexing (pgvector HNSW) and PostgreSQL full-text/trigram search (`tsvector`, `pg_trgm`) for sub-120ms response times.
-
----
-
-## 4. Target Users
-
-* **High School Students**: Exploring higher-education opportunities, entrance requirements, and university selections.
-* **Undergraduate & Graduate Students**: Accessing academic syllabi, degree roadmaps, research publications, and scholarship funding.
-* **Scholarship Seekers**: Discovering active national and institutional grants, eligibility requirements, and application deadlines.
-* **University Administrators & Faculty**: Publishing official program updates, admissions criteria, and institutional research.
-* **Educators & Counselors**: Using verified institutional data to assist students in academic planning.
-
----
-
-## 5. Major Features
-
-### 5.1 User Authentication & Role-Based Access Control (RBAC)
-* Secure user registration and login with bcrypt password salting (10 rounds).
-* Stateless JWT (JSON Web Token) bearer authentication with role-based route guards (`user`, `moderator`, `admin`).
-* Profile customization and personal dashboard management.
-
-### 5.2 Interactive University & Program Directories
-* **18+ Verified Ethiopian University Hubs**: Detailed profiles with verified logos (e.g., ASTU emblem), location maps, leadership, and contact data.
-* **8 Dynamic Subtabs per Campus**: Overview, Faculties/Departments, Degree Programs, Admissions Criteria, Tuition Fees, Campus Facilities, Scholarships, and Academic Calendars.
-* **Multi-Facet Search & Filtering**: Real-time filtering by Region (*Oromia, Amhara, Addis Ababa, Tigray, Sidama*), Governance (*Public vs Private*), and Degree Level (*Bachelor, Master, PhD*).
-
-### 5.3 Grounded AI Academic Consultation (RAG)
-* **Natural Language Advisory**: Students can ask questions regarding majors, career pathways, entrance cut-offs, and tuition rates.
-* **Retrieval-Augmented Generation (RAG)**: Connects local embeddings (`nomic-embed-text`) with vector similarity search (`pgvector`) to feed verified context to `Llama 3.2`.
-* **Zero-Hallucination Guardrails**: Prompts are fenced with authoritative database records; the AI refutes fictional queries and admits missing data rather than hallucinating.
-* **Citations & Sources**: Displays the exact source university, document title, and page number with every AI response.
-
-### 5.4 Academic Resources & Research Repository
-* Searchable digital library of verified syllabi, lecture slides, past exams, and research papers.
-* In-browser document streaming and secure direct file downloads.
-* Full-text search (`tsvector`) and typo-tolerant trigram search (`pg_trgm`).
-
-### 5.5 Student Bookmarking & Personal Dashboard
-* Personalized saved items: Bookmark universities, degree curricula, scholarships, and academic documents to a unified student dashboard.
+### 1.6 Peer Tutor Marketplace & Resource Vault
+* **Peer Tutor Network**: Connects undergraduate students with verified top-performing peer mentors from AAiT, ASTU, Hawassa, and Jimma.
+* **Academic Resource Vault**: Searchable repository of 39+ verified educational materials including university syllabi, lecture slides, and past national exit exam papers.
 
 ---
 
-## 6. Database System
+## 2. System Architecture
 
-GIBIConnect utilizes **PostgreSQL 16** with advanced extensions as its database foundation:
-
-* **Relational Schema**: 11 core canonical tables (`users`, `institutions`, `faculties`, `departments`, `programs`, `admissions`, `tuition_fees`, `scholarships`, `resources`, `research`, `academic_calendar`, `reviews`).
-* **pgvector Extension**: Stores 768-dimensional dense vector embeddings in `rag_document_chunks` indexed with **HNSW (Hierarchical Navigable Small World)** for high-speed cosine distance similarity search (`vector_cosine_ops`).
-* **pg_trgm & pgcrypto**: Powers typo-tolerant fuzzy search, instant autocomplete (`gin_trgm_ops`), and UUID primary key generation (`gen_random_uuid()`).
-* **Referential Integrity**: Enforces strict `ON DELETE RESTRICT` on core academic hierarchies and `ON DELETE CASCADE` on transient embeddings and bookmarks.
-
----
-
-## 7. Backend Architecture
-
-The backend is developed with **Node.js v24 and Express.js 4.19**:
-
-* **Layered MVC/Repository Architecture**: Strict separation between Controllers, Services, SQL Repositories, and Route Middleware.
-* **AI Orchestration Layer**: Query intent classification (`query.classifier.js`), structured SQL retrieval (`structured.retriever.js`), prompt fencing (`context.builder.js`), and LLM service connection (`llm.service.js`).
-* **Input Validation**: Centralized request payload validation using **Joi** schemas before reaching database queries.
-* **Security Middleware**: Centralized error envelopes, CORS configuration, rate limiting, and JWT authentication guards.
-
----
-
-## 8. Frontend Architecture
-
-The user interface is built using **HTML5, JavaScript ES Modules (`type="module"`), and Tailwind CSS**:
-
-* **Performance & Speed**: Zero client-side framework overhead, achieving sub-50ms paint times and instantaneous navigation.
-* **Dynamic DOM Lifecycle Gates**: Built with `document.readyState` checks to eliminate ES module asynchronous execution delays.
-* **Visual Logo & Monogram Fallback Engine**: Renders verified university emblems where available and falls back gracefully to clean initials badges (`AAU`, `BDU`, `JU`) for null records.
-* **Responsive Layouts**: Fully responsive across mobile (320px), tablet, and desktop (4K) viewports with slide-out navigation drawers and search command modals.
+```
+                       [ USER DEVICE / BROWSER ]
+                                   │
+              ┌────────────────────┴────────────────────┐
+              ▼                                         ▼
+    [ VERCEL: FRONTEND ]                    [ RENDER: BACKEND API ]
+    React 19 + TypeScript + Vite            Node.js + Express REST API
+    Tailwind CSS + Lucide + KaTeX           3-Tier Hybrid RAG Orchestrator
+    (gibiconnect.vercel.app)                (gibiconnect.onrender.com)
+                                                        │ (SSL / TLS)
+                                                        ▼
+                                              [ NEON: POSTGRESQL ]
+                                              Serverless Cloud Postgres 16
+                                              pgvector 768-dim HNSW Index
+                                              37 Relational Tables
+```
 
 ---
 
+## 3. Repository Structure
 
-## 9. System Architecture
+```
+gibiconnect/
+├── frontend/                 # ACTIVE: Modern React 19 + TypeScript + Vite Application
+│   ├── public/               # Verified campus imagery, university logos, entrance gates
+│   ├── src/
+│   │   ├── components/       # Reusable UI widgets, Modals, Navbar, AI Advisor components
+│   │   ├── config/           # API endpoints and environment configuration
+│   │   ├── data/             # Mock datasets, campus media catalog, university metadata
+│   │   ├── pages/            # Page views (Home, CampusDetail, AIAdvisor, Admissions, etc.)
+│   │   ├── types/            # TypeScript interfaces and domain schemas
+│   │   └── utils/            # Institution resolvers, SVG visual synthesizers
+│   ├── package.json          # Frontend dependencies (React 19, Vite, Lucide, KaTeX)
+│   ├── vercel.json           # Vercel SPA routing & rewrites configuration
+│   └── vite.config.ts        # Vite build tool configuration
+│
+├── legacy-frontend/          # ARCHIVED: Original early-stage HTML/JS/CSS prototype
+│   ├── assets/               # Early logos, icons, and hero illustrations
+│   ├── css/                  # Early CSS stylesheets
+│   ├── js/                   # Vanilla JavaScript ES modules
+│   ├── pages/                # Early static HTML pages (explore.html, admissions.html, etc.)
+│   └── package.json          # Early tooling configuration
+│
+├── backend/                  # RESTful API Gateway & AI RAG Engine
+│   ├── src/
+│   │   ├── modules/ai/       # Hybrid RAG retriever, vector search, document reader
+│   │   ├── modules/institutions/ # Institutional CRUD, faculties, facilities controllers
+│   │   └── server.ts         # Express server entry point
+│   └── prisma/               # Database schema & Neon migrations
+│
+├── vercel.json               # Monorepo root Vercel build & route rules
+├── package.json              # Monorepo scripts (builds frontend automatically)
+└── README.md                 # Project documentation
+```
 
-GIBIConnect follows a layered, decoupled system architecture:
-
-* text
-[ CLIENT / BROWSER LAYER ]
-   ├── explore.html | institutions.html | programs.html | ai-advisor.html | profile.html
-   └── Vanilla JS ES Modules (api.js, navigation.js, auth.js) + Tailwind CSS
-            │
-            ▼ (HTTP / JSON REST API Requests)
-[ APPLICATION / BACKEND LAYER (Node.js + Express 4.19) ]
-   ├── JWT Auth Middleware & Role-Based Access Control (RBAC)
-   ├── Joi Request Validation Layer
-   ├── REST Controllers & Services (Institutions, Programs, Scholarships, Users)
-   └── AI Orchestrator & Query Intent Classifier
-            │                                  │
-            ▼ (SQL Queries & Transactions)     ▼ (768-dim Vectors & Prompts)
-[ DATABASE LAYER (PostgreSQL 16) ]   [ LOCAL AI ENGINE (Ollama on localhost:11434) ]
-   ├── Relational Tables (11 Core)      ├── nomic-embed-text (Embeddings)
-   ├── pgvector (HNSW Index, 768-dim)   └── Llama 3.2 (Grounded Synthesis)
-   └── Full-Text & Trigram Indexes 
 ---
 
----
-### 10. Security & Quality Assurance
-* **Cryptographic Security**: Passwords salted and hashed with bcrypt (10 rounds); sensitive configurations managed via isolated .env files.
-* **SQL Injection Immunity**: 100% of database queries execute via parameterized statements ($1, $2, ...).
-* **Input Validation**: Strict Joi schema validation on all incoming request payloads before reaching database layers.
-* **Role-Based Access Control (RBAC)**: Stateless JWT authentication enforcing user privilege boundaries (user, moderator, admin).
-* **Comprehensive Automated Test Suite**: A 32-point test harness (backend/tests/full_system_test_suite.js) verifying Unit logic, Database constraints, API endpoints, AI/RAG retrieval, and Integration flows with a 100% Pass Rate.
-### 11. Expected Benefits
-### For Students
-* **Single Access Point**: Centralized access to verified university directories, degree curricula, cut-off marks, and fee structures.
-* **Personalized AI Guidance**: Real-time conversational guidance grounded strictly in official institutional data.
-* **Transparent Comparison**: Clear, side-by-side comparison of degree programs and tuition across public and private institutions.
-### For Educational Institutions
-* **Structured Digital Presence**: Authoritative platform to publish verified academic calendars, admissions criteria, and research publications.
-* **Reduced Inquiry Overhead**: Automated AI answering of repetitive admission, scholarship, and program inquiries.
-### For Educational Planning
-* **Elimination of Misinformation**: Anchors student expectations in verified facts, reducing dropouts and uninformed academic choices.
-### 12. Future Enhancements
-* **Dedicated GPU Worker Nodes**: High-throughput concurrent LLM inference streams for nationwide deployment.
-* **Multi-Language Support**: Native user interface and AI consultation in Amharic, Afaan Oromoo, and Tigrinya.
-* **Cross-Platform Mobile Apps**: Flutter / React Native applications with offline bookmark and resource synchronization.
-* **Automated PDF OCR Pipeline**: Direct ingestion, chunking, and semantic vectorization of scanned university prospectuses and syllabi.
-* **Entrance Exam Scoring Simulator**: Interactive cut-off score predictor based on historical matriculation trends.
-13. Project Team & Responsibilities
-No.	Full Name	Student ID	Core Project Responsibility
-1	Ermiyas Cheru	CTC-5723-26	Database Design, pgvector & AI/RAG Orchestration
-2	Fekadu Alemnew	CTC-4438-26	Backend Architecture, Express REST API & Security
-3	Ezra Michael	CTC-3205-26	UI/UX Design, CSS Styling & Reusable Components
-4	Ezana Girmay	CTC-7612-26	Frontend Pages, Routing & Search Integration
-5	Elsabeth Berhanu	CTC-1036-26	Authentication, Admin Console & Quality Assurance Testing
-### 14. Conclusion
-* GIBIConnect delivers an integrated, scalable, and intelligent educational platform that resolves the severe information fragmentation in Ethiopian higher education.
+## 4. Local Development Quickstart
 
-* By combining relational data modeling in PostgreSQL 16, hardware-accelerated semantic search in pgvector, modern performant frontend views, and grounded local AI reasoning via Llama 3.2 and Ollama, GIBIConnect establishes an authoritative, zero-hallucination digital companion that empowers students to explore opportunities, compare institutions, and make confident decisions about their academic future.
+### Prerequisites
+* **Node.js**: v18.0.0 or higher
+* **npm**: v9.0.0 or higher
+* **Git**
+
+### 1. Clone & Install Dependencies
+```bash
+git clone https://github.com/ermyascheru/GIBIConnect.git
+cd GIBIConnect
+
+# Install frontend dependencies
+cd frontend
+npm install
+
+# (Optional) Install backend dependencies if running full stack
+cd ../backend
+npm install
+```
+
+### 2. Run Frontend
+```bash
+cd frontend
+npm run dev
+```
+Open [http://localhost:5173](http://localhost:5173) in your browser. The frontend includes built-in offline knowledge fallbacks, allowing complete exploration of university directories, cutoffs, and AI advising even without an active local backend.
+
+### 3. Run Backend (Optional)
+```bash
+cd backend
+npm run dev
+```
+The Express API runs at [http://localhost:5000](http://localhost:5000).
+
+---
+
+## 5. Deployment Guide
+
+### Deploying Frontend to Vercel
+
+The frontend is fully configured for zero-config edge deployment on [Vercel](https://vercel.com):
+
+1. **Import to Vercel**:
+   - Navigate to [vercel.com/new](https://vercel.com/new) and log in.
+   - Select the `ermyascheru/GIBIConnect` repository.
+
+2. **Configure Project Settings**:
+   - **Framework Preset**: `Vite`
+   - **Root Directory**: `frontend`
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+
+3. **Configure Environment Variables**:
+   Under **Settings > Environment Variables**, add:
+   * **Key**: `VITE_API_URL`
+   * **Value**: `https://gibiconnect-backend.onrender.com` *(or your production backend URL)*
+
+4. **Deploy**:
+   - Click **Deploy**. Vercel will bundle the application and deploy it to a global CDN edge.
+
+---
+
+## 6. Project Team
+
+| Full Name | Role | Core Responsibility |
+| :--- | :--- | :--- |
+| **Ermiyas Cheru** | Project Lead & Full-Stack Architect | AI RAG Pipeline, Database Design & React Frontend |
+| **Fekadu Alemnew** | Backend Engineer | Express REST API, Authentication & Security |
+| **Ezra Michael** | UI/UX Designer | Visual Layouts, Responsive Design & Design System |
+| **Ezana Girmay** | Frontend Developer | Directory Grid, Campus Navigation & Search Routing |
+| **Elsabeth Berhanu** | QA & Security Engineer | Access Control, Validation & Automated Testing |
+
+---
+
+## 7. License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.

@@ -1,23 +1,16 @@
 {
-  "name": "gibiconnect-backend",
-  "version": "1.0.0",
-  "description": "Backend REST API for GIBIConnect Ethiopia",
-  "main": "backend/src/server.js",
+  "name": "gibiconnect",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Ethiopian Higher Education Intelligence & Grounded AI Academic Advising Platform",
   "scripts": {
-    "start": "node backend/src/server.js",
-    "dev": "node backend/src/server.js"
+    "build": "npm run build --prefix frontend",
+    "dev": "npm run dev --prefix frontend",
+    "preview": "npm run preview --prefix frontend"
   },
-  "keywords": [],
-  "author": "Fekadu",
-  "license": "ISC",
-  "type": "commonjs",
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "cors": "^2.8.6",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "joi": "^18.2.3",
-    "jsonwebtoken": "^9.0.3",
-    "pg": "^8.23.0"
+  "devDependencies": {
+    "autoprefixer": "^10.6.1",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^4.0.0"
   }
 }
