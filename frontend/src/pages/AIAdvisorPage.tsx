@@ -986,7 +986,7 @@ How can I assist your higher education journey today? You can ask about:
     };
 
     const isCutoffQuery = (text: string): boolean =>
-      /(?:cutoff|cut-off|cut off|point|points|score|scores|mark|marks|pass mark|matric|admiss|placement|requirement|requirements|criteria|entry|threshold)/i.test(text);
+      /(?:cutoff|cut-off|cut off|point|points|score|scores|mark|marks|pass mark|passmark|matric|martic|admiss|placement|requirement|requirements|criteria|entry|threshold)/i.test(text);
 
     const isTuitionQuery = (text: string): boolean =>
       /(?:tuition|cost|fee|fees|payment|paying|cost-sharing|cost sharing|repay|repayment|proclamation|650\/2009|etb)/i.test(text);
@@ -997,20 +997,38 @@ How can I assist your higher education journey today? You can ask about:
     // Formatter: Specific University Admissions & Cut-Offs
     const formatInstitutionCutoffs = (targetInst: Institution, queryContext: string): string => {
       const qContext = queryContext.toLowerCase();
-      const isEngineeringQuery = /(?:engineer|software|civil|electrical|mechanical|computing|iot|tech)/i.test(qContext);
+      const isCsQuery = /(?:\bcs\b|computer science|computing|informatics|software)/i.test(qContext);
       const isMedicineQuery = /(?:med|medicine|health|doctor|pharmacy|nursing|physio|optometry)/i.test(qContext);
+      const isEngineeringQuery = /(?:engineer|software|civil|electrical|mechanical|computing|iot|tech)/i.test(qContext);
+      const isLawQuery = /(?:law|llb|legal|justice)/i.test(qContext);
+      const isBusinessQuery = /(?:business|accounting|finance|management|economics|marketing)/i.test(qContext);
 
       let programList = targetInst.admissions || [];
-      if (isEngineeringQuery && targetInst.admissions) {
-        const engFiltered = targetInst.admissions.filter((a) =>
-          /(?:engineer|computer|software|iot|tech|mechanical|electrical|civil)/i.test(a.programName)
+      if (isCsQuery && targetInst.admissions) {
+        const csFiltered = targetInst.admissions.filter((a) =>
+          /(?:computer science|computing|software)/i.test(a.programName)
         );
-        if (engFiltered.length > 0) programList = engFiltered;
+        if (csFiltered.length > 0) programList = csFiltered;
       } else if (isMedicineQuery && targetInst.admissions) {
         const medFiltered = targetInst.admissions.filter((a) =>
           /(?:med|health|optometry|physi|pharm|nurs)/i.test(a.programName)
         );
         if (medFiltered.length > 0) programList = medFiltered;
+      } else if (isEngineeringQuery && targetInst.admissions) {
+        const engFiltered = targetInst.admissions.filter((a) =>
+          /(?:engineer|computer|software|iot|tech|mechanical|electrical|civil)/i.test(a.programName)
+        );
+        if (engFiltered.length > 0) programList = engFiltered;
+      } else if (isLawQuery && targetInst.admissions) {
+        const lawFiltered = targetInst.admissions.filter((a) =>
+          /(?:law|legal)/i.test(a.programName)
+        );
+        if (lawFiltered.length > 0) programList = lawFiltered;
+      } else if (isBusinessQuery && targetInst.admissions) {
+        const bizFiltered = targetInst.admissions.filter((a) =>
+          /(?:accounting|finance|business|economics)/i.test(a.programName)
+        );
+        if (bizFiltered.length > 0) programList = bizFiltered;
       }
 
       const formattedPrograms = programList && programList.length > 0
@@ -1314,26 +1332,35 @@ For full details on this specific program or university, you can also explore th
           }),
         });
 
-        if (!response.ok && !import.meta.env.VITE_API_URL) {
-          response = await fetch('http://localhost:5000/api/v1/ai/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              message: userText,
-              mode: 'ADVISOR',
-              sessionId: activeSessionId,
-              documentId: currentAttached?.documentId,
-              attachedDocument: currentAttached
-                ? {
-                    name: currentAttached.name,
-                    data: currentAttached.fileData,
-                  }
-                : undefined,
-            }),
-          });
+        const isProduction = typeof window !== 'undefined' && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1');
+        const directBackendUrl = isProduction ? 'https://gibiconnect-backend.onrender.com/api/v1/ai/chat' : 'http://localhost:5000/api/v1/ai/chat';
+
+        let contentType = response.headers.get('content-type') || '';
+        if ((!response.ok || !contentType.includes('application/json')) && !import.meta.env.VITE_API_URL) {
+          try {
+            response = await fetch(directBackendUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                message: userText,
+                mode: 'ADVISOR',
+                sessionId: activeSessionId,
+                documentId: currentAttached?.documentId,
+                attachedDocument: currentAttached
+                  ? {
+                      name: currentAttached.name,
+                      data: currentAttached.fileData,
+                    }
+                  : undefined,
+              }),
+            });
+            contentType = response.headers.get('content-type') || '';
+          } catch {
+            // direct backend connection failed, fallback to client-side grounded knowledge
+          }
         }
 
-        if (response.ok) {
+        if (response.ok && contentType.includes('application/json')) {
           const result = await response.json();
           if (result.success && result.data && result.data.reply) {
             replyText = result.data.reply;

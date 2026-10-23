@@ -95,6 +95,7 @@ export const INSTITUTION_ALIASES: Record<string, string[]> = {
   // Addis Ababa University (AAU)
   'aau-001': [
     'aau', 'aau-001', 'addis ababa university', 'addis-ababa-university', 'addis abeba university',
+    'addis ababa', 'addis abeba', 'addis', 'finfinne',
     'aait', '5 kilo', '4 kilo', 'sidist kilo', 'sedist kilo', 'arat kilo'
   ],
   // Bahir Dar University (BDU)

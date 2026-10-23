@@ -126,6 +126,8 @@ export const SORTED_INSTITUTION_ALIASES: { code: string; alias: string }[] = [
   // AAU
   { code: 'AAU', alias: 'addis ababa university' },
   { code: 'AAU', alias: 'addis abeba university' },
+  { code: 'AAU', alias: 'addis ababa' },
+  { code: 'AAU', alias: 'addis abeba' },
   { code: 'AAU', alias: 'sidist kilo' },
   { code: 'AAU', alias: 'sedist kilo' },
   { code: 'AAU', alias: 'arat kilo' },
