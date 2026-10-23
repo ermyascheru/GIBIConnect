@@ -1,0 +1,432 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  STUDENT
+  TUTOR
+  UNIVERSITY_ADMIN
+  MOE_ADMIN
+  SUPER_ADMIN
+}
+
+enum VerificationStatus {
+  VERIFIED
+  PENDING_REVIEW
+  OUTDATED
+  CONFLICTING
+  REJECTED
+}
+
+enum Ownership {
+  PUBLIC
+  PRIVATE
+}
+
+enum InstType {
+  UNIVERSITY
+  COLLEGE
+  INSTITUTE
+}
+
+enum StreamType {
+  NATURAL
+  SOCIAL
+}
+
+enum DegreeLevel {
+  BACHELOR
+  MASTER
+  PHD
+  DIPLOMA
+}
+
+enum FacilityCategory {
+  LIBRARY
+  LABORATORY
+  DORMITORY
+  SPORTS
+  ICT
+  HEALTH_CLINIC
+  AUDITORIUM
+  OTHER
+}
+
+enum ScholarshipCoverage {
+  FULL_TUITION
+  PARTIAL_TUITION
+  LIVING_STIPEND
+  WOMEN_IN_STEM
+  MERIT_BASED
+  NEED_BASED
+}
+
+enum CalendarCategory {
+  REGISTRATION
+  ORIENTATION
+  EXAM_PERIOD
+  DEADLINE
+  HOLIDAY
+  SEMESTER_START
+  SEMESTER_END
+}
+
+enum DocCategory {
+  SYLLABUS
+  EXAM
+  RESEARCH
+  LECTURE
+  POLICY
+}
+
+enum EventCategory {
+  DEADLINE
+  CONFERENCE
+  ORIENTATION
+  HACKATHON
+  CAREER
+  WORKSHOP
+}
+
+enum BookmarkType {
+  INSTITUTION
+  PROGRAM
+  EVENT
+  DOCUMENT
+}
+
+model User {
+  id           String         @id @default(uuid())
+  email        String         @unique
+  passwordHash String
+  fullName     String
+  role         Role           @default(STUDENT)
+  avatarUrl    String?
+  phoneNumber  String?
+  isVerified   Boolean        @default(false)
+  
+  bookmarks    Bookmark[]
+  tutorProfile TutorProfile?
+  
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([email])
+  @@index([role])
+}
+
+model Institution {
+  id                 String             @id @default(uuid())
+  code               String             @unique // e.g. 'AAU', 'ASTU', 'AASTU', 'BDU'
+  nameEn             String
+  nameAm             String?
+  ownership          Ownership          @default(PUBLIC)
+  type               InstType           @default(UNIVERSITY)
+  region             String             // e.g. 'Addis Ababa', 'Oromia', 'Amhara'
+  city               String
+  establishedYear    Int
+  websiteUrl         String?
+  logoUrl            String?
+  heroImageUrl       String?
+  verificationStatus VerificationStatus @default(VERIFIED)
+  overview           String             @db.Text
+  
+  // Leadership & Governance
+  leadershipName     String?
+  leadershipTitle    String?
+  accreditationBody  String?
+
+  // Aggregated Counters
+  totalFaculties     Int                @default(0)
+  totalDepartments   Int                @default(0)
+  totalPrograms      Int                @default(0)
+
+  // Relations
+  campuses           Campus[]
+  faculties          Faculty[]
+  facilities         Facility[]
+  scholarships       Scholarship[]
+  calendarEvents     CalendarEvent[]
+  documents          AcademicDoc[]
+  events             AcademicEvent[]
+
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  @@index([code])
+  @@index([region])
+  @@index([ownership])
+  @@index([verificationStatus])
+}
+
+model Campus {
+  id            String       @id @default(uuid())
+  institutionId String
+  institution   Institution  @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  name          String       // e.g. "Main Campus (Sidist Kilo)", "AAiT Campus (5 Kilo)"
+  location      String
+  latitude      Float?
+  longitude     Float?
+  
+  faculties     Faculty[]
+  facilities    Facility[]
+
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@index([institutionId])
+}
+
+model Faculty {
+  id              String       @id @default(uuid())
+  institutionId   String
+  institution     Institution  @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  campusId        String?
+  campusRel       Campus?      @relation(fields: [campusId], references: [id], onDelete: SetNull)
+  
+  name            String       // e.g. "Addis Ababa Institute of Technology (AAiT)"
+  campus          String       // Plain text campus indicator e.g. "5 Kilo (King George VI)"
+  dean            String?
+  establishedYear Int?
+  studentCount    Int          @default(0)
+  facultyCount    Int          @default(0)
+  description     String?      @db.Text
+  
+  departments     Department[]
+
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@index([institutionId])
+}
+
+model Department {
+  id          String    @id @default(uuid())
+  facultyId   String
+  faculty     Faculty   @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+  
+  name        String    // e.g. "Department of Software Engineering"
+  head        String?
+  programs    Program[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([facultyId])
+}
+
+model Program {
+  id                String            @id @default(uuid())
+  departmentId      String
+  department        Department        @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  
+  name              String            // e.g. "B.Sc. in Software Engineering"
+  degreeLevel       DegreeLevel       @default(BACHELOR)
+  durationYears     Float             @default(5.0)
+  creditsEcts       Int               @default(300)
+  deliveryMode      String            @default("Regular Day & Extension")
+  overview          String?           @db.Text
+  careerProspects   String[]          @default([])
+  curriculumOutline Json?             // Structured semester course modules
+
+  admissionCutoffs  AdmissionCutoff[]
+  tuitionRates      TuitionRate[]
+
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  @@index([departmentId])
+  @@index([degreeLevel])
+}
+
+model AdmissionCutoff {
+  id                String      @id @default(uuid())
+  programId         String
+  program           Program     @relation(fields: [programId], references: [id], onDelete: Cascade)
+  
+  academicYear      String      // e.g. "2016/2017 E.C."
+  stream            StreamType  @default(NATURAL)
+  maleCutoff        Float
+  femaleCutoff      Float
+  developingQuota   Float?      // Emerging regions: Afar, Somali, Gambela, Benishangul
+  disabilityQuota   Float?
+  notes             String?
+
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  @@index([programId])
+  @@index([academicYear, stream])
+  @@index([maleCutoff, femaleCutoff])
+}
+
+model TuitionRate {
+  id                  String   @id @default(uuid())
+  programId           String
+  program             Program  @relation(fields: [programId], references: [id], onDelete: Cascade)
+  
+  category            String   // "REGULAR_SUBSIDIZED", "EXTENSION", "WEEKEND", "INTERNATIONAL"
+  costPerCreditEtb    Float    @default(0.0)
+  registrationFeeEtb  Float    @default(0.0)
+  costSharingEligible Boolean  @default(true)
+  deferredRepayPercent Float   @default(0.15) // 15% salary repayment per Proclamation 650/2009
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([programId])
+}
+
+model Facility {
+  id            String           @id @default(uuid())
+  institutionId String
+  institution   Institution      @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  campusId      String?
+  campusRel     Campus?          @relation(fields: [campusId], references: [id], onDelete: SetNull)
+  
+  name          String           // e.g. "John F. Kennedy Memorial Library"
+  category      FacilityCategory @default(LIBRARY)
+  capacity      Int?
+  specs         Json?            // e.g. { "workstations": 450, "highSpeedWifi": true }
+  description   String?          @db.Text
+  
+  images        FacilityImage[]
+
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  @@index([institutionId])
+  @@index([category])
+}
+
+model FacilityImage {
+  id           String   @id @default(uuid())
+  facilityId   String
+  facility     Facility @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  
+  imageUrl     String
+  caption      String?
+  displayOrder Int      @default(0)
+
+  createdAt    DateTime @default(now())
+
+  @@index([facilityId])
+}
+
+model Scholarship {
+  id                  String              @id @default(uuid())
+  institutionId       String
+  institution         Institution         @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  
+  title               String              // e.g. "Ministry of Education National Merit Scholarship"
+  provider            String              // "Ministry of Education", "AAU Academic Council"
+  coverageType        ScholarshipCoverage @default(FULL_TUITION)
+  coveragePercentage  Int                 @default(100)
+  eligibilityCriteria String[]            @default([])
+  applicationDeadline String?
+  applicationUrl      String?
+
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  @@index([institutionId])
+}
+
+model CalendarEvent {
+  id                 String           @id @default(uuid())
+  institutionId      String?
+  institution        Institution?     @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  
+  title              String           // e.g. "First Semester Final Examination Period"
+  category           CalendarCategory @default(EXAM_PERIOD)
+  dateEthiopic       String           // e.g. "Meskerem 15 - 26, 2017 E.C."
+  dateGregorian      String           // e.g. "September 25 - October 6, 2026"
+  isNationalHoliday  Boolean          @default(false)
+
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  @@index([institutionId])
+  @@index([category])
+}
+
+model AcademicDoc {
+  id            String      @id @default(uuid())
+  institutionId String
+  institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  
+  title         String
+  category      DocCategory @default(SYLLABUS)
+  pages         Int         @default(1)
+  fileSize      String      // e.g. "2.4 MB"
+  uploadedYear  String      // e.g. "2016 E.C."
+  fileUrl       String
+  downloadCount Int         @default(0)
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([institutionId])
+  @@index([category])
+}
+
+model AcademicEvent {
+  id               String        @id @default(uuid())
+  institutionId    String?
+  institution      Institution?  @relation(fields: [institutionId], references: [id], onDelete: SetNull)
+  
+  title            String
+  category         EventCategory @default(DEADLINE)
+  dateGregorian    String
+  dateEthiopic     String
+  time             String?
+  location         String
+  isVirtual        Boolean       @default(false)
+  image            String?
+  description      String        @db.Text
+  registrationOpen Boolean       @default(true)
+  attendeesCount   Int           @default(0)
+
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([institutionId])
+  @@index([category])
+}
+
+model TutorProfile {
+  id                String   @id @default(uuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  universityName    String
+  specialtySubjects String[] @default([])
+  ratingAverage     Float    @default(5.0)
+  reviewsCount      Int      @default(0)
+  hourlyRateEtb     Float    @default(350.0)
+  isVerified        Boolean  @default(false)
+  bio               String?  @db.Text
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Bookmark {
+  id        String       @id @default(uuid())
+  userId    String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  itemType  BookmarkType @default(INSTITUTION)
+  itemId    String
+  createdAt DateTime     @default(now())
+
+  @@unique([userId, itemType, itemId])
+  @@index([userId])
+}
