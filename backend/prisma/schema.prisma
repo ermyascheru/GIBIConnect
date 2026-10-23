@@ -109,10 +109,10 @@ model User {
   avatarUrl    String?
   phoneNumber  String?
   isVerified   Boolean        @default(false)
-
+  
   bookmarks    Bookmark[]
   tutorProfile TutorProfile?
-
+  
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 
@@ -135,7 +135,7 @@ model Institution {
   heroImageUrl       String?
   verificationStatus VerificationStatus @default(VERIFIED)
   overview           String             @db.Text
-
+  
   // Leadership & Governance
   leadershipName     String?
   leadershipTitle    String?
@@ -172,7 +172,7 @@ model Campus {
   location      String
   latitude      Float?
   longitude     Float?
-
+  
   faculties     Faculty[]
   facilities    Facility[]
 
@@ -188,7 +188,7 @@ model Faculty {
   institution     Institution  @relation(fields: [institutionId], references: [id], onDelete: Cascade)
   campusId        String?
   campusRel       Campus?      @relation(fields: [campusId], references: [id], onDelete: SetNull)
-
+  
   name            String       // e.g. "Addis Ababa Institute of Technology (AAiT)"
   campus          String       // Plain text campus indicator e.g. "5 Kilo (King George VI)"
   dean            String?
@@ -196,7 +196,7 @@ model Faculty {
   studentCount    Int          @default(0)
   facultyCount    Int          @default(0)
   description     String?      @db.Text
-
+  
   departments     Department[]
 
   createdAt       DateTime     @default(now())
@@ -209,7 +209,7 @@ model Department {
   id          String    @id @default(uuid())
   facultyId   String
   faculty     Faculty   @relation(fields: [facultyId], references: [id], onDelete: Cascade)
-
+  
   name        String    // e.g. "Department of Software Engineering"
   head        String?
   programs    Program[]
@@ -224,7 +224,7 @@ model Program {
   id                String            @id @default(uuid())
   departmentId      String
   department        Department        @relation(fields: [departmentId], references: [id], onDelete: Cascade)
-
+  
   name              String            // e.g. "B.Sc. in Software Engineering"
   degreeLevel       DegreeLevel       @default(BACHELOR)
   durationYears     Float             @default(5.0)
@@ -248,7 +248,7 @@ model AdmissionCutoff {
   id                String      @id @default(uuid())
   programId         String
   program           Program     @relation(fields: [programId], references: [id], onDelete: Cascade)
-
+  
   academicYear      String      // e.g. "2016/2017 E.C."
   stream            StreamType  @default(NATURAL)
   maleCutoff        Float
@@ -269,7 +269,7 @@ model TuitionRate {
   id                  String   @id @default(uuid())
   programId           String
   program             Program  @relation(fields: [programId], references: [id], onDelete: Cascade)
-
+  
   category            String   // "REGULAR_SUBSIDIZED", "EXTENSION", "WEEKEND", "INTERNATIONAL"
   costPerCreditEtb    Float    @default(0.0)
   registrationFeeEtb  Float    @default(0.0)
@@ -288,13 +288,13 @@ model Facility {
   institution   Institution      @relation(fields: [institutionId], references: [id], onDelete: Cascade)
   campusId      String?
   campusRel     Campus?          @relation(fields: [campusId], references: [id], onDelete: SetNull)
-
+  
   name          String           // e.g. "John F. Kennedy Memorial Library"
   category      FacilityCategory @default(LIBRARY)
   capacity      Int?
   specs         Json?            // e.g. { "workstations": 450, "highSpeedWifi": true }
   description   String?          @db.Text
-
+  
   images        FacilityImage[]
 
   createdAt     DateTime         @default(now())
@@ -308,7 +308,7 @@ model FacilityImage {
   id           String   @id @default(uuid())
   facilityId   String
   facility     Facility @relation(fields: [facilityId], references: [id], onDelete: Cascade)
-
+  
   imageUrl     String
   caption      String?
   displayOrder Int      @default(0)
@@ -322,7 +322,7 @@ model Scholarship {
   id                  String              @id @default(uuid())
   institutionId       String
   institution         Institution         @relation(fields: [institutionId], references: [id], onDelete: Cascade)
-
+  
   title               String              // e.g. "Ministry of Education National Merit Scholarship"
   provider            String              // "Ministry of Education", "AAU Academic Council"
   coverageType        ScholarshipCoverage @default(FULL_TUITION)
@@ -341,7 +341,7 @@ model CalendarEvent {
   id                 String           @id @default(uuid())
   institutionId      String?
   institution        Institution?     @relation(fields: [institutionId], references: [id], onDelete: Cascade)
-
+  
   title              String           // e.g. "First Semester Final Examination Period"
   category           CalendarCategory @default(EXAM_PERIOD)
   dateEthiopic       String           // e.g. "Meskerem 15 - 26, 2017 E.C."
@@ -359,7 +359,7 @@ model AcademicDoc {
   id            String      @id @default(uuid())
   institutionId String
   institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
-
+  
   title         String
   category      DocCategory @default(SYLLABUS)
   pages         Int         @default(1)
@@ -379,7 +379,7 @@ model AcademicEvent {
   id               String        @id @default(uuid())
   institutionId    String?
   institution      Institution?  @relation(fields: [institutionId], references: [id], onDelete: SetNull)
-
+  
   title            String
   category         EventCategory @default(DEADLINE)
   dateGregorian    String
@@ -403,7 +403,7 @@ model TutorProfile {
   id                String   @id @default(uuid())
   userId            String   @unique
   user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  
   universityName    String
   specialtySubjects String[] @default([])
   ratingAverage     Float    @default(5.0)
@@ -422,7 +422,7 @@ model Bookmark {
   id        String       @id @default(uuid())
   userId    String
   user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  
   itemType  BookmarkType @default(INSTITUTION)
   itemId    String
   createdAt DateTime     @default(now())

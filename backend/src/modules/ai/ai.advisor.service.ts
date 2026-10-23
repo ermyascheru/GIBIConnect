@@ -11,7 +11,7 @@
  */
 
 import type { Response } from 'express';
-import { ragRetriever } from './rag.retriever.js';
+import { ragRetriever, extractInstitutionsFromQuery } from './rag.retriever.js';
 import { llmClient } from './llm.client.js';
 import { aiTutorService } from './ai.tutor.service.js';
 import { documentRAGService, type ScoredDocumentChunk } from './document.rag.service.js';
@@ -243,8 +243,9 @@ export class AIAdvisorService {
     if (q.includes('vector') && (q.includes('physic') || q.includes('math') || q.includes('chapter 1') || q.includes('explain'))) return 'Understanding Vectors';
     if (q.includes('medicine') && q.includes('aau') && (q.includes('cost') || q.includes('tuition') || q.includes('payment'))) return 'AAU Medicine Tuition';
     if (q.includes('aau') && (q.includes('private') || q.includes('autonom') || q.includes('status'))) return 'AAU Institutional Governance';
-    if (q.includes('cut-off') || q.includes('cutoff')) {
-      const uni = q.includes('aau') ? 'AAU' : q.includes('astu') ? 'ASTU' : q.includes('aastu') ? 'AASTU' : 'University';
+    if (q.includes('cut-off') || q.includes('cutoff') || q.includes('admission') || q.includes('point')) {
+      const detected = extractInstitutionsFromQuery(q);
+      const uni = detected.length > 0 ? detected.join(' & ') : 'University';
       return `${uni} Admissions Cut-Offs`;
     }
 
@@ -765,6 +766,7 @@ Rules:
 1. Source Grounding: Answer using ONLY information in <verified_context>.
 2. Proclamation No. 650/2009: Cost-sharing is 0 ETB upfront for regular students.
 3. Autonomous Public Status: AAU is autonomous public under Regulation No. 534/2023, NOT private.
+4. Comprehensive Multi-Question Coverage: If the user asks multiple questions or inquires about multiple institutions, departments, cut-offs, or topics simultaneously, you MUST answer EACH AND EVERY question and institution individually and completely. Organize answers with clear markdown headers (e.g., "### 1. ...", "### 2. ..."). Never skip, generalize, or blend answers into a generic summary when specific details are asked.
 
 <verified_context>
 ${verifiedContextText}

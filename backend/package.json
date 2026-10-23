@@ -6,7 +6,7 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "cross-env NODE_OPTIONS=--use-system-ca tsx watch src/server.ts",
-    "build": "tsc && node fix-esm-imports.mjs",
+    "build": "prisma generate && tsc && node fix-esm-imports.mjs",
     "audit": "node audit-backend.mjs",
     "start": "node dist/server.js",
     "db:neon:seed": "node seed-neon.mjs",
@@ -34,6 +34,7 @@
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "^5.22.0",
+    "prisma": "^5.22.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.3.0",

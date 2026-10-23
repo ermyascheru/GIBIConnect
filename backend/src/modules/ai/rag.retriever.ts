@@ -18,6 +18,212 @@ import type {
   StudentContextProfile,
 } from './ai.types.js';
 
+function escapeRegExp(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * Ordered list of institution aliases with codes, sorted so specific multi-word
+ * phrases and longer acronyms (AASTU, AMU, DMU, DDU, HRU) are tested BEFORE
+ * shorter substrings (ASTU, MU, DU, HU) to prevent false-positive masking.
+ */
+export const SORTED_INSTITUTION_ALIASES: { code: string; alias: string }[] = [
+  // AASTU before ASTU
+  { code: 'AASTU', alias: 'addis ababa science and technology university' },
+  { code: 'AASTU', alias: 'addis ababa science and techonology university' },
+  { code: 'AASTU', alias: 'addis ababa science and technology' },
+  { code: 'AASTU', alias: 'addis ababa science and techonology' },
+  { code: 'AASTU', alias: 'addis ababa science' },
+  { code: 'AASTU', alias: 'kilinto campus' },
+  { code: 'AASTU', alias: 'kilinto' },
+  { code: 'AASTU', alias: 'aastu tech' },
+  { code: 'AASTU', alias: 'aastu' },
+  // ASTU
+  { code: 'ASTU', alias: 'adama science and technology university' },
+  { code: 'ASTU', alias: 'adama science and techonology university' },
+  { code: 'ASTU', alias: 'adama science and technology' },
+  { code: 'ASTU', alias: 'adama technology' },
+  { code: 'ASTU', alias: 'adama science' },
+  { code: 'ASTU', alias: 'adama university' },
+  { code: 'ASTU', alias: 'adama tech' },
+  { code: 'ASTU', alias: 'astu' },
+  { code: 'ASTU', alias: 'adama' },
+  // AMU before MU
+  { code: 'AMU', alias: 'arba minch university' },
+  { code: 'AMU', alias: 'water technology institute' },
+  { code: 'AMU', alias: 'arba minch' },
+  { code: 'AMU', alias: 'arbaminch' },
+  { code: 'AMU', alias: 'awti' },
+  { code: 'AMU', alias: 'amu' },
+  // DMU before MU
+  { code: 'DMU', alias: 'debre markos university' },
+  { code: 'DMU', alias: 'derbre markos university' },
+  { code: 'DMU', alias: 'debre markos' },
+  { code: 'DMU', alias: 'derbre markos' },
+  { code: 'DMU', alias: 'debremarkos' },
+  { code: 'DMU', alias: 'derbremarkos' },
+  { code: 'DMU', alias: 'dmu' },
+  // DDU before DU
+  { code: 'DDU', alias: 'dire dawa university' },
+  { code: 'DDU', alias: 'dira dewa university' },
+  { code: 'DDU', alias: 'dira dawa university' },
+  { code: 'DDU', alias: 'dire dawa' },
+  { code: 'DDU', alias: 'diredawa' },
+  { code: 'DDU', alias: 'dira dewa' },
+  { code: 'DDU', alias: 'dira dawa' },
+  { code: 'DDU', alias: 'ddu' },
+  // DU
+  { code: 'DU', alias: 'dilla university' },
+  { code: 'DU', alias: 'dilla' },
+  { code: 'DU', alias: 'du' },
+  // HRU before HU
+  { code: 'HRU', alias: 'haramaya university' },
+  { code: 'HRU', alias: 'hiwot fana' },
+  { code: 'HRU', alias: 'haramaya' },
+  { code: 'HRU', alias: 'almaya' },
+  { code: 'HRU', alias: 'hru' },
+  // HU
+  { code: 'HU', alias: 'hawassa university' },
+  { code: 'HU', alias: 'wondo genet' },
+  { code: 'HU', alias: 'hawassa' },
+  { code: 'HU', alias: 'awassa' },
+  { code: 'HU', alias: 'hu' },
+  // MU
+  { code: 'MU', alias: 'mekelle university' },
+  { code: 'MU', alias: 'mekele university' },
+  { code: 'MU', alias: 'meqele university' },
+  { code: 'MU', alias: 'tigray university' },
+  { code: 'MU', alias: 'ayder hospital' },
+  { code: 'MU', alias: 'ayder referral' },
+  { code: 'MU', alias: 'mekelle' },
+  { code: 'MU', alias: 'mekele' },
+  { code: 'MU', alias: 'meqele' },
+  { code: 'MU', alias: 'ayder' },
+  { code: 'MU', alias: 'mu' },
+  // UoG
+  { code: 'UOG', alias: 'university of gondar' },
+  { code: 'UOG', alias: 'gondar university' },
+  { code: 'UOG', alias: 'goder university' },
+  { code: 'UOG', alias: 'gonder university' },
+  { code: 'UOG', alias: 'atse fasil' },
+  { code: 'UOG', alias: 'maraki' },
+  { code: 'UOG', alias: 'gondar' },
+  { code: 'UOG', alias: 'goder' },
+  { code: 'UOG', alias: 'gonder' },
+  { code: 'UOG', alias: 'teda' },
+  { code: 'UOG', alias: 'uog' },
+  // AAMC before AAU
+  { code: 'AAMC', alias: 'addis ababa medical college' },
+  { code: 'AAMC', alias: 'addis abeba medical collage' },
+  { code: 'AAMC', alias: 'addis ababa medical collage' },
+  { code: 'AAMC', alias: 'addis ababa medical and business' },
+  { code: 'AAMC', alias: 'tikur anbessa medical' },
+  { code: 'AAMC', alias: 'tikur anbessa chs' },
+  { code: 'AAMC', alias: 'black lion medical' },
+  { code: 'AAMC', alias: 'black lion hospital' },
+  { code: 'AAMC', alias: 'tikur anbessa' },
+  { code: 'AAMC', alias: 'aamc' },
+  // AAU
+  { code: 'AAU', alias: 'addis ababa university' },
+  { code: 'AAU', alias: 'addis abeba university' },
+  { code: 'AAU', alias: 'sidist kilo' },
+  { code: 'AAU', alias: 'sedist kilo' },
+  { code: 'AAU', alias: 'arat kilo' },
+  { code: 'AAU', alias: '5 kilo' },
+  { code: 'AAU', alias: '4 kilo' },
+  { code: 'AAU', alias: 'aait' },
+  { code: 'AAU', alias: 'aau' },
+  // WKU before WU
+  { code: 'WKU', alias: 'wolkite university' },
+  { code: 'WKU', alias: 'welkite university' },
+  { code: 'WKU', alias: 'wolkita university' },
+  { code: 'WKU', alias: 'wolkite' },
+  { code: 'WKU', alias: 'welkite' },
+  { code: 'WKU', alias: 'wolkita' },
+  { code: 'WKU', alias: 'gubre' },
+  { code: 'WKU', alias: 'gubiot' },
+  { code: 'WKU', alias: 'wku' },
+  // WU
+  { code: 'WU', alias: 'wollo university' },
+  { code: 'WU', alias: 'kombolcha' },
+  { code: 'WU', alias: 'dessie' },
+  { code: 'WU', alias: 'wollo' },
+  { code: 'WU', alias: 'kiot' },
+  { code: 'WU', alias: 'wu' },
+  // BDU
+  { code: 'BDU', alias: 'bahir dar university' },
+  { code: 'BDU', alias: 'tibebe ghion' },
+  { code: 'BDU', alias: 'bahir dar' },
+  { code: 'BDU', alias: 'bahirdar' },
+  { code: 'BDU', alias: 'bahr dar' },
+  { code: 'BDU', alias: 'eitex' },
+  { code: 'BDU', alias: 'poly' },
+  { code: 'BDU', alias: 'bit' },
+  { code: 'BDU', alias: 'bdu' },
+  // JU
+  { code: 'JU', alias: 'jimma university' },
+  { code: 'JU', alias: 'kito furdisa' },
+  { code: 'JU', alias: 'jucavm' },
+  { code: 'JU', alias: 'jimma' },
+  { code: 'JU', alias: 'jush' },
+  { code: 'JU', alias: 'jima' },
+  { code: 'JU', alias: 'ju' },
+  // DBU
+  { code: 'DBU', alias: 'debre berhan university' },
+  { code: 'DBU', alias: 'debre berhan' },
+  { code: 'DBU', alias: 'debreberhan' },
+  { code: 'DBU', alias: 'dbu' },
+  // WSU
+  { code: 'WSU', alias: 'wolaita sodo university' },
+  { code: 'WSU', alias: 'wolaita sodo' },
+  { code: 'WSU', alias: 'wolaita' },
+  { code: 'WSU', alias: 'sodo' },
+  { code: 'WSU', alias: 'wsu' },
+  // WCU
+  { code: 'WCU', alias: 'wachemo university' },
+  { code: 'WCU', alias: 'wachemo' },
+  { code: 'WCU', alias: 'hossana' },
+  { code: 'WCU', alias: 'hosanna' },
+  { code: 'WCU', alias: 'wcu' },
+  // AMBO
+  { code: 'AMBO', alias: 'ambo university' },
+  { code: 'AMBO', alias: 'awaro' },
+  { code: 'AMBO', alias: 'ambo' },
+  // SMU
+  { code: 'SMU', alias: "st. mary's university" },
+  { code: 'SMU', alias: 'saint mary' },
+  { code: 'SMU', alias: 'st. mary' },
+  { code: 'SMU', alias: 'st mary' },
+  { code: 'SMU', alias: 'smu' },
+  // RVU
+  { code: 'RVU', alias: 'rift valley university' },
+  { code: 'RVU', alias: 'rift valley' },
+  { code: 'RVU', alias: 'rvu' },
+  // UNITY
+  { code: 'UNITY', alias: 'unity university' },
+  { code: 'UNITY', alias: 'gerji' },
+  { code: 'UNITY', alias: 'unity' },
+];
+
+/**
+ * Extracts all unique Ethiopian institution codes mentioned in a query
+ * using strict word-boundary matching.
+ */
+export function extractInstitutionsFromQuery(query: string): string[] {
+  const q = query.toLowerCase();
+  const matchedCodes = new Set<string>();
+
+  for (const item of SORTED_INSTITUTION_ALIASES) {
+    const escaped = escapeRegExp(item.alias);
+    const regex = new RegExp(`(?:^|[^a-z0-9])${escaped}(?:$|[^a-z0-9])`, 'i');
+    if (regex.test(q)) {
+      matchedCodes.add(item.code);
+    }
+  }
+
+  return Array.from(matchedCodes);
+}
+
 export class HybridRAGRetriever {
   private corpus: RAGDocumentChunk[] = [...VERIFIED_RAG_CORPUS];
   private embeddingsInitialized = false;
@@ -137,6 +343,7 @@ export class HybridRAGRetriever {
 
     // Filter strictly to VERIFIED chunks (Part 6.1 Data Trust Rule)
     const verifiedChunks = this.corpus.filter((c) => c.verificationStatus === 'VERIFIED');
+    const detectedInstitutions = extractInstitutionsFromQuery(cleanQuery);
 
     // Score each chunk across all 3 tiers
     const rawScored = verifiedChunks.map((chunk) => {
@@ -161,50 +368,15 @@ export class HybridRAGRetriever {
           ? Math.min(1.0, (matchedTokens + keywordHits) / (queryTokens.length * 1.5))
           : 0;
 
-      // Tier 1: Exact Structured Code & Institution Name Match (With typo tolerance)
+      // Tier 1: Exact Structured Code & Institution Name Match (With typo tolerance and word boundaries)
       let structuredBonus = 0;
       const lowerQuery = cleanQuery.toLowerCase();
-
-      // University aliases and typo normalization map
-      const institutionAliases: Record<string, string[]> = {
-        UOG: ['gondar', 'goder', 'uog', 'maraki', 'teda', 'atse fasil'],
-        AAU: ['aau', 'addis ababa university', 'aait', '5 kilo', '4 kilo', 'sidist kilo', 'tikur anbessa'],
-        ASTU: ['astu', 'adama science', 'adama technology', 'adama university'],
-        AASTU: ['aastu', 'kilinto', 'addis ababa science'],
-        JU: ['jimma', 'ju', 'kito furdisa'],
-        BDU: ['bahir dar', 'bdu', 'bit', 'eitex'],
-        HU: ['hawassa', 'hu'],
-        MU: ['mekelle', 'mu'],
-        AMU: ['arba minch', 'amu'],
-        HRU: ['haramaya', 'hru', 'hiwot fana'],
-        WU: ['wollo', 'wu', 'kombolcha', 'kiot'],
-        WKU: ['wolkite', 'wku'],
-        DBU: ['debre berhan', 'dbu'],
-        DMU: ['debre markos', 'dmu'],
-        DU: ['dilla', 'du'],
-        DDU: ['dire dawa', 'ddu'],
-        WSU: ['wolaita sodo', 'wsu', 'sodo'],
-        WCU: ['wachemo', 'wcu', 'hossana'],
-        AMBO: ['ambo', 'ambo university'],
-        AAMC: ['aamc', 'addis ababa medical college', 'addis ababa medical and business'],
-        SMU: ['st mary', 'st. mary', 'saint mary', 'smu'],
-        RVU: ['rift valley', 'rvu'],
-        UNITY: ['unity university', 'unity'],
-      };
-
-      let queryTargetInstitution: string | null = null;
-      for (const [code, aliases] of Object.entries(institutionAliases)) {
-        if (aliases.some((alias) => lowerQuery.includes(alias))) {
-          queryTargetInstitution = code;
-          break;
-        }
-      }
 
       if (chunk.institutionCode) {
         if (queryTokens.includes(chunk.institutionCode.toLowerCase())) {
           structuredBonus += 0.40;
         }
-        if (queryTargetInstitution && chunk.institutionCode === queryTargetInstitution) {
+        if (detectedInstitutions.includes(chunk.institutionCode)) {
           structuredBonus += 0.65;
         }
       }
@@ -277,6 +449,23 @@ export class HybridRAGRetriever {
     const combined = [...rawScored, ...dbChunks];
 
     combined.sort((a, b) => b.rrfScore - a.rrfScore);
+
+    // If multiple institutions were inquired about in the prompt, balance retrieval to include top chunks for EACH
+    if (detectedInstitutions.length > 1) {
+      const balancedResults: ScoredRAGChunk[] = [];
+      for (const instCode of detectedInstitutions) {
+        const instChunks = combined.filter((c) => c.chunk.institutionCode === instCode).slice(0, 2);
+        balancedResults.push(...instChunks);
+      }
+      for (const c of combined) {
+        if (!balancedResults.some((x) => x.chunk.id === c.chunk.id)) {
+          balancedResults.push(c);
+        }
+        if (balancedResults.length >= Math.max(topK, detectedInstitutions.length * 2)) break;
+      }
+      return balancedResults;
+    }
+
     return combined.slice(0, topK);
   }
 
