@@ -1,8 +1,14 @@
 import { Pool } from "pg";
 import { env } from "./env";
 
+const isSsl =
+  env.nodeEnv === "production" ||
+  env.databaseUrl.includes("neon.tech") ||
+  env.databaseUrl.includes("sslmode=require");
+
 const pool = new Pool({
   connectionString: env.databaseUrl,
+  ssl: isSsl ? { rejectUnauthorized: false } : undefined,
 });
 
 export const checkDatabaseConnection = async (): Promise<void> => {

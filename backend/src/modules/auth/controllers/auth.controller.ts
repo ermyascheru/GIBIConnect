@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import { loginUser } from "../services/auth.service";
-import { loginSchema } from "../validators/auth.validator";
+import { loginUser, registerUser } from "../services/auth.service";
+import { loginSchema, registerSchema } from "../validators/auth.validator";
 import type { AuthenticatedRequest } from "../../../middleware/auth.middleware";
 
 export const loginController = async (
@@ -16,12 +16,38 @@ export const loginController = async (
       data: payload,
       timestamp: new Date().toISOString(),
     });
-  } catch {
+  } catch (err: any) {
     res.status(401).json({
       success: false,
       error: {
         code: "INVALID_CREDENTIALS",
-        message: "Invalid email or password",
+        message: err.message === "INVALID_CREDENTIALS" ? "Invalid email or password" : (err.errors ? err.errors[0]?.message : "Invalid credentials format"),
+      },
+      timestamp: new Date().toISOString(),
+    });
+  }
+};
+
+export const registerController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { email, password, fullName } = registerSchema.parse(req.body);
+    const payload = await registerUser(email, password, fullName);
+
+    res.status(201).json({
+      success: true,
+      data: payload,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (err: any) {
+    const isConflict = err.message === "EMAIL_ALREADY_EXISTS";
+    res.status(isConflict ? 409 : 400).json({
+      success: false,
+      error: {
+        code: isConflict ? "EMAIL_EXISTS" : "REGISTRATION_FAILED",
+        message: isConflict ? "An account with this email address already exists" : (err.errors ? err.errors[0]?.message : "Registration failed. Please check your details."),
       },
       timestamp: new Date().toISOString(),
     });

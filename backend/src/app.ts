@@ -10,12 +10,25 @@ import resourceRoutes from "./modules/resources/routes/resource.routes";
 import financeRoutes from "./modules/finance/routes/finance.routes";
 import authRoutes from "./modules/auth/routes/auth.routes";
 import userRoutes from "./modules/users/routes/user.routes";
+import eventRoutes from "./modules/events/routes/event.routes";
+import marketplaceRoutes from "./modules/marketplace/routes/marketplace.routes";
+import { aiRouter } from "./modules/ai/ai.routes";
 
 const app = express();
 
-app.use(helmet());
-app.use(cors());
-app.use(express.json());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+  })
+);
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
+app.use(express.json({ limit: "30mb" }));
+app.use(express.urlencoded({ extended: true, limit: "30mb" }));
 
 app.use("/api/v1/institutions", institutionRoutes);
 app.use("/api/v1/programs", programRoutes);
@@ -24,6 +37,9 @@ app.use("/api/v1/resources", resourceRoutes);
 app.use("/api/v1/finance", financeRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/events", eventRoutes);
+app.use("/api/v1/marketplace", marketplaceRoutes);
+app.use("/api/v1/ai", aiRouter);
 
 app.get("/api/v1/health", async (_req, res): Promise<void> => {
   try {
