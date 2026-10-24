@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { env } from "../../../config/env";
@@ -82,6 +83,49 @@ export const registerUser = async (
       full_name: newUser.full_name,
       role: newUser.role,
       status: newUser.status,
+    },
+  };
+};
+
+export const googleAuthUser = async (
+  email: string,
+  fullName: string,
+  _googleId?: string
+): Promise<LoginResult> => {
+  const normalizedEmail = email.trim().toLowerCase();
+  let user = await findUserByEmail(normalizedEmail);
+
+  if (!user) {
+    const salt = await bcrypt.genSalt(10);
+    const randomPassword = crypto.randomBytes(24).toString("hex");
+    const passwordHash = await bcrypt.hash(randomPassword, salt);
+    user = await createUser(
+      normalizedEmail,
+      passwordHash,
+      fullName || normalizedEmail.split("@")[0]
+    );
+  }
+
+  const token = jwt.sign(
+    {
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+      full_name: user.full_name,
+      status: user.status,
+    },
+    env.jwtAccessSecret,
+    { expiresIn: "12h" }
+  );
+
+  return {
+    token,
+    user: {
+      id: user.id,
+      email: user.email,
+      full_name: user.full_name,
+      role: user.role,
+      status: user.status,
     },
   };
 };

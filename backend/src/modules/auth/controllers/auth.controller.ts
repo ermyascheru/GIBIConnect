@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
-import { loginUser, registerUser } from "../services/auth.service";
+import jwt from "jsonwebtoken";
+import { loginUser, registerUser, googleAuthUser } from "../services/auth.service";
 import { loginSchema, registerSchema } from "../validators/auth.validator";
 import type { AuthenticatedRequest } from "../../../middleware/auth.middleware";
 
@@ -81,4 +82,57 @@ export const getCurrentUserController = async (
     },
     timestamp: new Date().toISOString(),
   });
+};
+
+export const googleAuthController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    let email = req.body.email;
+    let fullName = req.body.fullName || req.body.name;
+    let googleId = req.body.googleId;
+
+    if (req.body.credential) {
+      const decoded: any = jwt.decode(req.body.credential);
+      if (decoded && decoded.email) {
+        email = decoded.email;
+        fullName = decoded.name || fullName;
+        googleId = decoded.sub || googleId;
+      }
+    }
+
+    if (!email || typeof email !== "string") {
+      res.status(400).json({
+        success: false,
+        error: {
+          code: "INVALID_GOOGLE_PAYLOAD",
+          message: "Email is required for Google authentication",
+        },
+        timestamp: new Date().toISOString(),
+      });
+      return;
+    }
+
+    const payload = await googleAuthUser(
+      email,
+      fullName || email.split("@")[0],
+      googleId
+    );
+
+    res.json({
+      success: true,
+      data: payload,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      error: {
+        code: "GOOGLE_AUTH_FAILED",
+        message: err.message || "Failed to authenticate with Google",
+      },
+      timestamp: new Date().toISOString(),
+    });
+  }
 };
