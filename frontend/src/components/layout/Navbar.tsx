@@ -14,12 +14,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, onGetSt
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         
         {/* Brand Logo */}
-        <button onClick={() => onNavigate('home')} className="flex items-center gap-2 group text-left cursor-pointer">
-          <span className="w-8 h-8 rounded-lg bg-[#0C373D] text-[#5AA7A7] font-bold flex items-center justify-center text-sm tracking-tight group-hover:bg-[#072428] transition-colors">
-            G
-          </span>
+        <button onClick={() => onNavigate('home')} className="flex items-center gap-2.5 group text-left cursor-pointer">
+          <img
+            src="/images/brand/gibiconnect-icon.png"
+            alt="GIBIConnect"
+            className="w-8 h-8 object-contain rounded-lg shadow-xs group-hover:scale-105 transition-transform"
+          />
           <span className="text-lg font-bold tracking-tight text-[#0F172A]">
-            GIBI<span className="text-[#5AA7A7]">Connect</span>
+            GIBI<span className="text-[#0D9488]">Connect</span>
           </span>
         </button>
 

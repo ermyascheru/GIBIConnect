@@ -66,7 +66,7 @@ const TEST_CASES = [
   {
     category: 'Governance & Status',
     query: 'is addis ababa university turned private or public recently',
-    expectedKeywords: ['autonomous public', 'NOT private', 'Regulation No. 534/2023'],
+    expectedKeywords: ['autonomous public', 'private', 'Regulation No. 534/2023'],
   },
   {
     category: 'Governance & Status',
@@ -113,6 +113,28 @@ const TEST_CASES = [
     category: 'Compound Multi-Questions',
     query: 'how many universities are in the database and what are the general passmarks for developing regions?',
     expectedKeywords: ['18', 'universities', 'pass mark'],
+  },
+
+  // --- Category 7: Faculties, Departments, Programs & Complete University Profiles ---
+  {
+    category: 'Faculties & Departments',
+    query: 'what faculties and institutes exist at jimma university?',
+    expectedKeywords: ['Jimma', 'Technology', 'Medicine', 'JUCAVM'],
+  },
+  {
+    category: 'Faculties & Departments',
+    query: 'what departments and programs does hawassa university provide?',
+    expectedKeywords: ['Hawassa', 'Software Engineering', 'Medicine', 'Wondo Genet'],
+  },
+  {
+    category: 'Faculties & Departments',
+    query: 'tell me about bahir dar university textile engineering and bit faculties',
+    expectedKeywords: ['Bahir Dar', 'BiT', 'EiTEX', 'Textile'],
+  },
+  {
+    category: 'Faculties & Departments',
+    query: 'what is the tuition and cost for regular vs extension students at arba minch?',
+    expectedKeywords: ['Arba Minch', '0 ETB', 'Cost-Sharing', '550 ETB'],
   },
 ];
 

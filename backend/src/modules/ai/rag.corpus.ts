@@ -367,6 +367,225 @@ Chapter 4: Definite & Indefinite Integrals:
    - Standard Cell Potential: $E^\\circ_{\\text{cell}} = E^\\circ_{\\text{cathode (reduction)}} - E^\\circ_{\\text{anode (oxidation)}}$.
    - Nernst Equation at $25^\\circ\\text{C}$: $E_{\\text{cell}} = E^\\circ_{\\text{cell}} - \\frac{0.0592}{n} \\log_{10} Q$. A reaction is spontaneous when $E_{\\text{cell}} > 0$ ($\\Delta G^\\circ = -nFE^\\circ_{\\text{cell}} < 0$).`
   }
+,
+  {
+    id: 'chunk-ju-complete-01',
+    institutionCode: 'JU',
+    domain: 'UNIVERSITY_CATALOG',
+    sourceTitle: 'Jimma University (JU) Academic Catalog, Faculties & Department Directory',
+    pageNumber: 12,
+    chunkIndex: 1,
+    academicYear: '2016/2017 E.C.',
+    verificationStatus: 'VERIFIED',
+    keywords: ['jimma', 'ju', 'jimma university', 'jit', 'jumc', 'jucavm', 'faculties', 'departments', 'programs', 'tuition', 'cbe', 'community based education', 'medicine', 'software engineering', 'civil', 'agriculture', 'coffee'],
+    content: `Jimma University (JU) — Comprehensive Institutional Profile, Faculties & Departments (2016/2017 E.C.):
+1. Overview & Heritage:
+   - Established in 1952 (originally Jimma Agricultural Technical School). Renowned pioneer of Community-Based Education (CBE) in Ethiopia.
+   - Location: Jimma, Oromia Region.
+2. Academic Institutes, Colleges & Faculties:
+   - Jimma Institute of Technology (JiT — Kito Furdisa Campus, Dean: Dr. Efrem Wakjira): Departments of Software Engineering & Computing, Electrical & Computer Engineering, Civil & Environmental Engineering, Mechanical Engineering, and Chemical Engineering.
+   - Faculty of Medical Sciences / Institute of Health (integrated with 800-bed Jimma University Medical Center JUMC): School of Medicine (Doctor of Medicine MD), School of Pharmacy (B.Pharm, Pharm.D), School of Public Health, School of Medical Laboratory, and Nursing & Midwifery.
+   - College of Agriculture & Veterinary Medicine (JUCAVM — Eladale Campus): Department of Horticulture & Coffee Science (national center for Arabica coffee genetics and agronomy), School of Veterinary Medicine (DVM), Animal Sciences, and Agribusiness.
+   - College of Business & Economics: Accounting & Finance, Economics, Management, and Hospitality.
+   - College of Law & Governance and College of Natural Sciences.
+3. Degree Programs & Duration:
+   - Doctor of Medicine (MD): 6.0 Years (360 ECTS). Cut-off: Male 525+ | Female 505+.
+   - B.Sc. in Software Engineering: 5.0 Years (300 ECTS). Cut-off: Male 465+ | Female 445+.
+   - B.Sc. in Civil & Hydraulic Engineering: 5.0 Years (300 ECTS). Cut-off: Male 450+ | Female 430+.
+   - B.A. in Accounting & Finance: 4.0 Years (240 ECTS). Cut-off: Male 415+ | Female 395+.
+4. Tuition & Cost-Sharing:
+   - Placed regular students enjoy 100% upfront tuition, dormitory, and cafeteria support under Proclamation No. 650/2009 (0 ETB direct tuition).
+   - Continuing education / extension credit hour tuition: 600 ETB per credit.
+5. Key Campus Facilities:
+   - Jimma University Medical Center (JUMC), Kito Furdisa Engineering Complex, Eladale Agronomy Research Station, and Central Digital Library.`
+  },
+  {
+    id: 'chunk-hu-complete-01',
+    institutionCode: 'HU',
+    domain: 'UNIVERSITY_CATALOG',
+    sourceTitle: 'Hawassa University (HU) Academic Catalog, Faculties & Department Directory',
+    pageNumber: 15,
+    chunkIndex: 1,
+    academicYear: '2016/2017 E.C.',
+    verificationStatus: 'VERIFIED',
+    keywords: ['hawassa', 'hu', 'hawassa university', 'iot', 'hucsh', 'wondo genet', 'faculties', 'departments', 'programs', 'tuition', 'forestry', 'medicine', 'engineering', 'law', 'agriculture'],
+    content: `Hawassa University (HU) — Comprehensive Institutional Profile, Faculties & Departments (2016/2017 E.C.):
+1. Overview & Heritage:
+   - Flagship research university in Sidama Region, established in 1976 (originally Debub University).
+   - Location: Hawassa, Sidama Region (Main Campus, Referral Hospital Campus, Wondo Genet, and Awada).
+2. Academic Institutes, Colleges & Faculties:
+   - Hawassa Institute of Technology (IoT — Main Campus, Dean: Dr. Fasika Bete): Electrical & Computer Engineering, Software Engineering, Civil & Water Resources, Mechanical & Automotive Engineering, and Biosystems Engineering.
+   - College of Medicine & Health Sciences (operating the 650-bed Hawassa University Comprehensive Specialized Hospital HUCSH): School of Medicine (Doctor of Medicine MD), School of Public Health, School of Medical Laboratory, and Comprehensive Nursing.
+   - Wondo Genet College of Forestry & Natural Resources (historic campus est. 1978): Forestry & Agroforestry, Wildlife Management, Natural Resources Economics.
+   - College of Agriculture: Plant Sciences, Animal & Range Sciences, Agribusiness.
+   - College of Law & Governance: School of Law (LL.B), Governance & Development.
+   - College of Business & Economics: Accounting & Finance, Economics, Management.
+3. Degree Programs & Duration:
+   - Doctor of Medicine (MD): 6.0 Years (360 ECTS). Cut-off: Male 518+ | Female 498+.
+   - B.Sc. in Software Engineering: 5.0 Years (300 ECTS). Cut-off: Male 460+ | Female 440+.
+   - B.Sc. in Civil & Water Engineering: 5.0 Years (300 ECTS). Cut-off: Male 445+ | Female 425+.
+   - B.Sc. in Forestry & Agroforestry: 4.0 Years (240 ECTS).
+4. Tuition & Cost-Sharing:
+   - 0 ETB upfront tuition for all placed regular undergraduate students under Proclamation No. 650/2009.
+   - Extension / evening tuition rate: 550 ETB per credit hour.
+5. Facilities:
+   - HUCSH Referral Teaching Hospital, Wondo Genet Forestry Arboretum, IoT Advanced Software Labs, Central ICT Library.`
+  },
+  {
+    id: 'chunk-bdu-complete-01',
+    institutionCode: 'BDU',
+    domain: 'UNIVERSITY_CATALOG',
+    sourceTitle: 'Bahir Dar University (BDU) Academic Catalog, Faculties & Department Directory',
+    pageNumber: 18,
+    chunkIndex: 1,
+    academicYear: '2016/2017 E.C.',
+    verificationStatus: 'VERIFIED',
+    keywords: ['bahir dar', 'bdu', 'bahir dar university', 'bit', 'eitex', 'tibebe ghion', 'faculties', 'departments', 'programs', 'tuition', 'textile', 'maritime', 'engineering', 'polytechnic'],
+    content: `Bahir Dar University (BDU) — Comprehensive Institutional Profile, Faculties & Departments (2016/2017 E.C.):
+1. Overview & Heritage:
+   - Established in 1953 (Polytechnic Institute), located along the Lake Tana waterfront in Bahir Dar, Amhara Region.
+2. Academic Institutes, Colleges & Faculties:
+   - Bahir Dar Institute of Technology (BiT — Polytechnic Campus): Faculty of Electrical & Computer Engineering, Faculty of Computing & Software Engineering, Faculty of Civil & Water Resources Engineering, and Mechanical & Industrial Engineering.
+   - Ethiopian Institute of Textile and Fashion Technology (EiTEX): Unique national center of excellence for Textile Engineering, Garment Engineering, Leather Technology, and Fashion Design.
+   - College of Medicine & Health Sciences (operating the 600-bed Tibebe Ghion Specialized Hospital): School of Medicine (Doctor of Medicine MD), Public Health, Pharmacy, and Nursing.
+   - College of Agriculture & Environmental Sciences: Plant Sciences, Fisheries & Aquatic Sciences, Animal Production.
+   - Ethiopian Maritime Training Institute (EMTI): Merchant marine engineering officer training.
+   - College of Business & Economics and School of Law.
+3. Degree Programs & Duration:
+   - Doctor of Medicine (MD): 6.0 Years (360 ECTS). Cut-off: Male 520+ | Female 500+.
+   - B.Sc. in Software Engineering / Computing: 5.0 Years (300 ECTS). Cut-off: Male 470+ | Female 450+.
+   - B.Sc. in Textile Engineering (EiTEX): 5.0 Years (300 ECTS). Cut-off: Male 420+ | Female 400+.
+   - B.Sc. in Civil & Water Engineering: 5.0 Years (300 ECTS). Cut-off: Male 455+ | Female 435+.
+4. Tuition & Cost-Sharing:
+   - 0 ETB upfront tuition for regular undergraduate students under Proclamation No. 650/2009.
+   - Extension credit hour tuition rate: 600 ETB per credit.
+5. Facilities:
+   - Tibebe Ghion Hospital, BiT Waterfront Technology Campus, Lake Tana Maritime Training Vessels, EiTEX Testing Mills.`
+  },
+  {
+    id: 'chunk-mu-complete-01',
+    institutionCode: 'MU',
+    domain: 'UNIVERSITY_CATALOG',
+    sourceTitle: 'Mekelle University (MU) Academic Catalog, Faculties & Department Directory',
+    pageNumber: 16,
+    chunkIndex: 1,
+    academicYear: '2016/2017 E.C.',
+    verificationStatus: 'VERIFIED',
+    keywords: ['mekelle', 'mu', 'mekelle university', 'mit', 'ayder', 'faculties', 'departments', 'programs', 'tuition', 'dryland', 'ayder hospital', 'engineering', 'medicine'],
+    content: `Mekelle University (MU) — Comprehensive Institutional Profile, Faculties & Departments (2016/2017 E.C.):
+1. Overview & Heritage:
+   - Premier research university in Tigray Region, established in 1993 (Arid Zone Agricultural College).
+   - Location: Mekelle, Tigray (Endayesus Main Campus, Ayder, Adi Haki, and Kalamino).
+2. Academic Institutes, Colleges & Faculties:
+   - Mekelle Institute of Technology (MIT): Department of Software Engineering, Computer Science, Telecommunications Engineering, and Electronics.
+   - College of Health Sciences (operating the 700-bed Ayder Comprehensive Specialized Hospital): School of Medicine (Doctor of Medicine MD), Dentistry, Oncology, Nursing, and Public Health.
+   - College of Dryland Agriculture & Natural Resources: Dryland Crop Science, Soil Conservation, Animal Production, and Agro-Ecology.
+   - College of Business & Economics: Accounting & Finance, Economics, Management.
+   - College of Law & Governance and College of Natural & Computational Sciences.
+3. Degree Programs & Duration:
+   - Doctor of Medicine (MD — Ayder): 6.0 Years (360 ECTS). Cut-off: Male 520+ | Female 500+.
+   - B.Sc. in Software Engineering & MIT Engineering: 5.0 Years (300 ECTS). Cut-off: Male 465+ | Female 445+.
+   - B.Sc. in Dryland Agriculture: 4.0 Years (240 ECTS).
+4. Tuition & Cost-Sharing:
+   - 0 ETB upfront tuition for regular undergraduate students under Proclamation No. 650/2009.
+   - Extension rate: 600 ETB per credit hour.
+5. Facilities:
+   - Ayder Comprehensive Hospital, MIT Advanced Hardware & AI Labs, Endayesus Central Library.`
+  },
+  {
+    id: 'chunk-amu-complete-01',
+    institutionCode: 'AMU',
+    domain: 'UNIVERSITY_CATALOG',
+    sourceTitle: 'Arba Minch University (AMU) Academic Catalog, Faculties & Department Directory',
+    pageNumber: 14,
+    chunkIndex: 1,
+    academicYear: '2016/2017 E.C.',
+    verificationStatus: 'VERIFIED',
+    keywords: ['arba minch', 'amu', 'arba minch university', 'awti', 'water technology', 'amit', 'faculties', 'departments', 'programs', 'tuition', 'hydraulic', 'irrigation', 'engineering', 'medicine'],
+    content: `Arba Minch University (AMU) — Comprehensive Institutional Profile, Faculties & Departments (2016/2017 E.C.):
+1. Overview & Heritage:
+   - Established in 1986 (Arba Minch Water Technology Institute - AWTI), national center of excellence for water engineering.
+   - Location: Arba Minch, South Ethiopia Region.
+2. Academic Institutes, Colleges & Faculties:
+   - Arba Minch Water Technology Institute (AWTI): Hydraulic & Water Power Engineering, Water Resources & Irrigation Engineering, Meteorology & Hydrology, and Sanitary Engineering.
+   - Arba Minch Institute of Technology (AMiT): Civil Engineering, Electrical & Computer Engineering, Mechanical Engineering, Computer Science, and Architecture.
+   - College of Medicine & Health Sciences (integrated with Arba Minch General Hospital): Medicine (MD), Nursing, Public Health.
+   - College of Agricultural Sciences: Horticulture, Soil Science, Animal Science.
+   - College of Business & Economics.
+3. Degree Programs & Duration:
+   - Water Resources & Hydraulic Engineering (AWTI): 5.0 Years (300 ECTS). Cut-off: Male 445+ | Female 425+.
+   - Civil & Electrical Engineering (AMiT): 5.0 Years (300 ECTS). Cut-off: Male 435+ | Female 415+.
+   - Doctor of Medicine (MD): 6.0 Years (360 ECTS). Cut-off: Male 510+ | Female 490+.
+4. Tuition & Cost-Sharing:
+   - 0 ETB direct tuition under Proclamation No. 650/2009. Extension rate: 550 ETB/credit.
+5. Facilities:
+   - AWTI Hydraulic Modeling Flumes, Abaya & Chamo Lake Hydro-Research Stations, Central Digital Library.`
+  },
+  {
+    id: 'chunk-wku-complete-01',
+    institutionCode: 'WKU',
+    domain: 'UNIVERSITY_CATALOG',
+    sourceTitle: 'Wolkite University (WKU) Academic Catalog, Faculties & Department Directory',
+    pageNumber: 12,
+    chunkIndex: 1,
+    academicYear: '2016/2017 E.C.',
+    verificationStatus: 'VERIFIED',
+    keywords: ['wolkite', 'wku', 'wolkite university', 'gubiot', 'gubre', 'faculties', 'departments', 'programs', 'tuition', 'mechatronics', 'engineering', 'medicine'],
+    content: `Wolkite University (WKU) — Comprehensive Institutional Profile, Faculties & Departments (2016/2017 E.C.):
+1. Overview & Heritage:
+   - Established in 2011, serving the Gurage Zone and southwestern Ethiopia.
+   - Location: Wolkite, Central Ethiopia Region (Main Academic Campus and Gubre Engineering Campus).
+2. Academic Institutes, Colleges & Faculties:
+   - Gubre Institute of Technology (GubIoT): Electrical & Computer Engineering, Civil & Water Resources Engineering, Mechanical & Automotive Engineering, and Chemical Engineering.
+   - College of Computing & Informatics: Software Engineering, Computer Science, and Information Technology.
+   - College of Medicine & Health Sciences (operating the Wolkite University Referral Hospital): Doctor of Medicine (MD), Public Health Officer, Comprehensive Nursing, and Pharmacy.
+   - College of Agriculture & Natural Resources: Enset & Cash Crop Processing, Plant Sciences, Animal Production.
+   - College of Business & Economics: Accounting & Finance, Management, Economics.
+3. Degree Programs & Duration:
+   - Doctor of Medicine (MD): 6.0 Years (360 ECTS). Cut-off: Male 505+ | Female 485+.
+   - B.Sc. in Software Engineering & Computing: 5.0 Years (300 ECTS). Cut-off: Male 440+ | Female 420+.
+   - B.Sc. in Civil & Electrical Engineering: 5.0 Years (300 ECTS). Cut-off: Male 430+ | Female 410+.
+4. Tuition & Cost-Sharing:
+   - 0 ETB upfront tuition for regular undergraduate students under Proclamation No. 650/2009.
+   - Extension / evening tuition rate: 500 ETB per credit hour.
+5. Facilities:
+   - Wolkite Referral Hospital, Gubre Engineering Workshops & Mechatronics Lab, Central Digital Library.`
+  },
+  {
+    id: 'chunk-all-regional-complete-01',
+    institutionCode: 'MOE',
+    domain: 'UNIVERSITY_CATALOG',
+    sourceTitle: 'Directory of Regional Universities & Accredited Private Colleges in GIBIConnect',
+    pageNumber: 25,
+    chunkIndex: 1,
+    academicYear: '2016/2017 E.C.',
+    verificationStatus: 'VERIFIED',
+    keywords: ['wollo', 'wu', 'kiot', 'dilla', 'du', 'dire dawa', 'ddu', 'debre berhan', 'dbu', 'wolaita sodo', 'wsu', 'ambo', 'st marys', 'smu', 'faculties', 'departments', 'programs', 'tuition'],
+    content: `Directory of Regional Universities & Accredited Private Colleges in GIBIConnect (2016/2017 E.C.):
+1. Wollo University (WU — Dessie & Kombolcha):
+   - Kombolcha Institute of Technology (KIOT): Mechanical & Industrial Engineering, Software Engineering, Electrical Engineering, Civil Engineering.
+   - Dessie Health Sciences Campus: Medicine (MD), Nursing, Public Health.
+   - Extension Tuition: 550 ETB/credit. Regular: 0 ETB under Cost-Sharing.
+2. Dire Dawa University (DDU — Dire Dawa):
+   - Institute of Technology (IoT): Civil Engineering, Construction Technology Management, Electrical Engineering, Mechanical Engineering.
+   - College of Medicine & Health Sciences: Nursing, Public Health, Pharmacy.
+   - Extension Tuition: 500 ETB/credit. Regular: 0 ETB under Cost-Sharing.
+3. Dilla University (DU — Dilla):
+   - College of Engineering & Technology, College of Health & Medical Sciences, College of Agriculture & Natural Resources (Gedeo Agroforestry).
+   - Extension Tuition: 500 ETB/credit. Regular: 0 ETB under Cost-Sharing.
+4. Debre Berhan University (DBU — Debre Berhan):
+   - Institute of Technology, Asrat Woldeyes Health Sciences Campus, College of Agriculture.
+   - Extension Tuition: 500 ETB/credit. Regular: 0 ETB under Cost-Sharing.
+5. Wolaita Sodo University (WSU — Sodo):
+   - College of Engineering, College of Health Sciences (Comprehensive Teaching Hospital), College of Agricultural Sciences.
+   - Extension Tuition: 500 ETB/credit. Regular: 0 ETB under Cost-Sharing.
+6. Ambo University (Ambo & Guder):
+   - Institute of Technology, College of Medicine & Health Sciences, Guder Agro-Processing Campus.
+   - Extension Tuition: 500 ETB/credit. Regular: 0 ETB under Cost-Sharing.
+7. St. Mary's University (SMU — Accredited Private):
+   - Faculty of Informatics (Computer Science), Faculty of Business (Accounting, Management, Marketing).
+   - Direct Tuition: 850 ETB per credit hour.`
+  }
 ];
 
 // ============================================================================

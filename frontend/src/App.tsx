@@ -330,9 +330,11 @@ export default function App() {
             {/* Col 1: Brand & Provenance */}
             <div className="space-y-3 md:col-span-1">
               <div className="flex items-center gap-2">
-                <span className="w-7 h-7 rounded-lg bg-[#14474E] text-[#5AA7A7] font-bold flex items-center justify-center text-xs border border-[#5AA7A7]/30">
-                  G
-                </span>
+                <img
+                  src="/images/brand/gibiconnect-icon.png"
+                  alt="GIBIConnect"
+                  className="w-7 h-7 object-contain rounded-md shadow-xs"
+                />
                 <span className="text-base font-bold tracking-tight text-white">
                   GIBI<span className="text-[#5AA7A7]">Connect</span>
                 </span>

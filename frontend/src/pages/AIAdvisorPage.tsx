@@ -3,7 +3,7 @@ import {
   Plus, MessageSquare, Bookmark, Pin, PinOff,
   Send, Copy, Share2, FileText, Check,
   ThumbsUp, ThumbsDown, Mic,
-  PanelLeftClose, PanelLeft, Bot,
+  PanelLeftClose, PanelLeft,
   RotateCcw, Paperclip, X,
   Image as ImageIcon, Download, Maximize2,
   MoreVertical, Trash2, Edit3, AlertTriangle
@@ -11,6 +11,13 @@ import {
 import katex from 'katex';
 import { ETHIOPIAN_INSTITUTIONS } from '../data/mockInstitutions';
 import { resolveInstitution, INSTITUTION_ALIASES } from '../utils/resolveInstitution';
+import {
+  formatInstitutionFaculties,
+  formatInstitutionDepartments,
+  formatInstitutionPrograms,
+  formatInstitutionTuitionComplete,
+  formatInstitutionComprehensive,
+} from '../data/universityDetails';
 import type { Institution } from '../types/institution';
 import { getApiUrl } from '../config/api';
 import { generateClientSvg } from '../utils/clientSvgGenerator';
@@ -991,8 +998,54 @@ How can I assist your higher education journey today? You can ask about:
     const isTuitionQuery = (text: string): boolean =>
       /(?:tuition|cost|fee|fees|payment|paying|cost-sharing|cost sharing|repay|repayment|proclamation|650\/2009|etb)/i.test(text);
 
+    const isDepartmentQuery = (text: string): boolean =>
+      /(?:department|departments|dept|depts|specialization|specializations|major|majors)/i.test(text);
+
+    const isProgramQuery = (text: string): boolean =>
+      /(?:program|programs|degree|degrees|course|courses|curricul|field of study|fields of study|study mode|bachelor|master|doctor|phd|llb|undergraduate|postgraduate)/i.test(text);
+
+    const isFacultyQuery = (text: string): boolean =>
+      /(?:faculty|faculties|college|colleges|school|schools|institute|institutes)/i.test(text);
+
+    const isFacilityQuery = (text: string): boolean =>
+      /(?:facilit|hospital|hospitals|lab|laboratory|laboratories|library|libraries|dorm|dormitory|stadium|campus|campuses)/i.test(text);
+
+    const isComprehensiveQuery = (text: string): boolean =>
+      /(?:everything|everydetail|all detail|all details|all info|all information|complete profile|full profile|whole|profile)/i.test(text);
+
     const isOverviewQuery = (text: string): boolean =>
-      /(?:what is|tell me|about|where is|detail|details|campus|facult|faculties|overview|who is|locate|location|history|background)/i.test(text);
+      /(?:what is|tell me|about|where is|detail|details|campus|overview|who is|locate|location|history|background)/i.test(text);
+
+    const formatInstitutionForQuery = (targetInst: Institution, queryContext: string): string => {
+      const qContext = queryContext.toLowerCase();
+      const parts: string[] = [];
+
+      if (isDepartmentQuery(qContext)) {
+        parts.push(formatInstitutionDepartments(targetInst));
+      }
+      if (isProgramQuery(qContext)) {
+        parts.push(formatInstitutionPrograms(targetInst));
+      }
+      if (isFacultyQuery(qContext)) {
+        parts.push(formatInstitutionFaculties(targetInst));
+      }
+      if (isTuitionQuery(qContext) && !isCutoffQuery(qContext)) {
+        parts.push(formatInstitutionTuitionComplete(targetInst));
+      }
+      if (isCutoffQuery(qContext)) {
+        parts.push(formatInstitutionCutoffs(targetInst, queryContext));
+      }
+
+      if (parts.length > 0) {
+        return parts.join('\n\n---\n\n');
+      }
+
+      if (isComprehensiveQuery(qContext) || isOverviewQuery(qContext) || isFacilityQuery(qContext)) {
+        return formatInstitutionComprehensive(targetInst);
+      }
+
+      return formatInstitutionComprehensive(targetInst);
+    };
 
     // Formatter: Specific University Admissions & Cut-Offs
     const formatInstitutionCutoffs = (targetInst: Institution, queryContext: string): string => {
@@ -1051,39 +1104,7 @@ Students placed at ${targetInst.nameEn} complete the national common first-year 
 Candidates must also satisfy the Ministry of Education baseline public entry pass mark (360 Male / 345 Female in Natural Science; 330 for Emerging Regions). 100% of upfront tuition, dorms, and cafeteria dining are covered under National Cost-Sharing (Proclamation No. 650/2009).`;
     };
 
-    // Formatter: Specific University Profile & Campus Overview
-    const formatInstitutionOverview = (targetInst: Institution): string => {
-      return `### ${targetInst.nameEn} (${targetInst.code}) — Campus & Academic Overview
-**Ownership**: ${targetInst.ownership === 'PUBLIC' ? 'Autonomous/Public Federal University' : 'Accredited Private Higher Education Institution'}
-**Location**: ${targetInst.city}, ${targetInst.region} (Established: ${targetInst.establishedYear})
-**Type**: ${targetInst.type}
 
-**Overview**:
-${targetInst.overview || 'Premier higher education institution in Ethiopia.'}
-
-**Structure & Facilities**:
-• Academic Faculties: ${targetInst.totalFaculties} faculties offering ${targetInst.totalPrograms} degree programs across ${targetInst.totalDepartments} departments.
-• Key Facilities: ${targetInst.facilities ? targetInst.facilities.join(', ') : 'Digital libraries, research laboratories, and dormitories'}.
-
-To view complete admission cut-offs and department curricula for ${targetInst.code}, visit the Institutions tab.`;
-    };
-
-    // Formatter: Specific University Tuition & Cost Sharing Breakdown
-    const formatInstitutionTuition = (targetInst: Institution): string => {
-      const tuitionRows = targetInst.tuition && targetInst.tuition.length > 0
-        ? targetInst.tuition.map((t) => `• **${t.programName}** (${t.degreeLevel} - ${t.category}): ${t.costSharingEligible ? '100% Upfront Subsidized under Cost-Sharing (0 ETB direct tuition)' : `${t.costPerCreditEtb} ETB / credit hour`}`).join('\n')
-        : '• **Regular Undergraduate Degree Programs**: 100% government tuition subsidy under Proclamation No. 650/2009 (Cost-Sharing Scheme). 0 ETB upfront direct tuition for all placed students.';
-
-      return `### ${targetInst.nameEn} (${targetInst.code}) — Tuition & Cost-Sharing Structure
-**Regular Public Placement:**
-Under the Ethiopian Higher Education Cost-Sharing Scheme (Proclamation No. 650/2009 & Regulation No. 154/2008), 100% of upfront tuition, dormitory accommodation, and cafeteria meals are covered by the Federal Government for all regular students.
-
-**Program Fee Breakdown:**
-${tuitionRows}
-
-**Repayment Guidelines:**
-Repayment commences 1 year following graduation upon securing formal employment, deducted monthly by employers at 10% of gross salary.`;
-    };
 
     // Reusable Knowledge Blocks
     const COST_SHARING_BLOCK = `### Ethiopian Higher Education Cost-Sharing Scheme (Proclamation No. 650/2009)
@@ -1166,13 +1187,7 @@ All resources can be browsed, searched, and downloaded under the Resources tab.`
     if (targetInstitutions.length > 1) {
       const answers: string[] = [];
       targetInstitutions.forEach((inst) => {
-        if (isTuitionQuery(q) && !isCutoffQuery(q)) {
-          answers.push(formatInstitutionTuition(inst));
-        } else if (isOverviewQuery(q) && !isCutoffQuery(q)) {
-          answers.push(formatInstitutionOverview(inst));
-        } else {
-          answers.push(formatInstitutionCutoffs(inst, q));
-        }
+        answers.push(formatInstitutionForQuery(inst, q));
       });
 
       // If user also asked an additional non-institutional question (e.g., cost sharing, STEM tutor)
@@ -1186,19 +1201,7 @@ All resources can be browsed, searched, and downloaded under the Resources tab.`
     // CASE 2: Single Target Institution Inquired
     if (targetInstitutions.length === 1) {
       const inst = targetInstitutions[0];
-      const answers: string[] = [];
-
-      // Determine requested dimensions for this institution
-      if (isTuitionQuery(q)) {
-        answers.push(formatInstitutionTuition(inst));
-      } else if (isCutoffQuery(q)) {
-        answers.push(formatInstitutionCutoffs(inst, q));
-      } else if (isOverviewQuery(q)) {
-        answers.push(formatInstitutionOverview(inst));
-      } else {
-        // Combined default for specific institution
-        answers.push(formatInstitutionCutoffs(inst, q));
-      }
+      const answers: string[] = [formatInstitutionForQuery(inst, q)];
 
       // If query also inquired about general cost sharing or freshman courses
       if (isTuitionQuery(q) && !answers.some((a) => a.includes('Proclamation No. 650/2009'))) {
@@ -1591,11 +1594,11 @@ For full details on this specific program or university, you can also explore th
           {/* Top Branding & Close Action */}
           <div className="flex items-center justify-between px-2 pt-1">
             <div className="flex items-center gap-2.5">
-              <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold shadow-sm ${
-                isDark ? 'bg-white text-black' : 'bg-[#0C373D] text-[#5AA7A7]'
-              }`}>
-                <Bot className="w-4 h-4" />
-              </div>
+              <img
+                src="/images/brand/gibiconnect-icon.png"
+                alt="GIBI Advisor"
+                className="w-8 h-8 object-contain rounded-lg shadow-xs"
+              />
               <span className={`font-serif font-bold text-sm tracking-wide ${
                 isDark ? 'text-white' : 'text-[#0F172A]'
               }`}>
@@ -2035,11 +2038,11 @@ For full details on this specific program or university, you can also explore th
                   /* AI Advisor Message Block */
                   <div className="w-full space-y-3">
                     <div className={`flex items-center gap-2 text-xs ${isDark ? 'text-zinc-400' : 'text-slate-500'}`}>
-                      <div className={`w-5 h-5 rounded-md flex items-center justify-center font-bold text-[10px] ${
-                        isDark ? 'bg-white text-black' : 'bg-slate-900 text-white'
-                      }`}>
-                        G
-                      </div>
+                      <img
+                        src="/images/brand/gibiconnect-icon.png"
+                        alt="GIBI Advisor"
+                        className="w-5 h-5 object-contain rounded-md shadow-xs"
+                      />
                       <span className={`font-semibold ${isDark ? 'text-white' : 'text-slate-900'}`}>GIBI Academic Advisor</span>
                       <span>•</span>
                       <span className="text-[11px] opacity-70">{msg.timestamp}</span>

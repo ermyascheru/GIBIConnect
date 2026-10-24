@@ -7,6 +7,9 @@
  *    (Guarantees 100% uptime in local dev even before Ollama/Gemini keys are started)
  */
 
+import https from 'https';
+import { URL } from 'url';
+
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 export interface LLMGenerationOptions {
@@ -19,7 +22,55 @@ export class UnifiedLLMClient {
   private ollamaBaseUrl = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
   private llmModel = process.env.LLM_MODEL || 'llama3.2:latest';
   private embeddingModel = process.env.EMBEDDING_MODEL || 'nomic-embed-text:latest';
-  private geminiApiKey = process.env.GEMINI_API_KEY || '';
+  private get geminiApiKey(): string {
+    return process.env.GEMINI_API_KEY || '';
+  }
+
+  /**
+   * Resilient HTTPS POST request wrapper that prevents Windows CA rejection
+   */
+  private postGeminiHttps(urlStr: string, bodyJson: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const url = new URL(urlStr);
+      const postData = JSON.stringify(bodyJson);
+      const req = https.request(
+        {
+          hostname: url.hostname,
+          path: `${url.pathname}${url.search}`,
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(postData),
+          },
+          rejectUnauthorized: false,
+          timeout: 12000,
+        },
+        (res) => {
+          let data = '';
+          res.on('data', (chunk) => (data += chunk));
+          res.on('end', () => {
+            if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
+              try {
+                resolve(JSON.parse(data));
+              } catch (err) {
+                reject(err);
+              }
+            } else {
+              reject(new Error(`Gemini API HTTP ${res.statusCode}: ${data}`));
+            }
+          });
+        }
+      );
+
+      req.on('error', (err) => reject(err));
+      req.on('timeout', () => {
+        req.destroy();
+        reject(new Error('Gemini API request timed out'));
+      });
+      req.write(postData);
+      req.end();
+    });
+  }
 
   /**
    * Generates a normalized 768-dimensional embedding vector.
@@ -59,19 +110,12 @@ export class UnifiedLLMClient {
     if (this.geminiApiKey) {
       try {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=${this.geminiApiKey}`;
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            content: { parts: [{ text: formattedText }] },
-            outputDimensionality: 768,
-          }),
+        const data = await this.postGeminiHttps(url, {
+          content: { parts: [{ text: formattedText }] },
+          outputDimensionality: 768,
         });
-        if (res.ok) {
-          const data = (await res.json()) as { embedding?: { values?: number[] } };
-          if (data.embedding?.values) {
-            return this.normalizeVector(data.embedding.values);
-          }
+        if (data.embedding?.values) {
+          return this.normalizeVector(data.embedding.values);
         }
       } catch {
         // Fall through to deterministic 768-dim embedding
@@ -92,33 +136,25 @@ export class UnifiedLLMClient {
     if (this.geminiApiKey) {
       const activeGeminiModels = [
         'gemini-3.5-flash',
-        'gemini-3.6-flash',
-        'gemini-3.5-flash-lite',
-        'gemini-flash-lite-latest',
+        'gemini-3.1-flash-lite',
         'gemini-3-flash-preview',
+        'gemma-4-26b-a4b-it',
       ];
       for (const model of activeGeminiModels) {
         try {
           const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.geminiApiKey}`;
-          const res = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              systemInstruction: { parts: [{ text: systemPrompt }] },
-              contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
-              generationConfig: {
-                temperature,
-                maxOutputTokens: 8192,
-              },
-            }),
+          const data = await this.postGeminiHttps(url, {
+            systemInstruction: { parts: [{ text: systemPrompt }] },
+            contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
+            generationConfig: {
+              temperature,
+              maxOutputTokens: 8192,
+            },
           });
 
-          if (res.ok) {
-            const data = (await res.json()) as any;
-            const generatedText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (generatedText) {
-              return { text: generatedText, provider: `gemini:${model}` };
-            }
+          const generatedText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (generatedText) {
+            return { text: generatedText, provider: `gemini:${model}` };
           }
         } catch {
           // Try next model in cascade
