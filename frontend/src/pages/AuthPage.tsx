@@ -94,10 +94,12 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onBack, onSuccess }) => {
 
         {/* Title */}
         <div className="text-center">
-          <div className="w-12 h-12 rounded-2xl bg-[#0C373D] text-[#5AA7A7] flex items-center justify-center font-bold text-xl mx-auto shadow-md border border-[#5AA7A7]/30">
-            G
-          </div>
-          <h2 className="text-2xl font-bold text-[#0F172A] mt-4 font-serif">
+          <img
+            src="/images/brand/gibiconnect-icon.png"
+            alt="GIBIConnect"
+            className="w-14 h-14 object-contain mx-auto drop-shadow-md rounded-2xl mb-2"
+          />
+          <h2 className="text-2xl font-bold text-[#0F172A] mt-2 font-serif">
             {isRegister ? 'Create your account' : 'Welcome back'}
           </h2>
           <p className="text-xs text-[#64748B] mt-1">
