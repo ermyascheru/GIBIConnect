@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { 
   Search, BookOpen, Clock, Briefcase, GraduationCap, 
   X, CheckCircle2, ShieldCheck, Award, MapPin, 
-  Sparkles, Layers
+  Layers
 } from 'lucide-react';
 import { ETHIOPIAN_INSTITUTIONS } from '../data/mockInstitutions';
 
@@ -647,7 +647,6 @@ export const ProgramsPage: React.FC<ProgramsPageProps> = ({ theme = 'light' }) =
                   }}
                   className="px-6 py-2.5 rounded-xl bg-[#0C373D] hover:bg-[#072428] text-white text-xs font-bold transition-all shadow-md cursor-pointer flex items-center gap-1.5"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-[#5AA7A7]" />
                   <span>Apply / Inquire</span>
                 </button>
               </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckCircle2, ShieldAlert, Sparkles, Calculator } from 'lucide-react';
+import { CheckCircle2, ShieldAlert, Calculator } from 'lucide-react';
 import { ETHIOPIAN_INSTITUTIONS } from '../data/mockInstitutions';
 
 interface AdmissionsPageProps {
@@ -19,7 +19,6 @@ export const AdmissionsPage: React.FC<AdmissionsPageProps> = ({ theme = 'light' 
       {/* Header */}
       <div className="max-w-2xl">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#EBF6F6] text-[#1E5C64] border border-[#5AA7A7]/30 mb-4">
-          <Sparkles className="w-3.5 h-3.5 text-[#5AA7A7]" />
           <span>2016/2017 E.C. Matriculation Intelligence</span>
         </div>
         <h1 className={`text-3xl font-serif font-bold ${
@@ -105,7 +104,7 @@ export const AdmissionsPage: React.FC<AdmissionsPageProps> = ({ theme = 'light' 
               <thead className={`border-b font-semibold uppercase tracking-wider text-[11px] ${
                 isDark 
                   ? 'bg-zinc-950 border-zinc-800 text-zinc-300' 
-                  : 'bg-[#F8FAFC] border-[#E2E8F0] text-[#0F172A]'
+                  : 'bg-[#EBF4F7] border-[#E2E8F0] text-[#0F172A]'
               }`}>
                 <tr>
                   <th className="py-4 px-6">University</th>
@@ -125,7 +124,7 @@ export const AdmissionsPage: React.FC<AdmissionsPageProps> = ({ theme = 'light' 
 
                     return (
                       <tr key={`${inst.code}-${i}`} className={`transition-colors ${
-                        isDark ? 'hover:bg-zinc-800/50' : 'hover:bg-[#F8FAFC]'
+                        isDark ? 'hover:bg-zinc-800/50' : 'hover:bg-[#EBF4F7]'
                       }`}>
                         <td className={`py-4 px-6 font-bold flex items-center gap-2 ${
                           isDark ? 'text-white' : 'text-[#0F172A]'

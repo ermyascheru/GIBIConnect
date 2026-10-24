@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Search, Calendar as CalendarIcon, MapPin, Clock, Bookmark } from 'lucide-react';
+import { getApiUrl } from '../config/api';
 
 interface AcademicEvent {
   id: string;
@@ -27,8 +28,9 @@ export const EventsPage: React.FC<EventsPageProps> = ({ theme = 'light' }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [savedEvents, setSavedEvents] = useState<string[]>([]);
+  const [eventsList, setEventsList] = useState<AcademicEvent[]>([]);
 
-  const events: AcademicEvent[] = [
+  const defaultEvents: AcademicEvent[] = [
     {
       id: 'ev-1',
       title: 'Ministry of Education 2017 E.C. University Choice Submission Window',
@@ -127,6 +129,28 @@ export const EventsPage: React.FC<EventsPageProps> = ({ theme = 'light' }) => {
     },
   ];
 
+  React.useEffect(() => {
+    let isMounted = true;
+    fetch(getApiUrl('/api/v1/events'))
+      .then((res) => res.json())
+      .then((json) => {
+        if (isMounted && json.success && Array.isArray(json.data) && json.data.length > 0) {
+          setEventsList(json.data);
+        } else if (isMounted) {
+          setEventsList(defaultEvents);
+        }
+      })
+      .catch(() => {
+        if (isMounted) setEventsList(defaultEvents);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const activeEvents = eventsList.length > 0 ? eventsList : defaultEvents;
+
   const categories = [
     { id: 'ALL', label: 'All Events' },
     { id: 'DEADLINE', label: 'Admission Deadlines' },
@@ -137,15 +161,15 @@ export const EventsPage: React.FC<EventsPageProps> = ({ theme = 'light' }) => {
   ];
 
   const filteredEvents = useMemo(() => {
-    return events.filter((ev) => {
+    return activeEvents.filter((ev) => {
       const matchesSearch =
         ev.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        ev.universityName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (ev.universityName && ev.universityName.toLowerCase().includes(searchTerm.toLowerCase())) ||
         ev.location.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = selectedCategory === 'ALL' || ev.category === selectedCategory;
       return matchesSearch && matchesCategory;
     });
-  }, [events, searchTerm, selectedCategory]);
+  }, [activeEvents, searchTerm, selectedCategory]);
 
   const toggleSave = (id: string) => {
     setSavedEvents((prev) =>

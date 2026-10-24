@@ -1,7 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { Search } from 'lucide-react';
 import { ETHIOPIAN_INSTITUTIONS } from '../../data/mockInstitutions';
+import { resolveInstitution, matchesInstitution } from '../../utils/resolveInstitution';
 import { InstitutionCard } from './InstitutionCard';
+import { getApiUrl } from '../../config/api';
 
 const REGIONS = ['All', 'Addis Ababa', 'Oromia', 'Amhara', 'Tigray', 'Sidama'] as const;
 
@@ -15,20 +17,84 @@ export const DirectoryGrid: React.FC<DirectoryGridProps> = ({ onSelectCampus, th
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRegion, setSelectedRegion] = useState<string>('All');
   const [selectedOwnership, setSelectedOwnership] = useState<'ALL' | 'PUBLIC' | 'PRIVATE'>('ALL');
+  const [institutionsList, setInstitutionsList] = useState<any[]>([]);
+
+  React.useEffect(() => {
+    let isMounted = true;
+    fetch(getApiUrl('/api/v1/institutions'))
+      .then((res) => res.json())
+      .then((json) => {
+        if (isMounted && json.success && Array.isArray(json.data) && json.data.length > 0) {
+          const normalized = json.data.map((item: any) => {
+            const matched = resolveInstitution(item.id || item.code || item.slug || item.name || item.nameEn);
+
+            const nameEn = item.nameEn || item.name || matched?.nameEn || 'University';
+            const code = item.code || matched?.code || (item.name || item.nameEn || 'UNI').split(' ').map((w: string) => w[0]).join('').slice(0, 4).toUpperCase();
+            const nameAm = item.nameAm || matched?.nameAm;
+            const ownership = (item.ownership || matched?.ownership || 'PUBLIC').toUpperCase();
+            const type = (item.type || matched?.type || 'UNIVERSITY').toUpperCase();
+            const region = item.region || matched?.region || 'Addis Ababa';
+            const city = item.city || matched?.city || 'Addis Ababa';
+            const establishedYear = item.establishedYear || matched?.establishedYear || 1950;
+            const verificationStatus = (item.verificationStatus || (item.status === 'published' ? 'VERIFIED' : matched?.verificationStatus || 'VERIFIED'));
+            const overview = item.overview || item.description || matched?.overview || `${nameEn} is a distinguished higher education institution in Ethiopia.`;
+            const totalFaculties = item.totalFaculties ?? item.total_faculties ?? matched?.totalFaculties ?? 4;
+            const totalDepartments = item.totalDepartments ?? item.total_departments ?? matched?.totalDepartments ?? 12;
+            const totalPrograms = item.totalPrograms ?? item.total_programs ?? matched?.totalPrograms ?? 18;
+
+            return {
+              id: matched?.id || item.id,
+              dbId: item.id,
+              code,
+              nameEn,
+              nameAm,
+              ownership,
+              type,
+              region,
+              city,
+              establishedYear,
+              verificationStatus,
+              overview,
+              totalFaculties,
+              totalDepartments,
+              totalPrograms,
+              websiteUrl: item.website_url || item.websiteUrl || matched?.websiteUrl,
+              logoUrl: item.logo_url || item.logoUrl || matched?.logoUrl,
+              admissions: matched?.admissions || [],
+              tuition: matched?.tuition || [],
+              facilities: matched?.facilities || [],
+              scholarshipsAvailable: matched?.scholarshipsAvailable ?? 5,
+            };
+          });
+          // Merge API data with any local ETHIOPIAN_INSTITUTIONS not present in API so all institutions remain accessible
+          const missingLocals = ETHIOPIAN_INSTITUTIONS.filter(
+            (local) => !normalized.some((n: any) => n.id === local.id || n.code === local.code)
+          );
+          setInstitutionsList([...normalized, ...missingLocals]);
+        } else if (isMounted) {
+          setInstitutionsList(ETHIOPIAN_INSTITUTIONS);
+        }
+      })
+      .catch(() => {
+        if (isMounted) setInstitutionsList(ETHIOPIAN_INSTITUTIONS);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const activeInstitutions = institutionsList.length > 0 ? institutionsList : ETHIOPIAN_INSTITUTIONS;
 
   const filteredInstitutions = useMemo(() => {
-    return ETHIOPIAN_INSTITUTIONS.filter((inst) => {
-      const matchesSearch =
-        inst.nameEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        inst.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        inst.city.toLowerCase().includes(searchTerm.toLowerCase());
-
+    return activeInstitutions.filter((inst) => {
+      const matchesSearch = matchesInstitution(inst, searchTerm);
       const matchesRegion = selectedRegion === 'All' || inst.region === selectedRegion;
-      const matchesOwnership = selectedOwnership === 'ALL' || inst.ownership === selectedOwnership;
+      const matchesOwnership = selectedOwnership === 'ALL' || inst.ownership?.toUpperCase() === selectedOwnership;
 
       return matchesSearch && matchesRegion && matchesOwnership;
     });
-  }, [searchTerm, selectedRegion, selectedOwnership]);
+  }, [activeInstitutions, searchTerm, selectedRegion, selectedOwnership]);
 
   return (
     <section className="max-w-7xl mx-auto px-6 py-12 transition-colors duration-200">

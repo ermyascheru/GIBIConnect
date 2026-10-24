@@ -5,13 +5,23 @@ import { MonogramAvatar } from '../common/MonogramAvatar';
 import { Badge } from '../common/Badge';
 
 interface InstitutionCardProps {
-  institution: Institution;
+  institution: Institution | any;
   onClick?: (id: string) => void;
   theme?: 'light' | 'dark';
 }
 
 export const InstitutionCard: React.FC<InstitutionCardProps> = ({ institution, onClick, theme = 'light' }) => {
   const isDark = theme === 'dark';
+
+  const name = institution.nameEn || institution.name || 'Institution';
+  const code = institution.code || name.slice(0, 4).toUpperCase();
+  const city = institution.city || institution.region || 'Addis Ababa';
+  const region = institution.region || 'Ethiopia';
+  const overview = institution.overview || institution.description || 'Verified Ethiopian higher education institution.';
+  const totalFaculties = institution.totalFaculties ?? institution.total_faculties ?? 4;
+  const totalPrograms = institution.totalPrograms ?? institution.total_programs ?? 12;
+  const establishedYear = institution.establishedYear || institution.established_year || 1950;
+  const verificationStatus = institution.verificationStatus || (institution.status === 'published' ? 'VERIFIED' : 'VERIFIED');
 
   return (
     <div 
@@ -25,9 +35,9 @@ export const InstitutionCard: React.FC<InstitutionCardProps> = ({ institution, o
       {/* Top Row: Avatar & Status */}
       <div>
         <div className="flex items-start justify-between gap-4">
-          <MonogramAvatar code={institution.code} name={institution.nameEn} size="md" />
+          <MonogramAvatar code={code} name={name} logoUrl={institution.logoUrl} size="md" />
           <div className="flex items-center gap-2">
-            <Badge status={institution.verificationStatus} />
+            <Badge status={verificationStatus} />
             <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${
               isDark 
                 ? 'bg-zinc-800 text-zinc-400 group-hover:text-white group-hover:bg-[#0C373D]' 
@@ -43,7 +53,7 @@ export const InstitutionCard: React.FC<InstitutionCardProps> = ({ institution, o
           <h3 className={`font-semibold text-base transition-colors leading-snug ${
             isDark ? 'text-white group-hover:text-[#5AA7A7]' : 'text-[#0F172A] group-hover:text-[#0C373D]'
           }`}>
-            {institution.nameEn}
+            {name}
           </h3>
           {institution.nameAm && (
             <p className={`text-xs font-ethiopic mt-0.5 ${
@@ -56,7 +66,7 @@ export const InstitutionCard: React.FC<InstitutionCardProps> = ({ institution, o
             isDark ? 'text-zinc-400' : 'text-[#64748B]'
           }`}>
             <MapPin className={`w-3.5 h-3.5 ${isDark ? 'text-zinc-500' : 'text-[#5AA7A7]'}`} />
-            <span>{institution.city}, {institution.region}</span>
+            <span>{city}, {region}</span>
           </div>
         </div>
 
@@ -64,7 +74,7 @@ export const InstitutionCard: React.FC<InstitutionCardProps> = ({ institution, o
         <p className={`text-xs mt-3 line-clamp-2 leading-relaxed ${
           isDark ? 'text-zinc-400' : 'text-[#64748B]'
         }`}>
-          {institution.overview}
+          {overview}
         </p>
       </div>
 
@@ -74,16 +84,16 @@ export const InstitutionCard: React.FC<InstitutionCardProps> = ({ institution, o
       }`}>
         <div className="flex items-center gap-1.5">
           <Layers className={`w-3.5 h-3.5 ${isDark ? 'text-zinc-500' : 'text-[#5AA7A7]'}`} />
-          <span>{institution.totalFaculties} Faculties</span>
+          <span>{totalFaculties} Faculties</span>
         </div>
         <div className="flex items-center gap-1.5">
           <BookOpen className={`w-3.5 h-3.5 ${isDark ? 'text-zinc-500' : 'text-[#5AA7A7]'}`} />
-          <span>{institution.totalPrograms} Programs</span>
+          <span>{totalPrograms} Programs</span>
         </div>
         <span className={`text-[11px] font-medium px-2 py-0.5 rounded ${
           isDark ? 'text-zinc-400 bg-zinc-950 border border-zinc-800' : 'text-[#1E5C64] bg-[#EBF6F6] border border-[#5AA7A7]/20'
         }`}>
-          Est. {institution.establishedYear}
+          Est. {establishedYear}
         </span>
       </div>
     </div>

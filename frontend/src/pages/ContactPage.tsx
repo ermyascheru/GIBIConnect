@@ -16,7 +16,7 @@ export const ContactPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#F8FAFC] min-h-[85vh] flex items-center justify-center px-6 py-16">
+    <div className="bg-[#EBF4F7] min-h-[85vh] flex items-center justify-center px-6 py-16">
       <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
         
         {/* Left Contact Info */}
@@ -82,7 +82,7 @@ export const ContactPage: React.FC = () => {
                     required
                     value={formData.firstName}
                     onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                    className="w-full px-3.5 py-2.5 text-xs bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl focus:outline-none focus:border-[#5AA7A7] focus:bg-white transition-all"
+                    className="w-full px-3.5 py-2.5 text-xs bg-[#EBF4F7] border border-[#E2E8F0] rounded-xl focus:outline-none focus:border-[#5AA7A7] focus:bg-white transition-all"
                   />
                 </div>
                 <div>
@@ -92,7 +92,7 @@ export const ContactPage: React.FC = () => {
                     required
                     value={formData.lastName}
                     onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                    className="w-full px-3.5 py-2.5 text-xs bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl focus:outline-none focus:border-[#5AA7A7] focus:bg-white transition-all"
+                    className="w-full px-3.5 py-2.5 text-xs bg-[#EBF4F7] border border-[#E2E8F0] rounded-xl focus:outline-none focus:border-[#5AA7A7] focus:bg-white transition-all"
                   />
                 </div>
               </div>
@@ -104,7 +104,7 @@ export const ContactPage: React.FC = () => {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-3.5 py-2.5 text-xs bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl focus:outline-none focus:border-[#5AA7A7] focus:bg-white transition-all"
+                  className="w-full px-3.5 py-2.5 text-xs bg-[#EBF4F7] border border-[#E2E8F0] rounded-xl focus:outline-none focus:border-[#5AA7A7] focus:bg-white transition-all"
                 />
               </div>
 
@@ -115,7 +115,7 @@ export const ContactPage: React.FC = () => {
                   required
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="w-full px-3.5 py-2.5 text-xs bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl focus:outline-none focus:border-[#5AA7A7] focus:bg-white transition-all"
+                  className="w-full px-3.5 py-2.5 text-xs bg-[#EBF4F7] border border-[#E2E8F0] rounded-xl focus:outline-none focus:border-[#5AA7A7] focus:bg-white transition-all"
                 />
               </div>
 

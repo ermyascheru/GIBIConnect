@@ -28,6 +28,20 @@ export const HomePage: React.FC<HomePageProps> = ({
   const [expandedFaq, setExpandedFaq] = useState<number | null>(0);
   const [activeTab, setActiveTab] = useState<'ALL' | 'PUBLIC' | 'PRIVATE'>('ALL');
 
+  // Partner institutional network: 10 prominent Ethiopian universities (logos only)
+  const partnerLogos = [
+    { id: 'aau-001', code: 'AAU', name: 'Addis Ababa University', logo: '/images/logos/aau-logo.jpg' },
+    { id: 'aamc-022', code: 'AAMC', name: 'Addis Ababa Medical College (Tikur Anbessa)', logo: '/images/logos/aau-medical-logo.jpg' },
+    { id: 'astu-002', code: 'ASTU', name: 'Adama Science and Technology University', logo: '/images/logos/astu-logo.jpg' },
+    { id: 'aastu-003', code: 'AASTU', name: 'Addis Ababa Science and Technology University', logo: '/images/logos/aastu-logo.jpg' },
+    { id: 'ju-005', code: 'JU', name: 'Jimma University', logo: '/images/logos/ju-logo.jpg' },
+    { id: 'bdu-004', code: 'BDU', name: 'Bahir Dar University', logo: '/images/logos/bdu-logo.jpg' },
+    { id: 'hu-006', code: 'HU', name: 'Hawassa University', logo: '/images/logos/hu-logo.jpg' },
+    { id: 'uog-008', code: 'UoG', name: 'University of Gondar', logo: '/images/logos/uog-logo.jpg' },
+    { id: 'mu-007', code: 'MU', name: 'Mekelle University', logo: '/images/logos/mu-logo.jpg' },
+    { id: 'wku-023', code: 'WKU', name: 'Wolkite University', logo: '/images/logos/wku-logo.jpg' },
+  ];
+
   // Featured flagship universities
   const featuredInstitutions = ETHIOPIAN_INSTITUTIONS.slice(0, 6);
 
@@ -38,12 +52,12 @@ export const HomePage: React.FC<HomePageProps> = ({
     return true;
   });
 
-  // Academic Disciplines with rich photography
+  // Academic Disciplines with authentic Ethiopian university photography
   const academicDisciplines = [
     { 
       title: 'Engineering & Technology', 
       count: '140+ Programs', 
-      image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
+      image: '/images/universities/aau/aau-laboratory.jpg',
       badge: 'Accredited Centers of Excellence',
       desc: 'Software, Civil, Electrical, Mechanical, and Biomedical Engineering curricula across national Centers of Excellence.' 
     },
@@ -57,30 +71,30 @@ export const HomePage: React.FC<HomePageProps> = ({
     { 
       title: 'Computing & Informatics', 
       count: '65+ Programs', 
-      image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80',
+      image: '/images/universities/astu/astu-space-laboratory.jpg',
       badge: 'Tech & AI Curricula',
       desc: 'Computer Science, Information Systems, Artificial Intelligence, Data Science, and Cybersecurity.' 
     },
     { 
       title: 'Business & Economics', 
       count: '95+ Programs', 
-      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80',
+      image: '/images/universities/aau/aau-classroom-hall.jpg',
       badge: 'Undergrad & Executive MBA',
       desc: 'Accounting & Finance, Economics, Management, Marketing, and Executive Leadership tracks.' 
     },
     { 
       title: 'Law & Governance', 
       count: '40+ Programs', 
-      image: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800&q=80',
+      image: '/images/universities/aau/aau-jfk-library.jpg',
       badge: 'LL.B. & LL.M. Tracks',
       desc: 'Ethiopian jurisprudence, constitutional law, human rights, and international commercial arbitration.' 
     },
     { 
-      title: 'Agriculture & Natural Resources', 
+      title: 'Applied Sciences & Innovation', 
       count: '75+ Programs', 
-      image: 'https://images.unsplash.com/photo-1592417817098-8f3d6eb22d57?auto=format&fit=crop&w=800&q=80',
+      image: '/images/universities/aastu/aastu-coe-laboratory.png',
       badge: 'National Research Stations',
-      desc: 'Agribusiness, Horticulture, Plant Breeding, Dryland Farming, and Water Resource Engineering.' 
+      desc: 'Additive manufacturing, nanotechnology, biotechnology, materials science, and industrial automation.' 
     },
   ];
 
@@ -118,12 +132,12 @@ export const HomePage: React.FC<HomePageProps> = ({
   };
 
   return (
-    <div className={`flex flex-col antialiased font-sans transition-colors duration-200 ${isDark ? 'bg-zinc-950 text-zinc-100' : 'bg-[#F8FAFC] text-[#0F172A]'}`}>
+    <div className={`flex flex-col antialiased font-sans transition-colors duration-200 ${isDark ? 'bg-zinc-950 text-zinc-100' : 'bg-[#EBF4F7] text-[#0F172A]'}`}>
       
       {/* ========================================================================= */}
       {/* 1. HERO SECTION (Video Finpay Layout with Cyan-Teal Accents & Stacked Card) */}
       {/* ========================================================================= */}
-      <section className={`relative overflow-hidden pt-12 pb-16 lg:pt-16 lg:pb-24 border-b transition-colors ${isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-[#F8FAFC] border-[#E2E8F0]'}`}>
+      <section className={`relative overflow-hidden pt-12 pb-16 lg:pt-16 lg:pb-24 border-b transition-colors ${isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-[#EBF4F7] border-[#E2E8F0]'}`}>
         
         <div className="relative max-w-7xl mx-auto px-6 sm:px-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
@@ -214,7 +228,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
                   {/* Selected Program Block */}
                   <div className={`mt-5 p-4 rounded-2xl border ${
-                    isDark ? 'bg-zinc-950/60 border-zinc-800' : 'bg-[#F8FAFC] border-[#E2E8F0]'
+                    isDark ? 'bg-zinc-950/60 border-zinc-800' : 'bg-[#EBF4F7] border-[#E2E8F0]'
                   }`}>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#4E9F9F]">Selected Program</span>
                     <p className={`text-sm font-bold mt-0.5 ${isDark ? 'text-zinc-100' : 'text-[#0F172A]'}`}>
@@ -248,7 +262,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   {/* Card Button */}
                   <button
                     onClick={() => {
-                      if (onSelectCampus) onSelectCampus('aau');
+                      if (onSelectCampus) onSelectCampus('aau-001');
                       else onGetStarted();
                     }}
                     className="mt-6 w-full py-2.5 rounded-xl bg-[#0C373D] hover:bg-[#14474E] text-white text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer"
@@ -268,25 +282,35 @@ export const HomePage: React.FC<HomePageProps> = ({
       </section>
 
       {/* ========================================================================= */}
-      {/* 2. PARTNER / ECOSYSTEM STRIP (Monochrome Logo / University Strip)          */}
+      {/* 2. PARTNER / ECOSYSTEM STRIP (Logos Only - Official Institutional Network)  */}
       {/* ========================================================================= */}
-      <section className={`py-5 border-b ${isDark ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-[#E2E8F0]'}`}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-xs font-medium text-slate-400 dark:text-zinc-500">
-            <span className="text-[11px] uppercase tracking-widest font-bold text-slate-500 dark:text-zinc-400">Accredited Network:</span>
-            <span>Ministry of Education (MoE)</span>
-            <span>•</span>
-            <span>Addis Ababa University</span>
-            <span>•</span>
-            <span>ASTU Adama</span>
-            <span>•</span>
-            <span>AASTU</span>
-            <span>•</span>
-            <span>Jimma University</span>
-            <span>•</span>
-            <span>Bahir Dar University</span>
-            <span>•</span>
-            <span>Hawassa University</span>
+      <section className={`py-6 border-b transition-colors ${isDark ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-[#E2E8F0]'}`}>
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
+            <span className="text-[11px] uppercase tracking-widest font-bold text-slate-400 dark:text-zinc-500 shrink-0 select-none">
+              Verified Network:
+            </span>
+            
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4.5">
+              {partnerLogos.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => onSelectCampus && onSelectCampus(item.id)}
+                  title={item.name}
+                  aria-label={item.name}
+                  className="group relative p-1.5 rounded-full bg-white dark:bg-zinc-800 border border-slate-200/90 dark:border-zinc-700/80 shadow-xs hover:shadow-md hover:scale-110 hover:border-[#5AA7A7] transition-all duration-200 cursor-pointer flex items-center justify-center"
+                >
+                  <img
+                    src={item.logo}
+                    alt={item.name}
+                    className="w-8 h-8 sm:w-9 sm:h-9 object-contain rounded-full"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLElement).style.display = 'none';
+                    }}
+                  />
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -294,7 +318,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* ========================================================================= */}
       {/* 3. FEATURE VALUE PROPOSITION (Single Clean Card Container like Video Image 5) */}
       {/* ========================================================================= */}
-      <section className={`py-14 sm:py-20 border-b transition-colors ${isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-[#F8FAFC] border-[#E2E8F0]'}`}>
+      <section className={`py-14 sm:py-20 border-b transition-colors ${isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-[#EBF4F7] border-[#E2E8F0]'}`}>
         <div className="max-w-7xl mx-auto px-6 sm:px-10">
           
           {/* Unified Container Card */}
@@ -367,7 +391,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* ========================================================================= */}
       {/* 4. ASYMMETRIC BENTO GRID WITH LIVE CUTOFF TREND CHART                      */}
       {/* ========================================================================= */}
-      <section className={`py-14 sm:py-20 border-b transition-colors ${isDark ? 'bg-zinc-900/40 border-zinc-800' : 'bg-[#F8FAFC] border-[#E2E8F0]'}`}>
+      <section className={`py-14 sm:py-20 border-b transition-colors ${isDark ? 'bg-zinc-900/40 border-zinc-800' : 'bg-[#EBF4F7] border-[#E2E8F0]'}`}>
         <div className="max-w-7xl mx-auto px-6 sm:px-10">
           
           <div className="text-center max-w-xl mx-auto mb-10">
@@ -491,7 +515,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
             {/* Filter Tabs */}
             <div className={`flex items-center gap-1.5 p-1 rounded-xl border self-start md:self-auto ${
-              isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-[#F8FAFC] border-[#E2E8F0]'
+              isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-[#EBF4F7] border-[#E2E8F0]'
             }`}>
               {(['ALL', 'PUBLIC', 'PRIVATE'] as const).map((tab) => (
                 <button
@@ -530,7 +554,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               >
                 <div>
                   <div className="flex items-start justify-between gap-3">
-                    <MonogramAvatar code={inst.code} name={inst.nameEn} size="md" />
+                    <MonogramAvatar code={inst.code} name={inst.nameEn} logoUrl={inst.logoUrl} size="md" />
                     <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#EBF6F6] text-[#2C7A7B] border border-[#BCE3E3]">
                       <CheckCircle2 className="w-3 h-3 text-[#2C7A7B]" />
                       Verified
@@ -574,9 +598,400 @@ export const HomePage: React.FC<HomePageProps> = ({
       </section>
 
       {/* ========================================================================= */}
+      {/* 5B. AUTHENTIC ETHIOPIAN CAMPUS GROUNDS & INNOVATION HUBS                  */}
+      {/* ========================================================================= */}
+      <section className={`py-14 sm:py-20 border-b transition-colors ${isDark ? 'bg-zinc-900/60 border-zinc-800' : 'bg-white border-[#E2E8F0]'}`}>
+        <div className="max-w-7xl mx-auto px-6 sm:px-10">
+          
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+            <div>
+              <span className="text-[11px] font-bold text-[#4E9F9F] uppercase tracking-wider">CAMPUS EXPLORATION</span>
+              <h2 className={`text-2xl sm:text-3xl font-bold tracking-tight mt-1 ${isDark ? 'text-white' : 'text-[#0F172A]'}`}>
+                Authentic Campus Grounds & Historic Entrance Gates
+              </h2>
+              <p className={`text-xs sm:text-sm mt-1 max-w-xl ${isDark ? 'text-zinc-400' : 'text-[#64748B]'}`}>
+                Official institutional gateways and architectural landmarks across Ethiopian universities.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            {/* AAU Highlight */}
+            <div 
+              onClick={() => onSelectCampus && onSelectCampus('aau-001')}
+              className={`group rounded-3xl overflow-hidden border shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer flex flex-col justify-between ${
+                isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-slate-200'
+              }`}
+            >
+              <div className="relative h-56 overflow-hidden">
+                <img
+                  src="/images/entrances/aau-entrance.jpg"
+                  alt="Addis Ababa University Main Gate"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+                <div className="absolute top-3 left-3 flex items-center gap-2 bg-white/95 px-3 py-1 rounded-full shadow-md">
+                  <img src="/images/logos/aau-logo.jpg" alt="AAU" className="w-5 h-5 object-contain" />
+                  <span className="text-[11px] font-bold text-slate-900">Addis Ababa University</span>
+                </div>
+                <div className="absolute bottom-3 left-4 right-4 text-white">
+                  <p className="text-sm font-bold leading-snug">Sidist Kilo Historic Entrance & Palace Grounds</p>
+                  <p className="text-[11px] text-white/80">Est. 1950 • Flagship Research Institution</p>
+                </div>
+              </div>
+              <div className="p-5 flex items-center justify-between text-xs font-semibold">
+                <span className={isDark ? 'text-zinc-400' : 'text-slate-600'}>14 Campuses • 180+ Programs</span>
+                <span className="text-[#5AA7A7] group-hover:translate-x-0.5 transition-transform flex items-center gap-1 font-bold">
+                  Tour AAU <ArrowRight className="w-3.5 h-3.5" />
+                </span>
+              </div>
+            </div>
+
+            {/* ASTU Highlight */}
+            <div 
+              onClick={() => onSelectCampus && onSelectCampus('astu-002')}
+              className={`group rounded-3xl overflow-hidden border shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer flex flex-col justify-between ${
+                isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-slate-200'
+              }`}
+            >
+              <div className="relative h-56 overflow-hidden">
+                <img
+                  src="/images/entrances/astu-entrance.jpg"
+                  alt="Adama Science and Technology University Main Gate"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+                <div className="absolute top-3 left-3 flex items-center gap-2 bg-white/95 px-3 py-1 rounded-full shadow-md">
+                  <img src="/images/logos/astu-logo.jpg" alt="ASTU" className="w-5 h-5 object-contain" />
+                  <span className="text-[11px] font-bold text-slate-900">Adama Science & Tech</span>
+                </div>
+                <div className="absolute bottom-3 left-4 right-4 text-white">
+                  <p className="text-sm font-bold leading-snug">Grand Entrance Gate & Engineering Boulevard</p>
+                  <p className="text-[11px] text-white/80">Adama, Oromia • National Center of Excellence</p>
+                </div>
+              </div>
+              <div className="p-5 flex items-center justify-between text-xs font-semibold">
+                <span className={isDark ? 'text-zinc-400' : 'text-slate-600'}>5 Faculties • 42 STEM Tracks</span>
+                <span className="text-[#5AA7A7] group-hover:translate-x-0.5 transition-transform flex items-center gap-1 font-bold">
+                  Tour ASTU <ArrowRight className="w-3.5 h-3.5" />
+                </span>
+              </div>
+            </div>
+
+            {/* Bahir Dar University Highlight */}
+            <div 
+              onClick={() => onSelectCampus && onSelectCampus('bdu-004')}
+              className={`group rounded-3xl overflow-hidden border shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer flex flex-col justify-between ${
+                isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-slate-200'
+              }`}
+            >
+              <div className="relative h-56 overflow-hidden">
+                <img
+                  src="/images/entrances/bdu-entrance.jpg"
+                  alt="Bahir Dar University Main Entrance"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+                <div className="absolute top-3 left-3 flex items-center gap-2 bg-white/95 px-3 py-1 rounded-full shadow-md">
+                  <img src="/images/logos/bdu-logo.jpg" alt="BDU" className="w-5 h-5 object-contain" />
+                  <span className="text-[11px] font-bold text-slate-900">Bahir Dar University</span>
+                </div>
+                <div className="absolute bottom-3 left-4 right-4 text-white">
+                  <p className="text-sm font-bold leading-snug">Lake Tana Maritime & Poly Campus Main Entrance</p>
+                  <p className="text-[11px] text-white/80">Bahir Dar, Amhara • Maritime & Tech Academy</p>
+                </div>
+              </div>
+              <div className="p-5 flex items-center justify-between text-xs font-semibold">
+                <span className={isDark ? 'text-zinc-400' : 'text-slate-600'}>8 Faculties • 115 Programs</span>
+                <span className="text-[#5AA7A7] group-hover:translate-x-0.5 transition-transform flex items-center gap-1 font-bold">
+                  Tour BDU <ArrowRight className="w-3.5 h-3.5" />
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 5C. VIBRANT STUDENT LIFE ACROSS ETHIOPIAN CAMPUSES                        */}
+      {/* ========================================================================= */}
+      <section className={`py-14 sm:py-20 border-b transition-colors ${isDark ? 'bg-black border-zinc-800' : 'bg-[#EBF4F7] border-[#E2E8F0]'}`}>
+        <div className="max-w-7xl mx-auto px-6 sm:px-10">
+          
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+            <div>
+              <span className="text-[11px] font-bold text-[#4E9F9F] uppercase tracking-wider">CAMPUS LIFE & COMMUNITY</span>
+              <h2 className={`text-2xl sm:text-3xl font-bold tracking-tight mt-1 ${isDark ? 'text-white' : 'text-[#0F172A]'}`}>
+                Vibrant Student Life Across Ethiopian Universities
+              </h2>
+              <p className={`text-xs sm:text-sm mt-1 max-w-xl ${isDark ? 'text-zinc-400' : 'text-[#64748B]'}`}>
+                Real moments from student life, campus collaboration, laboratory innovation, and academic culture across university grounds.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            {/* 1. ASTU Student Life */}
+            <div 
+              onClick={() => onSelectCampus && onSelectCampus('astu-002')}
+              className={`group rounded-3xl overflow-hidden border shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer flex flex-col justify-between ${
+                isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-slate-200'
+              }`}
+            >
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src="/images/students/astu-student-life.jpg"
+                  alt="ASTU Student Life"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                <div className="absolute top-3 left-3 flex items-center gap-2 bg-white/95 px-2.5 py-1 rounded-full shadow-sm">
+                  <img src="/images/logos/astu-logo.jpg" alt="ASTU" className="w-4 h-4 object-contain" />
+                  <span className="text-[10px] font-bold text-slate-900">ASTU</span>
+                </div>
+                <div className="absolute bottom-2.5 left-3 right-3 text-white">
+                  <p className="text-xs font-bold leading-snug">Adama Science & Tech</p>
+                  <p className="text-[10px] text-white/80">STEM Innovation & Campus Life</p>
+                </div>
+              </div>
+              <div className="p-4 flex items-center justify-between text-xs font-semibold text-[#5AA7A7]">
+                <span>Student Community</span>
+                <span className="group-hover:translate-x-0.5 transition-transform flex items-center gap-1 font-bold">
+                  View <ArrowRight className="w-3 h-3" />
+                </span>
+              </div>
+            </div>
+
+            {/* 2. Hawassa University Student Life */}
+            <div 
+              onClick={() => onSelectCampus && onSelectCampus('hu-006')}
+              className={`group rounded-3xl overflow-hidden border shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer flex flex-col justify-between ${
+                isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-slate-200'
+              }`}
+            >
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src="/images/students/hu-student-life.jpg"
+                  alt="Hawassa University Student Life"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                <div className="absolute top-3 left-3 flex items-center gap-2 bg-white/95 px-2.5 py-1 rounded-full shadow-sm">
+                  <img src="/images/logos/hu-logo.jpg" alt="Hawassa" className="w-4 h-4 object-contain" />
+                  <span className="text-[10px] font-bold text-slate-900">Hawassa</span>
+                </div>
+                <div className="absolute bottom-2.5 left-3 right-3 text-white">
+                  <p className="text-xs font-bold leading-snug">Hawassa University</p>
+                  <p className="text-[10px] text-white/80">Lakeside Campus Community</p>
+                </div>
+              </div>
+              <div className="p-4 flex items-center justify-between text-xs font-semibold text-[#5AA7A7]">
+                <span>Student Community</span>
+                <span className="group-hover:translate-x-0.5 transition-transform flex items-center gap-1 font-bold">
+                  View <ArrowRight className="w-3 h-3" />
+                </span>
+              </div>
+            </div>
+
+            {/* 3. Jimma University Student Life */}
+            <div 
+              onClick={() => onSelectCampus && onSelectCampus('ju-005')}
+              className={`group rounded-3xl overflow-hidden border shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer flex flex-col justify-between ${
+                isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-slate-200'
+              }`}
+            >
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src="/images/students/ju-student-life.jpg"
+                  alt="Jimma University Student Life"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                <div className="absolute top-3 left-3 flex items-center gap-2 bg-white/95 px-2.5 py-1 rounded-full shadow-sm">
+                  <img src="/images/logos/ju-logo.jpg" alt="Jimma" className="w-4 h-4 object-contain" />
+                  <span className="text-[10px] font-bold text-slate-900">Jimma</span>
+                </div>
+                <div className="absolute bottom-2.5 left-3 right-3 text-white">
+                  <p className="text-xs font-bold leading-snug">Jimma University</p>
+                  <p className="text-[10px] text-white/80">Community-Based Education</p>
+                </div>
+              </div>
+              <div className="p-4 flex items-center justify-between text-xs font-semibold text-[#5AA7A7]">
+                <span>Student Community</span>
+                <span className="group-hover:translate-x-0.5 transition-transform flex items-center gap-1 font-bold">
+                  View <ArrowRight className="w-3 h-3" />
+                </span>
+              </div>
+            </div>
+
+            {/* 4. University of Gondar Student Life */}
+            <div 
+              onClick={() => onSelectCampus && onSelectCampus('uog-008')}
+              className={`group rounded-3xl overflow-hidden border shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer flex flex-col justify-between ${
+                isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-slate-200'
+              }`}
+            >
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src="/images/students/uog-student-life.jpg"
+                  alt="University of Gondar Student Life"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                <div className="absolute top-3 left-3 flex items-center gap-2 bg-white/95 px-2.5 py-1 rounded-full shadow-sm">
+                  <img src="/images/logos/uog-logo.jpg" alt="Gondar" className="w-4 h-4 object-contain" />
+                  <span className="text-[10px] font-bold text-slate-900">Gondar</span>
+                </div>
+                <div className="absolute bottom-2.5 left-3 right-3 text-white">
+                  <p className="text-xs font-bold leading-snug">University of Gondar</p>
+                  <p className="text-[10px] text-white/80">Medical & Health Sciences Campus</p>
+                </div>
+              </div>
+              <div className="p-4 flex items-center justify-between text-xs font-semibold text-[#5AA7A7]">
+                <span>Student Community</span>
+                <span className="group-hover:translate-x-0.5 transition-transform flex items-center gap-1 font-bold">
+                  View <ArrowRight className="w-3 h-3" />
+                </span>
+              </div>
+            </div>
+
+            {/* 5. Bahir Dar University Student Life */}
+            <div 
+              onClick={() => onSelectCampus && onSelectCampus('bdu-004')}
+              className={`group rounded-3xl overflow-hidden border shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer flex flex-col justify-between ${
+                isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-slate-200'
+              }`}
+            >
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src="/images/students/bdu-student-life.jpg"
+                  alt="Bahir Dar Student Life"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                <div className="absolute top-3 left-3 flex items-center gap-2 bg-white/95 px-2.5 py-1 rounded-full shadow-sm">
+                  <img src="/images/logos/bdu-logo.jpg" alt="BDU" className="w-4 h-4 object-contain" />
+                  <span className="text-[10px] font-bold text-slate-900">BDU</span>
+                </div>
+                <div className="absolute bottom-2.5 left-3 right-3 text-white">
+                  <p className="text-xs font-bold leading-snug">Bahir Dar University</p>
+                  <p className="text-[10px] text-white/80">Maritime & Tech Students</p>
+                </div>
+              </div>
+              <div className="p-4 flex items-center justify-between text-xs font-semibold text-[#5AA7A7]">
+                <span>Student Community</span>
+                <span className="group-hover:translate-x-0.5 transition-transform flex items-center gap-1 font-bold">
+                  View <ArrowRight className="w-3 h-3" />
+                </span>
+              </div>
+            </div>
+
+            {/* 6. Haramaya University Student Life */}
+            <div 
+              onClick={() => onSelectCampus && onSelectCampus('hru-010')}
+              className={`group rounded-3xl overflow-hidden border shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer flex flex-col justify-between ${
+                isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-slate-200'
+              }`}
+            >
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src="/images/students/hru-student-life.jpg"
+                  alt="Haramaya Student Life"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                <div className="absolute top-3 left-3 flex items-center gap-2 bg-white/95 px-2.5 py-1 rounded-full shadow-sm">
+                  <img src="/images/logos/hru-logo.jpg" alt="Haramaya" className="w-4 h-4 object-contain" />
+                  <span className="text-[10px] font-bold text-slate-900">Haramaya</span>
+                </div>
+                <div className="absolute bottom-2.5 left-3 right-3 text-white">
+                  <p className="text-xs font-bold leading-snug">Haramaya University</p>
+                  <p className="text-[10px] text-white/80">Agricultural & Veterinary Quads</p>
+                </div>
+              </div>
+              <div className="p-4 flex items-center justify-between text-xs font-semibold text-[#5AA7A7]">
+                <span>Student Community</span>
+                <span className="group-hover:translate-x-0.5 transition-transform flex items-center gap-1 font-bold">
+                  View <ArrowRight className="w-3 h-3" />
+                </span>
+              </div>
+            </div>
+
+            {/* 7. Arba Minch Student Life */}
+            <div 
+              onClick={() => onSelectCampus && onSelectCampus('amu-009')}
+              className={`group rounded-3xl overflow-hidden border shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer flex flex-col justify-between ${
+                isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-slate-200'
+              }`}
+            >
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src="/images/students/amu-student-life.jpg"
+                  alt="Arba Minch Student Life"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                <div className="absolute top-3 left-3 flex items-center gap-2 bg-white/95 px-2.5 py-1 rounded-full shadow-sm">
+                  <img src="/images/logos/amu-logo.jpg" alt="AMU" className="w-4 h-4 object-contain" />
+                  <span className="text-[10px] font-bold text-slate-900">Arba Minch</span>
+                </div>
+                <div className="absolute bottom-2.5 left-3 right-3 text-white">
+                  <p className="text-xs font-bold leading-snug">Arba Minch University</p>
+                  <p className="text-[10px] text-white/80">Water Technology Scholars</p>
+                </div>
+              </div>
+              <div className="p-4 flex items-center justify-between text-xs font-semibold text-[#5AA7A7]">
+                <span>Student Community</span>
+                <span className="group-hover:translate-x-0.5 transition-transform flex items-center gap-1 font-bold">
+                  View <ArrowRight className="w-3 h-3" />
+                </span>
+              </div>
+            </div>
+
+            {/* 8. Mekelle University Student Life */}
+            <div 
+              onClick={() => onSelectCampus && onSelectCampus('mu-007')}
+              className={`group rounded-3xl overflow-hidden border shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer flex flex-col justify-between ${
+                isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-slate-200'
+              }`}
+            >
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src="/images/students/mu-student-life.jpg"
+                  alt="Mekelle Student Life"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                <div className="absolute top-3 left-3 flex items-center gap-2 bg-white/95 px-2.5 py-1 rounded-full shadow-sm">
+                  <img src="/images/logos/mu-logo.jpg" alt="Mekelle" className="w-4 h-4 object-contain" />
+                  <span className="text-[10px] font-bold text-slate-900">Mekelle</span>
+                </div>
+                <div className="absolute bottom-2.5 left-3 right-3 text-white">
+                  <p className="text-xs font-bold leading-snug">Mekelle University</p>
+                  <p className="text-[10px] text-white/80">Ayder & Adi Haki Campus</p>
+                </div>
+              </div>
+              <div className="p-4 flex items-center justify-between text-xs font-semibold text-[#5AA7A7]">
+                <span>Student Community</span>
+                <span className="group-hover:translate-x-0.5 transition-transform flex items-center gap-1 font-bold">
+                  View <ArrowRight className="w-3 h-3" />
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
       {/* 6. ACADEMIC DISCIPLINES (6 Fields with High-Res Photography)              */}
       {/* ========================================================================= */}
-      <section className={`py-14 sm:py-20 border-b transition-colors ${isDark ? 'bg-zinc-900/30 border-zinc-800' : 'bg-[#F8FAFC] border-[#E2E8F0]'}`}>
+      <section className={`py-14 sm:py-20 border-b transition-colors ${isDark ? 'bg-zinc-900/30 border-zinc-800' : 'bg-[#EBF4F7] border-[#E2E8F0]'}`}>
         <div className="max-w-7xl mx-auto px-6 sm:px-10">
           
           <div className="text-center max-w-xl mx-auto mb-10">
@@ -719,7 +1134,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <div
                   key={idx}
                   className={`rounded-2xl border transition-all ${
-                    isDark ? 'bg-zinc-900/60 border-zinc-800' : 'bg-[#F8FAFC] border-[#E2E8F0]'
+                    isDark ? 'bg-zinc-900/60 border-zinc-800' : 'bg-[#EBF4F7] border-[#E2E8F0]'
                   }`}
                 >
                   <button
@@ -758,7 +1173,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* ========================================================================= */}
       {/* 9. BOTTOM CALL-TO-ACTION (CTA) BANNER & SINGLE MERGED FOOTER               */}
       {/* ========================================================================= */}
-      <section className={`py-14 sm:py-16 transition-colors ${isDark ? 'bg-zinc-950 text-zinc-400' : 'bg-[#F8FAFC] text-[#64748B]'}`}>
+      <section className={`py-14 sm:py-16 transition-colors ${isDark ? 'bg-zinc-950 text-zinc-400' : 'bg-[#EBF4F7] text-[#64748B]'}`}>
         <div className="max-w-7xl mx-auto px-6 sm:px-10">
           
           {/* Rounded Action Banner using Video Deep Ocean Cyan #0C373D */}
@@ -787,45 +1202,6 @@ export const HomePage: React.FC<HomePageProps> = ({
                 Learn More
               </button>
             </div>
-          </div>
-
-          {/* Consolidated Single Merged Footer */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-8 border-t border-[#E2E8F0] dark:border-zinc-800 text-xs">
-            <div>
-              <p className={`font-bold mb-2.5 text-sm ${isDark ? 'text-white' : 'text-[#0F172A]'}`}>GIBIConnect</p>
-              <p className="text-[#64748B] dark:text-zinc-400 leading-relaxed">
-                Empowering Ethiopian students with verified admissions intelligence and accredited higher education data.
-              </p>
-            </div>
-            <div>
-              <p className={`font-bold mb-2.5 ${isDark ? 'text-white' : 'text-[#0F172A]'}`}>Navigation</p>
-              <ul className="space-y-2">
-                <li><button onClick={onGetStarted} className="hover:text-[#4E9F9F] transition-colors cursor-pointer">Universities Directory</button></li>
-                <li><button onClick={onGetStarted} className="hover:text-[#4E9F9F] transition-colors cursor-pointer">Programs & Curricula</button></li>
-                <li><button onClick={onGetStarted} className="hover:text-[#4E9F9F] transition-colors cursor-pointer">EUEE Cutoffs</button></li>
-              </ul>
-            </div>
-            <div>
-              <p className={`font-bold mb-2.5 ${isDark ? 'text-white' : 'text-[#0F172A]'}`}>Student Resources</p>
-              <ul className="space-y-2">
-                <li><span className="hover:text-[#4E9F9F] cursor-pointer">Past Exam Repository</span></li>
-                <li><span className="hover:text-[#4E9F9F] cursor-pointer">Cost-Sharing Guide</span></li>
-                <li><span className="hover:text-[#4E9F9F] cursor-pointer">Academic Calendar</span></li>
-              </ul>
-            </div>
-            <div>
-              <p className={`font-bold mb-2.5 ${isDark ? 'text-white' : 'text-[#0F172A]'}`}>Legal & Standards</p>
-              <ul className="space-y-2">
-                <li><span>MoE Gazetted Guidelines</span></li>
-                <li><span>Proclamation No. 650/2009</span></li>
-                <li><span>ETA Accreditation Verification</span></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="pt-4 border-t border-[#E2E8F0] dark:border-zinc-800 text-[11px] text-[#64748B] dark:text-zinc-500 flex flex-col sm:flex-row items-center justify-between gap-2">
-            <p>© 2026 GIBIConnect. All rights reserved. Ethiopian Higher Education Portal.</p>
-            <p>Verified with Ministry of Education & University Registrars.</p>
           </div>
 
         </div>

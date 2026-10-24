@@ -1,0 +1,14 @@
+# Frontend build artifacts and dependencies
+node_modules/
+.env
+.env.local
+dist/
+build/
+*.log
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.cache/

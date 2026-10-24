@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { 
   ArrowLeft, MapPin, 
   ExternalLink, Phone, Mail, 
-  Share2, Maximize2, Sparkles,
+  Share2, Maximize2,
   Award, Building2, Layers, BookOpen, GraduationCap, 
   Coins, Check, Calendar, Search, 
   CheckCircle2, ChevronRight, ChevronLeft
 } from 'lucide-react';
-import { ETHIOPIAN_INSTITUTIONS } from '../data/mockInstitutions';
+import { getCampusMedia } from '../data/campusMedia';
+import { resolveInstitution } from '../utils/resolveInstitution';
 
 interface CampusDetailPageProps {
   institutionId: string;
@@ -77,41 +78,8 @@ export const CampusDetailPage: React.FC<CampusDetailPageProps> = ({
   // Gallery slider state per facility ID
   const [galleryIndexes, setGalleryIndexes] = useState<Record<string, number>>({});
 
-  const institution = ETHIOPIAN_INSTITUTIONS.find((inst) => inst.id === institutionId) || ETHIOPIAN_INSTITUTIONS[0];
-
-  const campusImages: Record<string, { hero: string; campusTour: string; landmark: string }> = {
-    AAU: {
-      hero: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=2000&q=85',
-      campusTour: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
-      landmark: 'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1200&q=80'
-    },
-    ASTU: {
-      hero: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=2000&q=85',
-      campusTour: 'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=1200&q=80',
-      landmark: 'https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=1200&q=80'
-    },
-    AASTU: {
-      hero: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=2000&q=85',
-      campusTour: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80',
-      landmark: 'https://images.unsplash.com/photo-1519452635265-7b1fbfd1e4e0?auto=format&fit=crop&w=1200&q=80'
-    },
-    BDU: {
-      hero: 'https://images.unsplash.com/photo-1592417817098-8f3d6eb22d57?auto=format&fit=crop&w=2000&q=85',
-      campusTour: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80',
-      landmark: 'https://images.unsplash.com/photo-1571260899304-425eee4c7efc?auto=format&fit=crop&w=1200&q=80'
-    },
-    JU: {
-      hero: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=2000&q=85',
-      campusTour: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=80',
-      landmark: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80'
-    }
-  };
-
-  const currentPhotos = campusImages[institution.code] || {
-    hero: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=2000&q=85',
-    campusTour: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
-    landmark: 'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1200&q=80'
-  };
+  const institution = resolveInstitution(institutionId);
+  const currentPhotos = getCampusMedia(institution.code);
 
   const navItems = [
     { id: 'overview', label: 'Overview', icon: Building2 },
@@ -125,7 +93,10 @@ export const CampusDetailPage: React.FC<CampusDetailPageProps> = ({
   ];
 
   // 1. Comprehensive faculties and departments database
-  const getUniversityFaculties = (code: string): FacultyDetail[] => {
+  const getUniversityFaculties = (inst: any): FacultyDetail[] => {
+    const code = (inst?.code || '').toUpperCase();
+    const nameEn = inst?.nameEn || 'University';
+    const city = inst?.city || 'Ethiopia';
     if (code === 'AAU') {
       return [
         {
@@ -213,72 +184,759 @@ export const CampusDetailPage: React.FC<CampusDetailPageProps> = ({
       ];
     }
 
-    // Default template for ASTU, AASTU, BDU, JU, etc.
+    if (code === 'AAMC') {
+      return [
+        {
+          id: 'aamc-som',
+          name: 'School of Medicine & Clinical Sciences',
+          campus: 'Tikur Anbessa Hospital Clinical Pavilion',
+          dean: 'Prof. Andualem Deneke (MD, Associate Prof. of Surgery)',
+          established: 1964,
+          studentCount: 2200,
+          facultyCount: 260,
+          description: 'Ethiopia premier clinical medicine training center, fully embedded in the 800-bed Tikur Anbessa Specialized Hospital with comprehensive residency programs.',
+          departments: [
+            { name: 'Department of Surgery', head: 'Dr. Yonas Bahru', degrees: ['MD (Doctor of Medicine)', 'Residency in Surgery', 'Subspecialty Fellowship'], enrolled: 650, specialization: 'Neurosurgery, Pediatric Surgery, Oncology Surgery' },
+            { name: 'Department of Internal Medicine', head: 'Dr. Daniel Asrat', degrees: ['MD (Doctor of Medicine)', 'Residency in Internal Medicine'], enrolled: 600, specialization: 'Cardiology, Pulmonology, Nephrology' },
+            { name: 'Department of Pediatrics & Child Health', head: 'Dr. Aster Berhe', degrees: ['MD (Doctor of Medicine)', 'Residency in Pediatrics'], enrolled: 450, specialization: 'Neonatal Care, Pediatric Oncology' },
+            { name: 'Department of Oncology & Radiotherapy', head: 'Dr. Workineh Shibeshi', degrees: ['Clinical Oncology Residency', 'Medical Physics M.Sc.'], enrolled: 250, specialization: 'Radiation Therapy, Medical Oncology' },
+            { name: 'Department of Obstetrics & Gynecology', head: 'Dr. Emebet Kebede', degrees: ['MD (Doctor of Medicine)', 'Residency in Ob-Gyn'], enrolled: 250, specialization: 'Maternal-Fetal Medicine, Gynecologic Oncology' }
+          ]
+        },
+        {
+          id: 'aamc-pharm',
+          name: 'School of Pharmacy',
+          campus: 'Tikur Anbessa Health Sciences Quad',
+          dean: 'Dr. Workineh Shibeshi (PhD in Pharmacology)',
+          established: 1961,
+          studentCount: 750,
+          facultyCount: 70,
+          description: 'Pioneer pharmaceutical education center in Ethiopia offering clinical pharmacy, pharmaceutical chemistry, and advanced drug development.',
+          departments: [
+            { name: 'Department of Pharmacology & Clinical Pharmacy', head: 'Dr. Tefera Abula', degrees: ['B.Pharm', 'Pharm.D', 'M.Sc. Pharmacology'], enrolled: 420, specialization: 'Clinical Toxicology, Rational Drug Use' },
+            { name: 'Department of Pharmaceutical Chemistry', head: 'Dr. Ariaya Hymete', degrees: ['B.Pharm', 'M.Sc. Quality Assurance'], enrolled: 330, specialization: 'Drug Formulation, Pharmacognosy' }
+          ]
+        },
+        {
+          id: 'aamc-public-health',
+          name: 'School of Public Health',
+          campus: 'Tikur Anbessa / Senga Tera Campus',
+          dean: 'Dr. Adamu Addissie (MD, MPH, PhD)',
+          established: 1965,
+          studentCount: 850,
+          facultyCount: 65,
+          description: 'Center of excellence in public health research, disease surveillance, healthcare economics, and epidemiology in the Horn of Africa.',
+          departments: [
+            { name: 'Epidemiology & Biostatistics', head: 'Dr. Wakgari Deressa', degrees: ['MPH', 'Ph.D. in Public Health'], enrolled: 480, specialization: 'Infectious Disease Tracking, Bio-Statistics' },
+            { name: 'Health Systems & Reproductive Health', head: 'Dr. Seblewengel Lemma', degrees: ['B.Sc. Public Health', 'MPH'], enrolled: 370, specialization: 'Community Health Programs, Health Policy' }
+          ]
+        },
+        {
+          id: 'aamc-allied',
+          name: 'School of Allied Health Sciences & Nursing',
+          campus: 'Tikur Anbessa Clinical Complex',
+          dean: 'Dr. Daniel Asrat (MD, PhD in Microbiology)',
+          established: 1970,
+          studentCount: 950,
+          facultyCount: 85,
+          description: 'Dedicated to diagnostic medical technology, pathology, emergency nursing, and clinical rehabilitation.',
+          departments: [
+            { name: 'Medical Laboratory Sciences', head: 'Dr. Aster Tsegaye', degrees: ['B.Sc. Medical Laboratory', 'M.Sc. Clinical Microbiology'], enrolled: 380, specialization: 'Molecular Diagnostics, Hematology' },
+            { name: 'Nursing & Midwifery', head: 'Sr. Tigist Lemma', degrees: ['B.Sc. Nursing', 'B.Sc. Midwifery', 'M.Sc. Emergency Care'], enrolled: 390, specialization: 'Critical Care, Neonatal Resuscitation' },
+            { name: 'Radiologic Technology & Physiotherapy', head: 'Dr. Solomon Worku', degrees: ['B.Sc. Radiologic Tech', 'B.Sc. Physiotherapy'], enrolled: 180, specialization: 'MRI/CT Imaging, Neuro-Rehab' }
+          ]
+        }
+      ];
+    }
+
+    if (code === 'WKU') {
+      return [
+        {
+          id: 'wku-eng',
+          name: 'Gubre Institute of Technology (GubIoT)',
+          campus: 'Gubre Engineering Campus (Wolkite)',
+          dean: 'Dr. Jemal Abdu (PhD in Mechatronics Engineering)',
+          established: 2012,
+          studentCount: 4200,
+          facultyCount: 220,
+          description: 'Modern engineering institute driving regional infrastructure, agricultural mechanization, smart grid power systems, and software engineering.',
+          departments: [
+            { name: 'Electrical & Computer Engineering', head: 'Dr. Temesgen Bekele', degrees: ['B.Sc. Electrical Engineering', 'M.Sc. Power Systems'], enrolled: 1200, specialization: 'Renewable Microgrids, Embedded Hardware' },
+            { name: 'Civil & Water Resources Engineering', head: 'Dr. Henok Haile', degrees: ['B.Sc. Civil Engineering', 'B.Sc. Hydraulic Engineering'], enrolled: 1100, specialization: 'Structural Design, Gurage Zone Water Infrastructure' },
+            { name: 'Mechanical & Automotive Engineering', head: 'Dr. Tsegaye Ayele', degrees: ['B.Sc. Mechanical Engineering', 'B.Sc. Electromechanical'], enrolled: 1000, specialization: 'Agro-Machinery Fabrication, Automotive Systems' },
+            { name: 'Chemical Engineering', head: 'Dr. Genet Molla', degrees: ['B.Sc. Chemical Engineering'], enrolled: 900, specialization: 'Process Engineering, Bio-Fuels' }
+          ]
+        },
+        {
+          id: 'wku-comp',
+          name: 'College of Computing & Informatics',
+          campus: 'Main Academic Campus, Wolkite',
+          dean: 'Dr. Temesgen Walelign (PhD in Computer Science)',
+          established: 2013,
+          studentCount: 2100,
+          facultyCount: 110,
+          description: 'Accelerating software systems development, machine intelligence, cyber defense, and network infrastructure.',
+          departments: [
+            { name: 'Software Engineering', head: 'Dr. Fikadu Tadesse', degrees: ['B.Sc. Software Engineering', 'M.Sc.'], enrolled: 950, specialization: 'Full-Stack Architecture, Enterprise Mobile Solutions' },
+            { name: 'Computer Science & Information Technology', head: 'Ato Getachew Belay', degrees: ['B.Sc. Computer Science', 'B.Sc. IT'], enrolled: 1150, specialization: 'AI, Distributed Data Systems, Cloud Platforms' }
+          ]
+        },
+        {
+          id: 'wku-health',
+          name: 'College of Medicine & Health Sciences',
+          campus: 'Wolkite University Referral Hospital Campus',
+          dean: 'Dr. Habtamu Girma (MD, MPH)',
+          established: 2014,
+          studentCount: 2300,
+          facultyCount: 140,
+          description: 'Regional healthcare complex operating the Wolkite Referral Hospital, training medical doctors, public health officers, and clinical midwives.',
+          departments: [
+            { name: 'School of Public Health', head: 'Dr. Almaz Kebede', degrees: ['B.Sc. Public Health Officer', 'MPH'], enrolled: 800, specialization: 'Maternal & Child Epidemiology, Community Health' },
+            { name: 'Department of Nursing & Midwifery', head: 'Sr. Rahel Desta', degrees: ['B.Sc. Comprehensive Nursing', 'B.Sc. Midwifery'], enrolled: 750, specialization: 'Emergency Triage, Surgical Nursing' },
+            { name: 'Department of Medicine & Pharmacy', head: 'Dr. Yared Assefa', degrees: ['MD (Doctor of Medicine)', 'B.Pharm'], enrolled: 750, specialization: 'Primary Clinical Care, Pharmacotherapy' }
+          ]
+        },
+        {
+          id: 'wku-agri',
+          name: 'College of Agricultural & Natural Resource Sciences',
+          campus: 'Main Campus Agro-Science Complex',
+          dean: 'Dr. Bekele Tulu (PhD in Agronomy)',
+          established: 2012,
+          studentCount: 1800,
+          facultyCount: 95,
+          description: 'Specializing in enset (false banana) biotechnology, dairy sciences, soil conservation, and modern horticulture value chains.',
+          departments: [
+            { name: 'Plant Sciences & Enset Biotechnology', head: 'Dr. Mulugeta Zewde', degrees: ['B.Sc. Plant Science', 'M.Sc. Agronomy'], enrolled: 700, specialization: 'Crop Protection, Sustainable Agroforestry' },
+            { name: 'Animal Science & Agribusiness', head: 'Ato Birhanu Lemma', degrees: ['B.Sc. Animal Science', 'B.Sc. Agribusiness'], enrolled: 1100, specialization: 'Livestock Nutrition, Agricultural Marketing' }
+          ]
+        }
+      ];
+    }
+
+    if (code === 'MU') {
+      return [
+        {
+          id: 'mu-mit',
+          name: 'Mekelle Institute of Technology (MIT)',
+          campus: 'MIT Engineering Campus, Aynalem (Mekelle)',
+          dean: 'Dr. Berihu Teklehaimanot (PhD in Telecommunications)',
+          established: 2002,
+          studentCount: 3800,
+          facultyCount: 240,
+          description: 'Pioneering technology and engineering institute renowned across Ethiopia for rigorous hands-on engineering, software development, electronics, and applied sciences.',
+          departments: [
+            { name: 'Department of Software Engineering & Computing', head: 'Dr. Haftu Tasew', degrees: ['B.Sc. Software Engineering', 'M.Sc. Computer Science', 'Ph.D.'], enrolled: 1100, specialization: 'Distributed Systems, Embedded Systems, AI' },
+            { name: 'Department of Electrical & Electronics Engineering', head: 'Dr. Mebrahtu Gebre', degrees: ['B.Sc. Electrical Engineering', 'M.Sc. Power & Control'], enrolled: 1050, specialization: 'Wireless Communications, Microelectronics, Renewable Energy' },
+            { name: 'Department of Mechanical & Industrial Engineering', head: 'Dr. Gebremariam Tesfay', degrees: ['B.Sc. Mechanical Engineering', 'B.Sc. Industrial Engineering'], enrolled: 850, specialization: 'Automotive Design, Advanced Manufacturing' },
+            { name: 'Department of Civil & Structural Engineering', head: 'Dr. Araya Woldu', degrees: ['B.Sc. Civil Engineering', 'M.Sc. Geotechnical'], enrolled: 800, specialization: 'Bridge & Dam Infrastructure, Structural Dynamics' }
+          ]
+        },
+        {
+          id: 'mu-chs',
+          name: 'College of Health Sciences (Ayder Comprehensive Hospital)',
+          campus: 'Ayder Specialized Hospital Campus, Mekelle',
+          dean: 'Dr. Amanuel Haile (MD, Consultant Pediatrician)',
+          established: 2003,
+          studentCount: 3400,
+          facultyCount: 310,
+          description: 'Major regional healthcare referral complex operating the 500+ bed Ayder Comprehensive Specialized Hospital serving northern Ethiopia.',
+          departments: [
+            { name: 'School of Medicine (MD)', head: 'Dr. Kibrom Gebreselassie', degrees: ['MD (Doctor of Medicine)', 'Residency in Surgery', 'Internal Medicine Specialization'], enrolled: 1300, specialization: 'Neurosurgery, Emergency Medicine, Trauma Care' },
+            { name: 'School of Public Health', head: 'Dr. Afework Mulugeta', degrees: ['B.Sc. Public Health', 'MPH', 'Ph.D. in Nutrition'], enrolled: 750, specialization: 'Community Health Epidemiology, Maternal Nutrition' },
+            { name: 'School of Pharmacy', head: 'Dr. Hagos Abrha', degrees: ['B.Pharm', 'Pharm.D'], enrolled: 650, specialization: 'Clinical Pharmacy, Pharmacognosy' },
+            { name: 'School of Nursing & Midwifery', head: 'Sr. Letebirhan Gebre', degrees: ['B.Sc. Nursing', 'B.Sc. Midwifery'], enrolled: 700, specialization: 'Neonatal Critical Care, Surgical Nursing' }
+          ]
+        },
+        {
+          id: 'mu-agri',
+          name: 'College of Dryland Agriculture & Natural Resources',
+          campus: 'Main Campus Agro-Complex, Mekelle',
+          dean: 'Dr. Eyasu Yazew (PhD in Land Resources)',
+          established: 1993,
+          studentCount: 2200,
+          facultyCount: 160,
+          description: 'Nationally acclaimed center of excellence in dryland farming, watershed harvesting, soil conservation, and drought-resilient crops.',
+          departments: [
+            { name: 'Land Resource Management & Environmental Protection', head: 'Dr. Girmay Gebresamuel', degrees: ['B.Sc. Land Resources', 'M.Sc. Soil Science'], enrolled: 800, specialization: 'Watershed Management, GIS & Remote Sensing' },
+            { name: 'Dryland Crop & Horticultural Sciences', head: 'Dr. Fetien Abay', degrees: ['B.Sc. Plant Science', 'M.Sc. Plant Breeding'], enrolled: 750, specialization: 'Barley Genetics, Drought Resistance' },
+            { name: 'Animal, Rangeland & Wildlife Sciences', head: 'Dr. Yayneshet Tesfay', degrees: ['B.Sc. Animal Science', 'M.Sc. Livestock Nutrition'], enrolled: 650, specialization: 'Ruminant Nutrition, Apiculture' }
+          ]
+        },
+        {
+          id: 'mu-cbe',
+          name: 'College of Business and Economics (CBE)',
+          campus: 'Adi Haki Campus, Mekelle',
+          dean: 'Dr. Gebrehiwot Weldegebriel (PhD in Economics)',
+          established: 1993,
+          studentCount: 3100,
+          facultyCount: 180,
+          description: 'Key institution for business, development economics, management, and financial administration in Tigray.',
+          departments: [
+            { name: 'Department of Accounting & Finance', head: 'Ato Berhane Teklay', degrees: ['B.A. Accounting & Finance', 'M.Sc.'], enrolled: 1250, specialization: 'Auditing, Corporate Finance' },
+            { name: 'Department of Economics', head: 'Dr. Halefom Nigus', degrees: ['B.A. Economics', 'M.Sc. Development Economics'], enrolled: 950, specialization: 'Econometrics, Resource Economics' },
+            { name: 'Department of Management', head: 'Dr. Atsbeha Gebre', degrees: ['B.A. Management', 'MBA'], enrolled: 900, specialization: 'Operations & Enterprise Leadership' }
+          ]
+        },
+        {
+          id: 'mu-law',
+          name: 'College of Law and Governance',
+          campus: 'Main Campus, Mekelle',
+          dean: 'Ato Alula Gidey (LL.M.)',
+          established: 1995,
+          studentCount: 1200,
+          facultyCount: 75,
+          description: 'Nationally recognized law faculty providing clinical legal education, human rights defense, and judicial training.',
+          departments: [
+            { name: 'School of Law (LL.B.)', head: 'Ato Solomon Berhane', degrees: ['LL.B. in Law', 'LL.M. in International Law'], enrolled: 850, specialization: 'Constitutional Law, Customary Legal Systems' },
+            { name: 'Department of Political Science & Public Policy', head: 'Dr. Mehari Taddele', degrees: ['B.A. Political Science', 'M.A. Governance'], enrolled: 350, specialization: 'Regional Geopolitics, Public Governance' }
+          ]
+        }
+      ];
+    }
+
+    if (code === 'UOG') {
+      return [
+        {
+          id: 'uog-cmhs',
+          name: 'College of Medicine and Health Sciences (Hospital Est. 1954)',
+          campus: 'Gondar Comprehensive Hospital Campus',
+          dean: 'Dr. Assefa Mulugeta (MD, Associate Prof. of Public Health)',
+          established: 1954,
+          studentCount: 4100,
+          facultyCount: 360,
+          description: 'The historic Public Health College and Training Centre founded in 1954, Ethiopia pioneer health training institution integrated with the 1,000-bed Gondar Comprehensive Hospital.',
+          departments: [
+            { name: 'School of Medicine (MD)', head: 'Dr. Getachew Arage', degrees: ['MD (Doctor of Medicine)', 'Residency in Surgery', 'Pediatrics Specialization'], enrolled: 1500, specialization: 'Tropical Medicine, Infectious Diseases, Surgery' },
+            { name: 'Institute of Public Health', head: 'Dr. Mezgebu Yitayal', degrees: ['B.Sc. Public Health', 'MPH', 'Ph.D.'], enrolled: 950, specialization: 'Epidemiology, Health Informatics, Community Health' },
+            { name: 'School of Pharmacy', head: 'Dr. Birhanu Demeke', degrees: ['B.Pharm', 'M.Sc. Clinical Pharmacy'], enrolled: 750, specialization: 'Pharmacotherapy, Drug Discovery' },
+            { name: 'School of Midwifery & Nursing', head: 'Sr. Tigist Kassa', degrees: ['B.Sc. Midwifery', 'B.Sc. Nursing', 'M.Sc.'], enrolled: 900, specialization: 'Neonatal Care, Obstetric Emergencies' }
+          ]
+        },
+        {
+          id: 'uog-iot',
+          name: 'Institute of Technology (IoT - Gondar)',
+          campus: 'Maraki Campus, Gondar',
+          dean: 'Dr. Asrat Mekonnen (PhD in Computer Engineering)',
+          established: 2004,
+          studentCount: 3600,
+          facultyCount: 220,
+          description: 'Dynamic engineering institute driving software development, civil infrastructure, and electrical hardware engineering in the historic city of Gondar.',
+          departments: [
+            { name: 'Department of Software Engineering', head: 'Dr. Molla Tadesse', degrees: ['B.Sc. Software Engineering', 'M.Sc. Data Engineering'], enrolled: 1100, specialization: 'Enterprise Software, Mobile & Cloud Systems' },
+            { name: 'Department of Civil Engineering', head: 'Dr. Solomon Melese', degrees: ['B.Sc. Civil Engineering', 'M.Sc. Structural'], enrolled: 1000, specialization: 'Heritage Site Geotechnics, Transportation' },
+            { name: 'Department of Electrical & Computer Engineering', head: 'Dr. Endalkachew Gashaw', degrees: ['B.Sc. Electrical Engineering', 'M.Sc. Power Systems'], enrolled: 950, specialization: 'Control Systems, Renewable Energy' },
+            { name: 'Department of Mechanical Engineering', head: 'Dr. Yohannes Tefera', degrees: ['B.Sc. Mechanical Engineering'], enrolled: 550, specialization: 'Thermal Systems, Manufacturing' }
+          ]
+        },
+        {
+          id: 'uog-vet',
+          name: 'Faculty of Veterinary Medicine (FVM)',
+          campus: 'Teda Campus, Gondar',
+          dean: 'Dr. Fentahun Tsegaye (DVM, M.Sc.)',
+          established: 1995,
+          studentCount: 1100,
+          facultyCount: 85,
+          description: 'Renowned veterinary faculty providing comprehensive clinical veterinary medicine, zoological disease control, and livestock epidemiology.',
+          departments: [
+            { name: 'Veterinary Clinical Medicine (DVM)', head: 'Dr. Belayneh Getachew', degrees: ['DVM (Doctor of Veterinary Medicine)', 'M.Sc. Surgery'], enrolled: 700, specialization: 'Bovine Surgery, Equine Health' },
+            { name: 'Veterinary Public Health & Microbiology', head: 'Dr. Alula Alemayehu', degrees: ['B.Sc. Veterinary Lab Tech', 'M.Sc. Zoonoses'], enrolled: 400, specialization: 'Zoonotic Disease Surveillance, Vaccine Testing' }
+          ]
+        },
+        {
+          id: 'uog-cbe',
+          name: 'College of Business and Economics',
+          campus: 'Maraki Campus, Gondar',
+          dean: 'Dr. Yared Worku (PhD in Finance)',
+          established: 2002,
+          studentCount: 2900,
+          facultyCount: 170,
+          description: 'Center for tourism economics, commercial accounting, business analytics, and regional financial planning.',
+          departments: [
+            { name: 'Department of Accounting & Finance', head: 'Ato Abebaw Kassie', degrees: ['B.A. Accounting & Finance', 'M.Sc.'], enrolled: 1200, specialization: 'IFRS, Tax Administration' },
+            { name: 'Department of Tourism & Hotel Management', head: 'Dr. Daniel Getahun', degrees: ['B.A. Tourism Management', 'M.A.'], enrolled: 700, specialization: 'UNESCO Heritage Tourism, Hospitality' },
+            { name: 'Department of Economics & Management', head: 'Dr. Mesfin Ayele', degrees: ['B.A. Economics', 'B.A. Management', 'MBA'], enrolled: 1000, specialization: 'Macroeconomic Analysis, Operations' }
+          ]
+        }
+      ];
+    }
+
+    if (code === 'JU') {
+      return [
+        {
+          id: 'ju-jit',
+          name: 'Jimma Institute of Technology (JiT)',
+          campus: 'Kito Furdisa Campus, Jimma',
+          dean: 'Dr. Efrem Wakjira (PhD in Civil Engineering)',
+          established: 1997,
+          studentCount: 4900,
+          facultyCount: 310,
+          description: 'Leading polytechnic institute pioneering Community-Based Education (CBE) in engineering, biomedical innovation, and water systems.',
+          departments: [
+            { name: 'Department of Biomedical Engineering', head: 'Dr. Million Kebede', degrees: ['B.Sc. Biomedical Engineering', 'M.Sc.'], enrolled: 650, specialization: 'Medical Device Prototyping, Clinical Instrumentation' },
+            { name: 'Department of Electrical & Computer Engineering', head: 'Dr. Tadesse Hailu', degrees: ['B.Sc. Electrical Engineering', 'M.Sc.'], enrolled: 1300, specialization: 'Industrial Automation, Smart Grid Power' },
+            { name: 'Department of Civil & Environmental Engineering', head: 'Dr. Jemal Mohammed', degrees: ['B.Sc. Civil Engineering', 'M.Sc. Hydraulics'], enrolled: 1400, specialization: 'Hydropower, River Basin Management' },
+            { name: 'Department of Mechanical & Industrial Engineering', head: 'Dr. Bekele Desta', degrees: ['B.Sc. Mechanical Engineering'], enrolled: 950, specialization: 'Coffee Processing Machinery, Agro-Mechanization' },
+            { name: 'Department of Computing & Software', head: 'Dr. Worku Geda', degrees: ['B.Sc. Software Engineering', 'B.Sc. Computer Science'], enrolled: 600, specialization: 'Health Informatics, Mobile Apps' }
+          ]
+        },
+        {
+          id: 'ju-fms',
+          name: 'Faculty of Medical Sciences (JUSH Hospital)',
+          campus: 'Main Hospital Campus, Jimma',
+          dean: 'Dr. Negash Tesfaye (MD, Associate Prof. of Surgery)',
+          established: 1983,
+          studentCount: 3800,
+          facultyCount: 320,
+          description: 'Center of excellence in clinical medicine and public health, integrated with the 800-bed Jimma University Specialized Hospital (JUSH).',
+          departments: [
+            { name: 'School of Medicine (MD)', head: 'Dr. Tsegaye Berhanu', degrees: ['MD (Doctor of Medicine)', 'Residency in Surgery', 'Internal Medicine'], enrolled: 1550, specialization: 'Cardiovascular Surgery, Tropical Pediatrics' },
+            { name: 'School of Public Health', head: 'Dr. Mirkuzie Woldie', degrees: ['B.Sc. Public Health', 'MPH', 'Ph.D.'], enrolled: 850, specialization: 'Community-Based Health Care, Health Policy' },
+            { name: 'School of Pharmacy', head: 'Dr. Tefera Gizaw', degrees: ['B.Pharm', 'Pharm.D'], enrolled: 700, specialization: 'Clinical Pharmacology, Herbal Medicines' },
+            { name: 'School of Dentistry & Medical Laboratory', head: 'Dr. Sisay Lemma', degrees: ['B.Sc. Dentistry (DMD)', 'B.Sc. Medical Lab'], enrolled: 700, specialization: 'Oral Surgery, Hematology Diagnostics' }
+          ]
+        },
+        {
+          id: 'ju-jucavm',
+          name: 'College of Agriculture & Veterinary Medicine (JUCAVM)',
+          campus: 'Eladale Campus, Jimma',
+          dean: 'Prof. Ali Mohammed (PhD in Postharvest Physiology)',
+          established: 1952,
+          studentCount: 2400,
+          facultyCount: 190,
+          description: 'Ethiopia premier coffee and agronomy institute, founded in 1952 as Jimma Agricultural Technical School.',
+          departments: [
+            { name: 'Department of Horticulture & Coffee Science', head: 'Dr. Weyessa Garedew', degrees: ['B.Sc. Plant Science', 'M.Sc. Coffee Processing', 'Ph.D.'], enrolled: 950, specialization: 'Arabica Coffee Genetics, Specialty Postharvest' },
+            { name: 'School of Veterinary Medicine (DVM)', head: 'Dr. Tadele Tolosa', degrees: ['DVM', 'M.Sc. Veterinary Public Health'], enrolled: 800, specialization: 'Zoonoses, Tropical Animal Health' },
+            { name: 'Department of Animal Science & Agribusiness', head: 'Dr. Ketema Bekele', degrees: ['B.Sc. Animal Science', 'B.Sc. Agribusiness'], enrolled: 650, specialization: 'Dairy Science, Value Chains' }
+          ]
+        }
+      ];
+    }
+
+    if (code === 'BDU') {
+      return [
+        {
+          id: 'bdu-bit',
+          name: 'Bahir Dar Institute of Technology (BiT)',
+          campus: 'BiT Polytechnic Campus, Lake Tana Waterfront',
+          dean: 'Dr. Bimrew Tamrat (PhD in Sustainable Energy)',
+          established: 1953,
+          studentCount: 5200,
+          facultyCount: 340,
+          description: 'Originally established in 1953 as the Poly-Technic Institute with Soviet cooperation, BiT is one of Ethiopia foremost engineering hubs.',
+          departments: [
+            { name: 'Faculty of Electrical & Computer Engineering', head: 'Dr. Tesfaye Negash', degrees: ['B.Sc. Electrical Engineering', 'M.Sc. Power'], enrolled: 1400, specialization: 'Hydroelectric Integration, Control Automation' },
+            { name: 'Faculty of Computing & Software Engineering', head: 'Dr. Getnet Mequanint', degrees: ['B.Sc. Software Engineering', 'B.Sc. Computer Science', 'M.Sc.'], enrolled: 1250, specialization: 'Cloud Architectures, Machine Learning' },
+            { name: 'Faculty of Civil & Water Resources Engineering', head: 'Dr. Megersa Olumana', degrees: ['B.Sc. Civil Engineering', 'B.Sc. Hydraulic Engineering'], enrolled: 1350, specialization: 'Lake Tana Hydrology, Dam Safety, Geotechnics' },
+            { name: 'Faculty of Mechanical & Industrial Engineering', head: 'Dr. Zenamarkos Biresaw', degrees: ['B.Sc. Mechanical Engineering'], enrolled: 1200, specialization: 'Turbine Fabrication, Thermal Power' }
+          ]
+        },
+        {
+          id: 'bdu-cmhs',
+          name: 'College of Medicine & Health Sciences (Tibebe Ghion)',
+          campus: 'Tibebe Ghion Specialized Hospital Campus, Bahir Dar',
+          dean: 'Dr. Firew Tegegne (MD, MPH)',
+          established: 2007,
+          studentCount: 3100,
+          facultyCount: 260,
+          description: 'Premier health institute operating the state-of-the-art 600-bed Tibebe Ghion Specialized Teaching Hospital.',
+          departments: [
+            { name: 'School of Medicine (MD)', head: 'Dr. Mulat Yimer', degrees: ['MD (Doctor of Medicine)', 'Residency in Surgery', 'Pediatrics'], enrolled: 1200, specialization: 'General Surgery, Internal Medicine, Ob-Gyn' },
+            { name: 'School of Public Health', head: 'Dr. Destaw Fetene', degrees: ['B.Sc. Public Health', 'MPH'], enrolled: 700, specialization: 'Infectious Disease Control, Environmental Health' },
+            { name: 'School of Pharmacy & Nursing', head: 'Sr. Mulugeta Baye', degrees: ['B.Pharm', 'B.Sc. Nursing', 'B.Sc. Midwifery'], enrolled: 1200, specialization: 'Clinical Pharmacology, Critical Care' }
+          ]
+        },
+        {
+          id: 'bdu-eitex',
+          name: 'Ethiopian Institute of Textile and Fashion Technology (EiTEX)',
+          campus: 'EiTEX Textile Campus, Bahir Dar',
+          dean: 'Dr. Abera Kechi (PhD in Textile Engineering)',
+          established: 1963,
+          studentCount: 1800,
+          facultyCount: 110,
+          description: 'Ethiopia unique national center of excellence for textile manufacturing, garment engineering, leather technology, and fashion design.',
+          departments: [
+            { name: 'Department of Textile Engineering', head: 'Dr. Tamrat Tesfaye', degrees: ['B.Sc. Textile Engineering', 'M.Sc.'], enrolled: 750, specialization: 'Yarn Spinning, Weaving Technology, Nanofibers' },
+            { name: 'Department of Garment Engineering & Fashion', head: 'Ato Birhanu Asfaw', degrees: ['B.Sc. Garment Engineering', 'B.A. Fashion Design'], enrolled: 650, specialization: 'Apparel Industrial Engineering, CAD Pattern Making' },
+            { name: 'Department of Leather Engineering & Chemical Processing', head: 'Dr. Solomon Tilahun', degrees: ['B.Sc. Leather Technology'], enrolled: 400, specialization: 'Eco-Tanning, Textile Dyeing & Finishing' }
+          ]
+        }
+      ];
+    }
+
+    if (code === 'HU') {
+      return [
+        {
+          id: 'hu-iot',
+          name: 'Hawassa Institute of Technology (HU-IoT)',
+          campus: 'Main Engineering Campus, Hawassa',
+          dean: 'Dr. Fasika Bete (PhD in Computer Science)',
+          established: 2006,
+          studentCount: 4200,
+          facultyCount: 260,
+          description: 'Modern engineering polytechnic powering software engineering, smart textile integration, power systems, and civil infrastructure.',
+          departments: [
+            { name: 'School of Electrical & Computer Engineering', head: 'Dr. Girma Bekele', degrees: ['B.Sc. Electrical Engineering', 'M.Sc. Control'], enrolled: 1250, specialization: 'Industrial Automation, Communications' },
+            { name: 'School of Software & Computing Sciences', head: 'Dr. Solomon Negatu', degrees: ['B.Sc. Software Engineering', 'B.Sc. IT'], enrolled: 1150, specialization: 'Smart City Platforms, Full-Stack Architecture' },
+            { name: 'School of Civil & Urban Engineering', head: 'Dr. Tefera Belachew', degrees: ['B.Sc. Civil Engineering', 'B.Sc. Architecture'], enrolled: 1100, specialization: 'Rift Valley Soils, Urban Planning' },
+            { name: 'School of Mechanical Engineering', head: 'Dr. Ashenafi Kebede', degrees: ['B.Sc. Mechanical Engineering'], enrolled: 700, specialization: 'Agro-Processing, Heating & Ventilation' }
+          ]
+        },
+        {
+          id: 'hu-cmhs',
+          name: 'College of Medicine & Health Sciences (HUCSH)',
+          campus: 'HUCSH Referral Hospital Campus, Hawassa',
+          dean: 'Dr. Anteneh Gadisa (MD, Associate Prof. of Surgery)',
+          established: 2003,
+          studentCount: 3500,
+          facultyCount: 290,
+          description: 'Flagship medical complex in southern Ethiopia running the Hawassa University Comprehensive Specialized Hospital with 650 inpatient beds.',
+          departments: [
+            { name: 'School of Medicine (MD)', head: 'Dr. Teshome Berhanu', degrees: ['MD (Doctor of Medicine)', 'Residency Programs'], enrolled: 1400, specialization: 'Internal Medicine, Pediatric Surgery, Oncology' },
+            { name: 'School of Public Health', head: 'Dr. Birkneh Tilahun', degrees: ['B.Sc. Public Health', 'MPH'], enrolled: 800, specialization: 'Maternal-Child Health, Epidemiology' },
+            { name: 'School of Pharmacy & Medical Laboratory', head: 'Dr. Daniel Getachew', degrees: ['B.Pharm', 'B.Sc. Med Lab'], enrolled: 800, specialization: 'Clinical Toxicology, Microbiology' },
+            { name: 'School of Nursing & Midwifery', head: 'Sr. Rahel Bekele', degrees: ['B.Sc. Nursing', 'B.Sc. Midwifery'], enrolled: 500, specialization: 'Emergency Triage, Neonatal Care' }
+          ]
+        },
+        {
+          id: 'hu-wondo',
+          name: 'Wondo Genet College of Forestry & Natural Resources',
+          campus: 'Wondo Genet Arboretum Campus, Sidama',
+          dean: 'Dr. Motuma Tolera (PhD in Agroforestry)',
+          established: 1978,
+          studentCount: 1600,
+          facultyCount: 95,
+          description: 'Ethiopia foremost institution for forestry conservation, agroforestry, wildlife ecology, and natural resource management.',
+          departments: [
+            { name: 'Department of General Forestry', head: 'Dr. Tesfaye Bekele', degrees: ['B.Sc. Forestry', 'M.Sc. Silviculture'], enrolled: 600, specialization: 'Indigenous Tree Conservation, Carbon Sequestration' },
+            { name: 'Department of Wildlife & Ecotourism', head: 'Dr. Girma Mengesha', degrees: ['B.Sc. Wildlife Management', 'B.A. Ecotourism'], enrolled: 500, specialization: 'National Park Ecology, Protected Areas' },
+            { name: 'Department of Agroforestry & Soil Conservation', head: 'Dr. Tefera Mengistu', degrees: ['B.Sc. Agroforestry', 'M.Sc.'], enrolled: 500, specialization: 'Catchment Restoration, Biodiversity' }
+          ]
+        }
+      ];
+    }
+
+    if (code === 'ASTU') {
+      return [
+        {
+          id: 'astu-ece',
+          name: 'School of Electrical Engineering & Computing',
+          campus: 'Main STEM Quadrant, Adama',
+          dean: 'Dr. Kumsa Dereje (PhD in Computer Engineering)',
+          established: 1993,
+          studentCount: 3900,
+          facultyCount: 240,
+          description: 'Dedicated center of excellence for software engineering, artificial intelligence, communications, and electronic systems.',
+          departments: [
+            { name: 'Department of Software Engineering', head: 'Dr. Gemechu Boku', degrees: ['B.Sc. Software Engineering', 'M.Sc. AI', 'Ph.D.'], enrolled: 1300, specialization: 'Cybersecurity, Cloud Infrastructure, Ethiopian Speech AI' },
+            { name: 'Department of Computer Science & Engineering', head: 'Dr. Dereje Shiferaw', degrees: ['B.Sc. Computer Science', 'M.Sc.'], enrolled: 1200, specialization: 'Algorithms, High Performance Computing' },
+            { name: 'Department of Electrical Power & Control', head: 'Dr. Belayneh Tolassa', degrees: ['B.Sc. Electrical Engineering', 'M.Sc. Renewable Power'], enrolled: 1400, specialization: 'Grid Automation, EV Propulsion Systems' }
+          ]
+        },
+        {
+          id: 'astu-mech',
+          name: 'School of Mechanical, Chemical & Materials Engineering',
+          campus: 'Advanced Manufacturing Hub, Adama',
+          dean: 'Dr. Tolera Gemechu (PhD in Materials Science)',
+          established: 2006,
+          studentCount: 3200,
+          facultyCount: 200,
+          description: 'Home of ASTU Centers of Excellence in Space Science, Robotics, Advanced Nanomaterials, and Automotive Fabrication.',
+          departments: [
+            { name: 'Department of Mechanical & Mechatronics Engineering', head: 'Dr. Yared Assefa', degrees: ['B.Sc. Mechanical Engineering', 'B.Sc. Mechatronics'], enrolled: 1400, specialization: 'Industrial Robotics, CNC Prototyping, Drone Design' },
+            { name: 'Department of Materials Science & Metallurgy', head: 'Dr. Hirpa Geda', degrees: ['B.Sc. Materials Engineering', 'M.Sc.'], enrolled: 900, specialization: 'Semiconductors, Ceramic Nanocomposites' },
+            { name: 'Department of Chemical & Bio-Process Engineering', head: 'Dr. Fanta Bedasa', degrees: ['B.Sc. Chemical Engineering'], enrolled: 900, specialization: 'Polymer Synthesis, Petrochemical Processes' }
+          ]
+        },
+        {
+          id: 'astu-civil',
+          name: 'School of Civil Engineering & Architecture',
+          campus: 'Infrastructure Testing Grounds, Adama',
+          dean: 'Dr. Solomon Bekele (PhD in Structural Dynamics)',
+          established: 2000,
+          studentCount: 2500,
+          facultyCount: 160,
+          description: 'High-precision infrastructure research center focusing on geotechnical engineering, transportation corridors, and sustainable architecture.',
+          departments: [
+            { name: 'Department of Structural & Geotechnical Engineering', head: 'Dr. Mulugeta Regassa', degrees: ['B.Sc. Civil Engineering', 'M.Sc. Structural'], enrolled: 1400, specialization: 'Seismic Design, Express Highway Materials' },
+            { name: 'Department of Architecture & Urban Design', head: 'Ato Dawit Birhanu', degrees: ['B.Sc. Architecture', 'M.Sc. Urban Planning'], enrolled: 1100, specialization: 'Sustainable High-Rises, Green City Logistics' }
+          ]
+        }
+      ];
+    }
+
+    if (code === 'AASTU') {
+      return [
+        {
+          id: 'aastu-elec-mech',
+          name: 'College of Electrical & Mechanical Engineering',
+          campus: 'Kilinto High-Tech Campus, Addis Ababa (Akaki)',
+          dean: 'Dr. Terefe Feyisa (PhD in Mechatronics)',
+          established: 2011,
+          studentCount: 3600,
+          facultyCount: 220,
+          description: 'Center of excellence for industrial automation, robotics, power systems, software architecture, and automotive engineering.',
+          departments: [
+            { name: 'Department of Software Engineering', head: 'Dr. Fitsum Kebede', degrees: ['B.Sc. Software Engineering', 'M.Sc.'], enrolled: 1100, specialization: 'Distributed Ledger, Embedded Systems, AI' },
+            { name: 'Department of Electromechanical Engineering', head: 'Dr. Getachew Birru', degrees: ['B.Sc. Electromechanical', 'B.Sc. Electrical Power'], enrolled: 1300, specialization: 'Robotics, High Voltage Transmission' },
+            { name: 'Department of Mechanical Engineering', head: 'Dr. Tadesse Mengesha', degrees: ['B.Sc. Mechanical Engineering'], enrolled: 1200, specialization: 'Aerospace Components, Industrial Tooling' }
+          ]
+        },
+        {
+          id: 'aastu-nano-bio',
+          name: 'College of Biological & Chemical Engineering (CoE Nanotechnology)',
+          campus: 'Kilinto Nanotech Pavilion, Addis Ababa',
+          dean: 'Dr. Aster Haile (PhD in Nanobiotechnology)',
+          established: 2013,
+          studentCount: 2200,
+          facultyCount: 140,
+          description: 'Houses Ethiopia advanced national Nanotechnology and Biotechnology Centers of Excellence.',
+          departments: [
+            { name: 'Department of Biotechnology & Food Engineering', head: 'Dr. Endale Tsegaye', degrees: ['B.Sc. Biotechnology', 'B.Sc. Food Process'], enrolled: 1100, specialization: 'Industrial Microbiology, Fermentation Science' },
+            { name: 'Department of Chemical Engineering & Nanomaterials', head: 'Dr. Yonas Chebude', degrees: ['B.Sc. Chemical Engineering', 'M.Sc. Nanotech'], enrolled: 1100, specialization: 'Carbon Nanotubes, Water Filtration Membranes' }
+          ]
+        }
+      ];
+    }
+
+    if (code === 'AMU') {
+      return [
+        {
+          id: 'amu-awti',
+          name: 'Arba Minch Water Technology Institute (AWTI)',
+          campus: 'AWTI Waterfront Campus, Lake Abaya & Chamo',
+          dean: 'Dr. Alemayehu Kasaye (PhD in Hydrology)',
+          established: 1986,
+          studentCount: 3800,
+          facultyCount: 260,
+          description: 'Ethiopia and East Africa premier national flagship institute for water resources engineering, hydraulic modeling, meteorology, and irrigation.',
+          departments: [
+            { name: 'Department of Hydraulic & Water Resources Engineering', head: 'Dr. Kinfe Kassa', degrees: ['B.Sc. Hydraulic Engineering', 'M.Sc. Hydrology', 'Ph.D.'], enrolled: 1400, specialization: 'Dam Break Modeling, River Engineering, Large Scale Irrigation' },
+            { name: 'Department of Irrigation & Water Drainage Engineering', head: 'Dr. Yilma Seleshi', degrees: ['B.Sc. Irrigation Engineering', 'M.Sc.'], enrolled: 1200, specialization: 'Pressurized Drip Systems, Salinity Control' },
+            { name: 'Department of Meteorology & Hydrological Science', head: 'Dr. Tsegaye Tadesse', degrees: ['B.Sc. Meteorology', 'M.Sc. Climate Modeling'], enrolled: 1200, specialization: 'Drought Forecasting, East African Monsoons' }
+          ]
+        },
+        {
+          id: 'amu-amit',
+          name: 'Arba Minch Institute of Technology (AMiT)',
+          campus: 'Main Science Campus, Arba Minch',
+          dean: 'Dr. Behailu Merdekios (PhD in Electrical Systems)',
+          established: 2004,
+          studentCount: 3400,
+          facultyCount: 210,
+          description: 'Polytechnic engineering faculty delivering accredited computer science, electrical, software, and mechanical degrees.',
+          departments: [
+            { name: 'Department of Software Engineering & Computer Science', head: 'Dr. Dawit Bekele', degrees: ['B.Sc. Software Engineering', 'B.Sc. CS'], enrolled: 1200, specialization: 'Full-Stack Web, Embedded Telemetry' },
+            { name: 'Department of Electrical & Computer Engineering', head: 'Dr. Ermias Geda', degrees: ['B.Sc. Electrical Engineering'], enrolled: 1100, specialization: 'Off-Grid Solar, Hydroelectric Generators' },
+            { name: 'Department of Civil Engineering', head: 'Dr. Kassa Mengistu', degrees: ['B.Sc. Civil Engineering'], enrolled: 1100, specialization: 'Rift Valley Bridge Construction, Highways' }
+          ]
+        }
+      ];
+    }
+
+    if (code === 'HRU') {
+      return [
+        {
+          id: 'hru-agri',
+          name: 'College of Agriculture & Environmental Sciences',
+          campus: 'Historic Oklahoma State Quad, Haramaya',
+          dean: 'Dr. Jemal Yousuf (PhD in Plant Pathology)',
+          established: 1954,
+          studentCount: 3900,
+          facultyCount: 270,
+          description: 'The historic mother of Ethiopian modern agricultural education, established in 1954 with Oklahoma State University collaboration.',
+          departments: [
+            { name: 'Department of Plant Sciences & Agronomy', head: 'Dr. Benti Gelalcha', degrees: ['B.Sc. Plant Science', 'M.Sc. Crop Genetics', 'Ph.D.'], enrolled: 1500, specialization: 'Sorghum & Maize Breeding, Rust Resistance' },
+            { name: 'Department of Animal Sciences & Dairy Tech', head: 'Dr. Mengistu Urge', degrees: ['B.Sc. Animal Science', 'M.Sc. Dairy Science'], enrolled: 1300, specialization: 'Pastoral Rangelands, High-Yield Dairy Genetics' },
+            { name: 'Department of Agricultural Economics & Agribusiness', head: 'Dr. Jema Haji', degrees: ['B.Sc. Agribusiness', 'M.Sc. Agricultural Econ'], enrolled: 1100, specialization: 'Rural Value Chains, Food Security Policy' }
+          ]
+        },
+        {
+          id: 'hru-cmhs',
+          name: 'College of Health & Medical Sciences (Hiwot Fana Hospital)',
+          campus: 'Hiwot Fana Specialized Hospital Campus, Harar',
+          dean: 'Dr. Yadeta Dessie (PhD in Epidemiology)',
+          established: 2007,
+          studentCount: 3100,
+          facultyCount: 240,
+          description: 'Major clinical training complex located in historic Harar, managing the Hiwot Fana Comprehensive Specialized Hospital.',
+          departments: [
+            { name: 'School of Medicine (MD)', head: 'Dr. Ahmed Mohammed', degrees: ['MD (Doctor of Medicine)', 'Residency in Surgery'], enrolled: 1250, specialization: 'Emergency Trauma, Tropical Medicine, Pediatrics' },
+            { name: 'School of Public Health', head: 'Dr. Berhanu Seyoum', degrees: ['B.Sc. Public Health', 'MPH'], enrolled: 850, specialization: 'Vector Borne Diseases, Community Sanitation' },
+            { name: 'School of Pharmacy & Nursing', head: 'Sr. Fatuma Abdurahman', degrees: ['B.Pharm', 'B.Sc. Nursing'], enrolled: 1000, specialization: 'Clinical Pharmacy, Midwifery Care' }
+          ]
+        }
+      ];
+    }
+
+    // Dynamic tailored schema for all other Ethiopian institutions (DU, WU, DMU, DBU, WSU, WCU, SMU, RVU, UNITY, AMBO, DDU)
     return [
       {
-        id: 'eng-tech',
-        name: 'School / College of Engineering & Technology',
-        campus: 'Main Science Quadrant',
-        dean: 'Dr. Bekele Haile (PhD)',
-        established: 1993,
-        studentCount: 4500,
-        facultyCount: 280,
-        description: 'Flagship engineering faculty delivering nationally accredited polytechnic and computer science degrees.',
-        departments: [
-          { name: 'Electrical & Computer Engineering', head: 'Dr. Getachew Abebe', degrees: ['B.Sc.', 'M.Sc.'], enrolled: 1200, specialization: 'Power Electronics & Embedded Systems' },
-          { name: 'Software Engineering & IT', head: 'Dr. Selamawit Tadesse', degrees: ['B.Sc.', 'M.Sc.'], enrolled: 950, specialization: 'Full-Stack Development, Cloud Computing' },
-          { name: 'Civil & Construction Engineering', head: 'Dr. Henok Mekonnen', degrees: ['B.Sc.', 'M.Sc.'], enrolled: 1100, specialization: 'Structural Engineering & Highway Design' },
-          { name: 'Mechanical & Manufacturing', head: 'Dr. Tewodros Girma', degrees: ['B.Sc.'], enrolled: 850, specialization: 'Thermodynamics & CAD/CAM' }
-        ]
-      },
-      {
-        id: 'health-med',
-        name: 'College of Health & Medical Sciences',
-        campus: 'Teaching Hospital Campus',
-        dean: 'Dr. Emebet Kebede (MD, MPH)',
-        established: 1983,
-        studentCount: 3100,
-        facultyCount: 220,
-        description: 'Comprehensive health complex dedicated to community medicine, general clinical practice, and pharmaceutical care.',
-        departments: [
-          { name: 'School of Medicine (MD)', head: 'Dr. Dereje Assefa', degrees: ['MD (Doctor of Medicine)'], enrolled: 1200, specialization: 'Internal Medicine, General Surgery, Pediatrics' },
-          { name: 'Department of Public Health', head: 'Dr. Almaz Negash', degrees: ['B.Sc.', 'MPH'], enrolled: 750, specialization: 'Epidemiology & Community Health' },
-          { name: 'School of Pharmacy', head: 'Dr. Kassahun Tefera', degrees: ['B.Pharm'], enrolled: 550, specialization: 'Clinical Pharmacology' },
-          { name: 'Department of Nursing', head: 'Sr. Tigist Lemma', degrees: ['B.Sc. Nursing'], enrolled: 600, specialization: 'Maternal & Emergency Nursing' }
-        ]
-      },
-      {
-        id: 'biz-econ',
-        name: 'College of Business & Economics',
-        campus: 'Main Academic Campus',
-        dean: 'Dr. Yared Lemma (PhD in Finance)',
-        established: 1998,
+        id: `${code.toLowerCase()}-iot`,
+        name: `${nameEn} Institute of Technology (${code}-IoT)`,
+        campus: `${city} Engineering & Polytechnic Campus`,
+        dean: `Dr. Girma Bekele (PhD in Engineering)`,
+        established: inst?.establishedYear || 2000,
         studentCount: 3800,
-        facultyCount: 190,
-        description: 'Dynamic business school producing qualified accountants, economists, and enterprise administrators.',
+        facultyCount: 210,
+        description: `Flagship engineering institute delivering nationally accredited polytechnic degrees in software engineering, electrical systems, and civil infrastructure.`,
         departments: [
-          { name: 'Accounting & Finance', head: 'Ato Birhanu Ayele', degrees: ['B.A.', 'M.Sc.'], enrolled: 1600, specialization: 'Financial Accounting, Tax Audit' },
-          { name: 'Economics', head: 'Dr. Genet Haile', degrees: ['B.A.', 'M.Sc.'], enrolled: 1100, specialization: 'Development Economics, Econometrics' },
-          { name: 'Management', head: 'Dr. Fikadu Belay', degrees: ['B.A.', 'MBA'], enrolled: 1100, specialization: 'Strategic Management, Operations' }
+          { name: 'Electrical & Computer Engineering', head: 'Dr. Abebe Tadesse', degrees: ['B.Sc.', 'M.Sc.'], enrolled: 1150, specialization: 'Power Systems & Electronics' },
+          { name: 'Software Engineering & Computing', head: 'Dr. Selamawit Haile', degrees: ['B.Sc.', 'M.Sc.'], enrolled: 1050, specialization: 'Full-Stack Software, Applied AI' },
+          { name: 'Civil & Construction Engineering', head: 'Dr. Henok Desta', degrees: ['B.Sc.', 'M.Sc.'], enrolled: 950, specialization: 'Structural Engineering & Hydraulics' },
+          { name: 'Mechanical Engineering', head: 'Dr. Tewodros Lemma', degrees: ['B.Sc.'], enrolled: 650, specialization: 'Thermodynamics & Manufacturing' }
+        ]
+      },
+      {
+        id: `${code.toLowerCase()}-health`,
+        name: `${nameEn} College of Medicine & Health Sciences`,
+        campus: `${city} Teaching Referral Hospital Campus`,
+        dean: `Dr. Emebet Kebede (MD, MPH)`,
+        established: (inst?.establishedYear || 2000) + 2,
+        studentCount: 2800,
+        facultyCount: 190,
+        description: `Healthcare training facility managing community health, clinical medical clerkships, pharmacy, and nursing.`,
+        departments: [
+          { name: 'School of Medicine (MD)', head: 'Dr. Dereje Assefa', degrees: ['MD (Doctor of Medicine)'], enrolled: 1100, specialization: 'Internal Medicine, Surgery, Pediatrics' },
+          { name: 'School of Public Health', head: 'Dr. Almaz Negash', degrees: ['B.Sc.', 'MPH'], enrolled: 700, specialization: 'Epidemiology, Community Health' },
+          { name: 'School of Pharmacy', head: 'Dr. Kassahun Tefera', degrees: ['B.Pharm'], enrolled: 500, specialization: 'Clinical Pharmacology' },
+          { name: 'School of Nursing & Midwifery', head: 'Sr. Tigist Lemma', degrees: ['B.Sc. Nursing', 'B.Sc. Midwifery'], enrolled: 500, specialization: 'Maternal Care, Emergency Triage' }
+        ]
+      },
+      {
+        id: `${code.toLowerCase()}-cbe`,
+        name: `${nameEn} College of Business & Economics`,
+        campus: `${city} Main Academic Campus`,
+        dean: `Dr. Yared Lemma (PhD in Finance)`,
+        established: (inst?.establishedYear || 2000) + 1,
+        studentCount: 3100,
+        facultyCount: 160,
+        description: `Center for regional business administration, accounting compliance, economic modeling, and financial analytics.`,
+        departments: [
+          { name: 'Department of Accounting & Finance', head: 'Ato Birhanu Ayele', degrees: ['B.A.', 'M.Sc.'], enrolled: 1400, specialization: 'IFRS Accounting, Auditing' },
+          { name: 'Department of Economics', head: 'Dr. Genet Haile', degrees: ['B.A.', 'M.Sc.'], enrolled: 900, specialization: 'Development Economics, Econometrics' },
+          { name: 'Department of Management', head: 'Dr. Fikadu Belay', degrees: ['B.A.', 'MBA'], enrolled: 800, specialization: 'Strategic Leadership, Supply Chain' }
+        ]
+      },
+      {
+        id: `${code.toLowerCase()}-cncs`,
+        name: `${nameEn} College of Natural & Computational Sciences`,
+        campus: `${city} Science Quad`,
+        dean: `Dr. Belayneh Mesfin (PhD in Physics)`,
+        established: inst?.establishedYear || 2000,
+        studentCount: 2200,
+        facultyCount: 130,
+        description: `Conducts foundational science education and experimental laboratory training across physics, chemistry, biology, and mathematics.`,
+        departments: [
+          { name: 'Department of Computer Science', head: 'Dr. Mulugeta Libsie', degrees: ['B.Sc. CS', 'M.Sc.'], enrolled: 800, specialization: 'Computer Networks, Data Analysis' },
+          { name: 'Department of Biology & Biotechnology', head: 'Dr. Fassil Assefa', degrees: ['B.Sc. Biology'], enrolled: 650, specialization: 'Microbiology, Ecological Studies' },
+          { name: 'Department of Chemistry & Physics', head: 'Dr. Negussie Megersa', degrees: ['B.Sc. Chemistry', 'B.Sc. Physics'], enrolled: 750, specialization: 'Analytical Chemistry, Solar Materials' }
         ]
       }
     ];
   };
 
-  const facultiesData = getUniversityFaculties(institution.code);
+  const facultiesData = getUniversityFaculties(institution);
+
+  // Dynamic naming helpers for programs and facilities
+  const getEngFacultyName = (code: string, nameEn: string): string => {
+    switch (code.toUpperCase()) {
+      case 'AAU': return 'Addis Ababa Institute of Technology (AAiT)';
+      case 'ASTU': return 'School of Electrical Engineering & Computing (ASTU)';
+      case 'AASTU': return 'College of Electrical & Mechanical Engineering (AASTU)';
+      case 'BDU': return 'Bahir Dar Institute of Technology (BiT)';
+      case 'JU': return 'Jimma Institute of Technology (JiT)';
+      case 'HU': return 'Hawassa Institute of Technology (IoT)';
+      case 'MU': return 'Mekelle Institute of Technology (MIT)';
+      case 'UOG': return 'Gondar Institute of Technology (IoT)';
+      case 'AMU': return 'Arba Minch Institute of Technology (AMiT)';
+      case 'HRU': return 'Haramaya Institute of Technology (HiT)';
+      case 'WKU': return 'Gubre Institute of Technology (GubIoT)';
+      case 'WU': return 'Kombolcha Institute of Technology (KIOT)';
+      default: return `${nameEn} Institute of Technology`;
+    }
+  };
+
+  const getCivilFacultyName = (code: string, nameEn: string): string => {
+    switch (code.toUpperCase()) {
+      case 'AAU': return 'Addis Ababa Institute of Technology (AAiT)';
+      case 'ASTU': return 'School of Civil Engineering & Architecture (ASTU)';
+      case 'AASTU': return 'College of Architecture & Civil Engineering (AASTU)';
+      case 'BDU': return 'Bahir Dar Institute of Technology (BiT)';
+      case 'JU': return 'Jimma Institute of Technology (JiT)';
+      case 'HU': return 'Hawassa Institute of Technology (IoT)';
+      case 'MU': return 'Mekelle Institute of Technology (MIT)';
+      case 'UOG': return 'Gondar Institute of Technology (IoT)';
+      case 'AMU': return 'Arba Minch Water Technology Institute (AWTI)';
+      case 'HRU': return 'Haramaya Institute of Technology (HiT)';
+      case 'WKU': return 'Gubre Institute of Technology (GubIoT)';
+      default: return `${nameEn} College of Engineering`;
+    }
+  };
+
+  const getMedFacultyName = (code: string, nameEn: string): string => {
+    switch (code.toUpperCase()) {
+      case 'AAU': return 'College of Health Sciences (Tikur Anbessa CHS)';
+      case 'AAMC': return 'School of Medicine & Clinical Sciences (Tikur Anbessa)';
+      case 'BDU': return 'College of Medicine & Health Sciences (Tibebe Ghion)';
+      case 'JU': return 'Faculty of Medical Sciences (Jimma Specialized Hospital)';
+      case 'HU': return 'College of Medicine & Health Sciences (HUCSH)';
+      case 'MU': return 'College of Health Sciences (Ayder Comprehensive Hospital)';
+      case 'UOG': return 'College of Medicine & Health Sciences (Gondar Comprehensive)';
+      case 'AMU': return 'College of Medicine & Health Sciences (Arba Minch Hospital)';
+      case 'HRU': return 'College of Health & Medical Sciences (Hiwot Fana)';
+      case 'WKU': return 'College of Medicine & Health Sciences (Wolkite Referral)';
+      case 'WSU': return 'College of Health Sciences (Wolaita Sodo Hospital)';
+      default: return `${nameEn} College of Health Sciences`;
+    }
+  };
+
+  const getLabName = (code: string, nameEn: string): string => {
+    switch (code.toUpperCase()) {
+      case 'AAU': return 'AAiT Advanced Polytechnic, Robotics & AI Laboratories';
+      case 'ASTU': return 'ASTU Space Science & Advanced Robotics Center';
+      case 'AASTU': return 'AASTU Nanotechnology & Biotechnology CoE Laboratories';
+      case 'BDU': return 'BiT Advanced Engineering & EiTEX Textile Testing Laboratories';
+      case 'JU': return 'JiT Community-Based Innovation & Engineering Laboratories';
+      case 'HU': return 'Hawassa IoT Software & Smart Irrigation Laboratories';
+      case 'MU': return 'Mekelle Institute of Technology (MIT) AI & Advanced Hardware Labs';
+      case 'UOG': return 'Gondar IoT & Specialized Medical Diagnostics Laboratories';
+      case 'AMU': return 'AWTI Hydraulic Modeling Flumes & Water Research Labs';
+      case 'HRU': return 'Haramaya Agricultural Biotechnology & Seed Science Labs';
+      case 'WKU': return 'GubIoT Mechatronics & Agro-Machinery Fabrication Labs';
+      default: return `${nameEn} Polytechnic, Robotics & Science Laboratories`;
+    }
+  };
+
+  const getHospitalName = (code: string, city: string): string => {
+    switch (code.toUpperCase()) {
+      case 'AAU':
+      case 'AAMC': return 'Tikur Anbessa (Black Lion) Specialized Teaching & Referral Hospital';
+      case 'MU': return 'Ayder Comprehensive Specialized Referral Hospital';
+      case 'UOG': return 'Gondar Comprehensive Specialized Teaching Hospital (Est. 1954)';
+      case 'JU': return 'Jimma University Specialized Teaching Hospital (JUSH)';
+      case 'BDU': return 'Tibebe Ghion Specialized Teaching Hospital';
+      case 'HU': return 'Hawassa University Comprehensive Specialized Hospital (HUCSH)';
+      case 'HRU': return 'Hiwot Fana Comprehensive Specialized Hospital (Harar)';
+      case 'WKU': return 'Wolkite University Referral Hospital';
+      case 'AMU': return 'Arba Minch General & Teaching Hospital';
+      case 'WSU': return 'Wolaita Sodo University Comprehensive Specialized Hospital';
+      default: return `${city} Teaching & Clinical Referral Hospital`;
+    }
+  };
 
   // 2. Comprehensive Program database
   const getAllUniversityPrograms = (): DetailedProgram[] => {
     return [
       {
         name: 'Doctor of Medicine (MD)',
-        faculty: institution.code === 'AAU' ? 'College of Health Sciences (CHS)' : 'College of Health & Medical Sciences',
+        faculty: getMedFacultyName(institution.code, institution.nameEn),
         degreeLevel: 'DOCTORAL',
         stream: 'NATURAL',
         duration: '6.0 Years (12 Semesters)',
         credits: '360 ECTS',
         modes: ['Regular Full-Time Day'],
-        intakeQuota: 180,
+        intakeQuota: institution.code === 'AAMC' ? 250 : 180,
         careerPaths: ['Medical Doctor (General Practitioner)', 'Hospital Resident Specialist', 'Clinical Researcher', 'Public Health Director'],
         curriculumHighlights: [
           { year: 'Year 1 (Pre-Med)', modules: ['Human Gross Anatomy I & II', 'Medical Biochemistry', 'Physiology I', 'Medical Ethics'] },
@@ -291,7 +949,7 @@ export const CampusDetailPage: React.FC<CampusDetailPageProps> = ({
       },
       {
         name: 'B.Sc. in Software Engineering',
-        faculty: institution.code === 'AAU' ? 'Addis Ababa Institute of Technology (AAiT)' : 'College of Engineering & Technology',
+        faculty: getEngFacultyName(institution.code, institution.nameEn),
         degreeLevel: 'BACHELOR',
         stream: 'NATURAL',
         duration: '5.0 Years (10 Semesters)',
@@ -309,7 +967,7 @@ export const CampusDetailPage: React.FC<CampusDetailPageProps> = ({
       },
       {
         name: 'B.Sc. in Civil Engineering',
-        faculty: institution.code === 'AAU' ? 'Addis Ababa Institute of Technology (AAiT)' : 'College of Engineering & Technology',
+        faculty: getCivilFacultyName(institution.code, institution.nameEn),
         degreeLevel: 'BACHELOR',
         stream: 'NATURAL',
         duration: '5.0 Years (10 Semesters)',
@@ -327,7 +985,7 @@ export const CampusDetailPage: React.FC<CampusDetailPageProps> = ({
       },
       {
         name: 'B.A. in Accounting & Finance',
-        faculty: institution.code === 'AAU' ? 'College of Business and Economics (CBE)' : 'College of Business & Economics',
+        faculty: institution.code === 'AAU' ? 'College of Business and Economics (CBE)' : `${institution.nameEn} College of Business & Economics`,
         degreeLevel: 'BACHELOR',
         stream: 'SOCIAL',
         duration: '4.0 Years (8 Semesters)',
@@ -344,40 +1002,43 @@ export const CampusDetailPage: React.FC<CampusDetailPageProps> = ({
       },
       {
         name: 'Bachelor of Laws (LL.B.)',
-        faculty: institution.code === 'AAU' ? 'College of Law and Governance Studies (CLGS)' : 'College of Law',
+        faculty: institution.code === 'AAU' ? 'College of Law and Governance Studies (CLGS)' : institution.code === 'MU' ? 'College of Law & Governance' : `${institution.nameEn} School of Law`,
         degreeLevel: 'BACHELOR',
         stream: 'SOCIAL',
         duration: '5.0 Years (10 Semesters)',
         credits: '300 ECTS',
-        modes: ['Regular Full-Time', 'Extension Evening'],
-        intakeQuota: 160,
-        careerPaths: ['Attorney at Law', 'Federal / Regional Judge', 'Legal Counsel to Corporations', 'Diplomat / UN Officer'],
+        modes: ['Regular Day', 'Extension Evening'],
+        intakeQuota: 150,
+        careerPaths: ['Attorney at Law', 'Federal / Regional High Court Judge', 'Corporate Legal Counsel', 'Human Rights Diplomat'],
         curriculumHighlights: [
-          { year: 'Year 1', modules: ['Introduction to Law & Legal Methods', 'Constitutional Law I', 'Law of Persons', 'Legal Research & Writing'] },
-          { year: 'Year 2', modules: ['Law of Contracts I & II', 'Criminal Law I (General Principles)', 'Constitutional Law II', 'Property Law'] },
-          { year: 'Year 3', modules: ['Law of Torts', 'Criminal Procedure', 'Commercial Law & Banking', 'Human Rights Law'] },
-          { year: 'Year 4', modules: ['Civil Procedure I & II', 'Tax Law', 'Conflict of Laws', 'Moot Court & Legal Clinic'] },
-          { year: 'Year 5', modules: ['International Law & Treaties', 'Maritime Law', 'Alternative Dispute Resolution', 'Senior Thesis'] }
+          { year: 'Year 1', modules: ['Introduction to Law & Legal Systems', 'Constitutional Law I & II', 'Law of Persons', 'Philosophy of Law'] },
+          { year: 'Year 2', modules: ['Law of Contracts', 'Criminal Law I & II', 'Property Law', 'Family Law & Succession'] },
+          { year: 'Year 3', modules: ['Commercial & Company Law', 'Administrative Law', 'Law of Evidence', 'Public International Law'] },
+          { year: 'Year 4', modules: ['Civil Procedure & Litigation', 'Criminal Procedure', 'Tax Law & Ethiopian Customs', 'Environmental Law'] },
+          { year: 'Year 5', modules: ['Clinical Legal Aid Practicum', 'Conflict of Laws (Private International)', 'Senior Legal Dissertation'] }
         ]
       },
       {
-        name: 'M.Sc. in Data Science & Artificial Intelligence',
-        faculty: institution.code === 'AAU' ? 'Addis Ababa Institute of Technology (AAiT)' : 'Institute of Technology',
-        degreeLevel: 'MASTER',
+        name: 'B.Sc. in Electrical & Computer Engineering',
+        faculty: getEngFacultyName(institution.code, institution.nameEn),
+        degreeLevel: 'BACHELOR',
         stream: 'NATURAL',
-        duration: '2.0 Years (4 Semesters)',
-        credits: '120 ECTS',
-        modes: ['Weekend & Extension Modular'],
-        intakeQuota: 45,
-        careerPaths: ['Lead AI Scientist', 'Data Architect', 'Machine Learning Infrastructure Engineer'],
+        duration: '5.0 Years (10 Semesters)',
+        credits: '300 ECTS',
+        modes: ['Regular Full-Time Day'],
+        intakeQuota: 200,
+        careerPaths: ['Telecommunications Engineer', 'Power Systems Grid Engineer', 'Embedded Hardware Specialist', 'Control Systems Engineer'],
         curriculumHighlights: [
-          { year: 'Year 1', modules: ['Advanced Machine Learning', 'Deep Learning & Neural Networks', 'Distributed Big Data Architectures', 'Natural Language Processing for Ethiopic'] },
-          { year: 'Year 2', modules: ['Computer Vision & Robotics', 'Research Methodology & Ethics in AI', 'Master Thesis Defense (30 ECTS)'] }
+          { year: 'Year 1', modules: ['Engineering Physics', 'Calculus for Engineers', 'Linear Algebra', 'Computer Programming'] },
+          { year: 'Year 2', modules: ['Electric Circuit Analysis I & II', 'Digital Logic Design', 'Electromagnetic Fields', 'Electronics I'] },
+          { year: 'Year 3', modules: ['Signals & Systems', 'Microprocessor Systems & Interfacing', 'Electrical Machines', 'Electronics II'] },
+          { year: 'Year 4', modules: ['Control Systems', 'Communication Systems', 'Power Systems Analysis', 'Industrial Internship'] },
+          { year: 'Year 5', modules: ['Senior Engineering Capstone Project', 'Wireless Networks', 'Renewable Microgrids'] }
         ]
       },
       {
         name: 'Master of Business Administration (MBA)',
-        faculty: institution.code === 'AAU' ? 'College of Business and Economics (CBE)' : 'College of Business & Economics',
+        faculty: institution.code === 'AAU' ? 'College of Business and Economics (CBE)' : `${institution.nameEn} College of Business & Economics`,
         degreeLevel: 'MASTER',
         stream: 'SOCIAL',
         duration: '2.0 Years (4 Semesters)',
@@ -404,86 +1065,73 @@ export const CampusDetailPage: React.FC<CampusDetailPageProps> = ({
   // 3. Comprehensive Facilities & Infrastructure with Image Galleries
   const universityFacilitiesGallery: FacilityGalleryItem[] = [
     {
-      id: 'kennedy-lib',
-      name: 'Kennedy Memorial Central Library & Digital Hub',
+      id: `${institution.code.toLowerCase()}-lib`,
+      name: institution.code === 'AAU' 
+        ? 'John F. Kennedy Memorial Central Academic Library & Digital Knowledge Stacks' 
+        : `${institution.nameEn} Central Academic Library & Digital Knowledge Stacks`,
       category: 'Library',
-      location: 'Sidist Kilo Campus, Main Academic Quadrant',
-      capacity: '4,500 Seated Capacity • 1.2M Physical Books',
-      description: 'The national reference library and digital repository of Ethiopia, containing historical manuscripts, international academic journal subscriptions, and 24/7 quiet study hubs.',
+      location: `${institution.city} Main Campus, Academic Quadrant`,
+      capacity: '4,500 Seated Capacity • 1.2M Physical & Digital Stacks',
+      description: 'The primary reference library and digital repository, containing historical academic manuscripts, international journal subscriptions, and 24/7 quiet study hubs.',
       features: [
         'Over 1,200,000 physical volumes and bound periodicals',
-        '24/7 Digital E-Resource Center with 500+ high-speed workstations',
+        '24/7 Digital E-Resource Center with high-speed workstations',
         'Direct access to IEEE Xplore, ScienceDirect, JSTOR, and Springer',
-        'Ethiopian Heritage & Ge’ez Rare Manuscript Archive Room'
+        'Ethiopian Heritage & National Manuscript Archive Room'
       ],
-      images: [
-        { url: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1200&q=80', caption: 'Central Reading Hall & Academic Stacks' },
-        { url: 'https://images.unsplash.com/photo-1568667256549-094345857637?auto=format&fit=crop&w=1200&q=80', caption: 'Silent Study Desks & Digital Catalog Stations' },
-        { url: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1200&q=80', caption: 'Group Discussion & Collaborative Pods' }
-      ]
+      images: (currentPhotos.facilities.libraries || []).map(img => ({ url: img.url, caption: img.caption }))
     },
     {
-      id: 'aait-labs',
-      name: 'AAiT Advanced Polytechnic & AI Research Laboratories',
+      id: `${institution.code.toLowerCase()}-labs`,
+      name: getLabName(institution.code, institution.nameEn),
       category: 'Laboratory',
-      location: '5 Kilo Campus, Innovation Complex',
+      location: 'Engineering & Innovation Complex',
       capacity: '42 Specialized Labs • 1,800 Concurrent Workstations',
-      description: 'Cutting-edge engineering research facility featuring high-voltage electrical benches, materials testing rigs, clean-room robotics benches, and GPU supercomputing nodes.',
+      description: 'Cutting-edge engineering and research facility featuring high-voltage electrical test benches, materials testing rigs, robotics benches, and GPU computing nodes.',
       features: [
         'NVIDIA GPU High-Performance AI & Machine Learning Cluster',
         'Hydraulics, Geotechnical & Soil Mechanics Testing Hall',
         'Renewable Solar Photovoltaic & Smart Microgrid Research Center',
         'Precision CNC Milling, 3D Prototyping & Fabrication FabLab'
       ],
-      images: [
-        { url: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=80', caption: 'Precision Robotics & Hardware Testing Rig' },
-        { url: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=1200&q=80', caption: 'Biochemical & Materials Analysis Workbenches' },
-        { url: 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=1200&q=80', caption: 'Electronics & Circuit Design Studio' }
-      ]
+      images: (currentPhotos.facilities.labs || []).map(img => ({ url: img.url, caption: img.caption }))
     },
     {
-      id: 'black-lion-hospital',
-      name: 'Tikur Anbessa (Black Lion) Teaching & Referral Hospital',
+      id: `${institution.code.toLowerCase()}-hospital`,
+      name: getHospitalName(institution.code, institution.city),
       category: 'Healthcare',
-      location: 'Tikur Anbessa Campus, Central Addis Ababa',
-      capacity: '800 Inpatient Beds • 2,000 Daily Outpatients',
-      description: 'The national specialized tertiary hospital serving as the primary clinical clerkship and medical residency hospital for medical, pharmacy, and nursing students.',
+      location: 'College of Health Sciences Campus',
+      capacity: '800 Inpatient Beds • Comprehensive Clinical Outpatient Care',
+      description: 'Specialized tertiary referral hospital serving as the primary clinical clerkship and residency hospital for medical, nursing, and pharmacy students.',
       features: [
-        'Comprehensive Oncology, Cardiac Surgery & Radiotherapy Centers',
-        'Advanced Surgical Suites and Level-1 Trauma Emergency Care',
+        'Comprehensive Inpatient Oncology, Surgery & Trauma Care',
+        'Advanced Surgical Suites and Level-1 Emergency Care',
         'State-of-the-Art MRI, CT Scanning, and Pathology Diagnostics',
-        'Full residency and medical clerkship inpatient training rotations'
+        'Full residency and medical clerkship training rotations'
       ],
-      images: [
-        { url: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80', caption: 'Hospital Main Clinical Pavilion' },
-        { url: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1200&q=80', caption: 'Clinical Skills Simulation Ward' }
-      ]
+      images: (currentPhotos.facilities.healthcare || []).map(img => ({ url: img.url, caption: img.caption }))
     },
     {
       id: 'student-dorms',
       name: 'Residential Halls & Campus Dining Pavilions',
       category: 'Housing',
-      location: 'Sidist Kilo, 5 Kilo, and FBE Residential Quads',
-      capacity: '28,000 Dormitory Capacity • 8 Central Dining Halls',
+      location: 'Main Campus Residential Quads',
+      capacity: '28,000 Dormitory Capacity • Central Dining Halls',
       description: 'Complete student housing village providing safe dormitory accommodations, government-subsidized three-course daily meals, study rooms, and recreation areas.',
       features: [
-        'Separate multi-story residential blocks for Male & Female freshmen and seniors',
+        'Separate multi-story residential blocks for Male & Female students',
         'Three daily government-subsidized meals served in hygienic central cafeterias',
         'High-speed Wi-Fi access in common recreation and study lounges',
         '24/7 security gate control, on-duty proctors, and laundry facilities'
       ],
-      images: [
-        { url: 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=1200&q=80', caption: 'Campus Dormitory Courtyard & Living Quarters' },
-        { url: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80', caption: 'Student Dining Hall & Common Area' },
-        { url: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80', caption: 'Residential Walkways & Green Campus Parks' }
-      ]
+      images: (currentPhotos.facilities.dorms || []).map(img => ({ url: img.url, caption: img.caption }))
     },
     {
       id: 'stadium-sports',
-      name: 'Olympic Sports Stadium & Multi-Purpose Gymnasium',
+      name: 'Olympic Athletics Stadium & Multi-Purpose Sports Complex',
       category: 'Sports',
-      location: 'Main Campus Sports Complex',
-      capacity: '15,000 Seated Spectators',
+      location: 'Campus Athletics Quadrant',
+      capacity: '15,000 Seated Spectator Stadium',
       description: 'Standard all-weather athletics track, professional football pitch, indoor basketball and volleyball arenas, and modern fitness gymnasium.',
       features: [
         'Standard 400m synthetic running track and natural grass football pitch',
@@ -491,28 +1139,22 @@ export const CampusDetailPage: React.FC<CampusDetailPageProps> = ({
         'Student & staff strength-training and cardio fitness gymnasium',
         'Hosts annual Ethiopian Inter-University Athletic Games'
       ],
-      images: [
-        { url: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1200&q=80', caption: 'Olympic Track & Main Campus Football Stadium' },
-        { url: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=80', caption: 'Indoor Gymnasium & Multi-Sport Arena' }
-      ]
+      images: (currentPhotos.facilities.sports || []).map(img => ({ url: img.url, caption: img.caption }))
     },
     {
       id: 'ict-center',
-      name: 'ICT Data Center & Campus Fiber Network Hub',
+      name: 'ICT Data Center & Campus Fiber Core Network Hub',
       category: 'ICT & Innovation',
-      location: 'FBE & Sidist Kilo Campus',
+      location: 'Central IT & E-Learning Center',
       capacity: '10 Gbps Redundant Bandwidth • 50,000 Connected Devices',
-      description: 'High-speed campus-wide fiber optic network connecting all 14 university campuses with redundant cloud data storage and e-learning servers.',
+      description: 'High-speed campus-wide fiber optic network connecting all university faculties with redundant cloud data storage and e-learning servers.',
       features: [
         'Tier-2 campus data center powering the university portal and LMS',
         'Campus-wide eduroam and open authenticated student Wi-Fi network',
         'Cloud storage for students and certified academic email accounts',
         'Virtual classroom lecture recording studios'
       ],
-      images: [
-        { url: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80', caption: 'Central Data Center Server Infrastructure' },
-        { url: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=80', caption: 'Smart Classroom & Digital Learning Studio' }
-      ]
+      images: (currentPhotos.facilities.ict || []).map(img => ({ url: img.url, caption: img.caption }))
     }
   ];
 
@@ -547,23 +1189,25 @@ export const CampusDetailPage: React.FC<CampusDetailPageProps> = ({
 
   return (
     <div className={`min-h-screen antialiased font-sans transition-colors duration-200 ${
-      isDark ? 'bg-zinc-950 text-white' : 'bg-[#FAF9F6] text-slate-900'
+      isDark ? 'bg-zinc-950 text-white' : 'bg-[#EBF4F7] text-slate-900'
     }`}>
       
       {/* 1. Full-Width Campus Hero */}
-      <div className="relative h-[340px] sm:h-[420px] lg:h-[460px] w-full overflow-hidden bg-slate-900">
+      <div className="relative h-[360px] sm:h-[440px] lg:h-[480px] w-full overflow-hidden bg-slate-900">
         <img
           src={currentPhotos.hero}
-          alt={institution.nameEn}
-          className="w-full h-full object-cover object-center opacity-50 mix-blend-luminosity"
+          alt={`${institution.nameEn} Main Entrance`}
+          className="w-full h-full object-cover object-center opacity-90 transition-opacity duration-300"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent" />
+        {/* Natural gradient scrim preserving authentic photo colors while maintaining high text contrast */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/45 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/30" />
         
         <div className="absolute inset-0 flex flex-col justify-between max-w-7xl mx-auto px-6 sm:px-10 py-8">
           <div>
             <button
               onClick={onBack}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md text-white text-xs font-semibold transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md text-white text-xs font-semibold transition-all cursor-pointer border border-white/20 shadow-sm"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to Directory</span>
@@ -571,11 +1215,33 @@ export const CampusDetailPage: React.FC<CampusDetailPageProps> = ({
           </div>
 
           <div className="max-w-3xl">
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-bold text-white tracking-tight leading-tight">
+            {/* University Logo & Accreditation Tag */}
+            <div className="flex items-center gap-4 mb-4">
+              {institution.logoUrl && (
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white p-2 shadow-2xl flex items-center justify-center shrink-0 border border-white/60 ring-4 ring-black/20 overflow-hidden backdrop-blur-sm">
+                  <img
+                    src={institution.logoUrl}
+                    alt={`${institution.nameEn} official emblem`}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              )}
+              <div>
+                <span className="inline-block px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-[11px] font-bold uppercase tracking-wider border border-white/25 shadow-sm">
+                  {institution.code} • {institution.ownership} {institution.type}
+                </span>
+                <p className="text-xs text-slate-300 mt-1 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-pulse" />
+                  <span>Est. {institution.establishedYear} • {institution.city}, {institution.region}</span>
+                </p>
+              </div>
+            </div>
+
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-bold text-white tracking-tight leading-tight drop-shadow-md">
               {institution.nameEn}
             </h1>
             {institution.nameAm && (
-              <p className="text-sm sm:text-base text-slate-300 font-ethiopic mt-1">
+              <p className="text-base sm:text-lg text-slate-200 font-ethiopic mt-1.5 drop-shadow">
                 {institution.nameAm}
               </p>
             )}
@@ -597,7 +1263,6 @@ export const CampusDetailPage: React.FC<CampusDetailPageProps> = ({
                 }}
                 className="px-6 py-3 rounded-full bg-[#0C373D] hover:bg-[#072428] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
               >
-                <Sparkles className="w-3.5 h-3.5" />
                 <span>Ask AI Advisor</span>
               </button>
             </div>

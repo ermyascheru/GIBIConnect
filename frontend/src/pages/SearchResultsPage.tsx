@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Search, ArrowLeft, Building2, BookOpen, MapPin, ArrowUpRight, CheckCircle2 } from 'lucide-react';
 import { ETHIOPIAN_INSTITUTIONS } from '../data/mockInstitutions';
+import { matchesInstitution } from '../utils/resolveInstitution';
 import { MonogramAvatar } from '../components/common/MonogramAvatar';
 import type { Institution } from '../types/institution';
 
@@ -27,10 +28,7 @@ export const SearchResultsPage: React.FC<SearchResultsPageProps> = ({
     const lower = query.toLowerCase();
     return ETHIOPIAN_INSTITUTIONS.filter((inst) => {
       return (
-        inst.nameEn.toLowerCase().includes(lower) ||
-        inst.code.toLowerCase().includes(lower) ||
-        inst.city.toLowerCase().includes(lower) ||
-        inst.region.toLowerCase().includes(lower) ||
+        matchesInstitution(inst, query) ||
         inst.overview.toLowerCase().includes(lower) ||
         inst.admissions?.some((adm) => adm.programName.toLowerCase().includes(lower))
       );
@@ -59,7 +57,7 @@ export const SearchResultsPage: React.FC<SearchResultsPageProps> = ({
 
   return (
     <div className={`min-h-screen py-10 px-6 antialiased transition-colors duration-200 ${
-      isDark ? 'bg-zinc-950 text-slate-100' : 'bg-[#FAF9F6] text-slate-900'
+      isDark ? 'bg-zinc-950 text-slate-100' : 'bg-[#EBF4F7] text-slate-900'
     }`}>
       <div className="max-w-6xl mx-auto">
         
@@ -191,7 +189,7 @@ export const SearchResultsPage: React.FC<SearchResultsPageProps> = ({
                             <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${
                               isDark 
                                 ? 'bg-zinc-800 text-zinc-400 group-hover:text-white group-hover:bg-[#0C373D]' 
-                                : 'bg-[#F8FAFC] text-slate-400 group-hover:text-white group-hover:bg-[#0C373D]'
+                                : 'bg-[#EBF4F7] text-slate-400 group-hover:text-white group-hover:bg-[#0C373D]'
                             }`}>
                               <ArrowUpRight className="w-4 h-4" />
                             </div>

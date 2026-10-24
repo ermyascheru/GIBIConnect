@@ -262,18 +262,33 @@ export class UnifiedLLMClient {
       .map((b) => b.trim())
       .filter(Boolean);
 
+    const validShortTerms = new Set(['cs', 'it', 'ai', 'ba', 'ee', 'me', 'ce', 'md', 'du', 'hu', 'mu', 'ju']);
+    const stopWords = new Set(['what', 'when', 'where', 'how', 'the', 'is', 'for', 'in', 'of', 'and', 'point', 'points', 'tell', 'about', 'me', 'are']);
+
     const queryTerms = userPrompt
       .toLowerCase()
       .replace(/[^a-z0-9\s+-]/g, ' ')
       .split(/\s+/)
-      .filter((t) => t.length > 2 && !['what', 'when', 'where', 'how', 'the', 'is', 'for', 'in', 'of', 'and', 'point', 'points'].includes(t));
+      .filter((t) => (t.length > 2 || validShortTerms.has(t)) && !stopWords.has(t));
 
     // Synonym expansion for Ethiopian universities and common typos
-    if (queryTerms.includes('goder')) {
+    if (queryTerms.includes('cs')) {
+      queryTerms.push('computer science', 'computing', 'software');
+    }
+    if (queryTerms.some((t) => t.includes('martic') || t.includes('matric') || t.includes('cutoff') || t.includes('passmark'))) {
+      queryTerms.push('matriculation', 'cut-off', 'cutoff', 'admissions');
+    }
+    if (queryTerms.includes('goder') || queryTerms.includes('gonder')) {
       queryTerms.push('gondar', 'uog', 'engineering');
     }
     if (queryTerms.includes('gondar')) {
       queryTerms.push('uog');
+    }
+    if (queryTerms.includes('derbre') || queryTerms.includes('debremarkos') || queryTerms.includes('dmu')) {
+      queryTerms.push('debre markos', 'dmu');
+    }
+    if (queryTerms.includes('dira') || queryTerms.includes('ddu')) {
+      queryTerms.push('dire dawa', 'ddu');
     }
     if (queryTerms.includes('aait')) {
       queryTerms.push('aau', 'engineering');
