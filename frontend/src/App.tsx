@@ -68,6 +68,20 @@ export default function App() {
   const [selectedCampusId, setSelectedCampusId] = useState<string | null>(initialRoute.campusId);
   const [activeSearchQuery, setActiveSearchQuery] = useState<string>('');
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [currentUser, setCurrentUser] = useState<{ email?: string; full_name?: string } | null>(() => {
+    try {
+      const raw = localStorage.getItem('gibiconnect_user');
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const handleSignOut = () => {
+    localStorage.removeItem('gibiconnect_token');
+    localStorage.removeItem('gibiconnect_user');
+    setCurrentUser(null);
+  };
 
   // Navigation dispatcher that updates URL hash (enabling browser Back/Forward)
   const navigateTo = useCallback((view: PublicNavView | 'platform' | 'search', tab?: PlatformTab, campusId?: string | null) => {
@@ -132,6 +146,8 @@ export default function App() {
           onGetStarted={() => {
             navigateTo('platform', 'institutions');
           }}
+          currentUser={currentUser}
+          onSignOut={handleSignOut}
         />
       ) : null}
 
@@ -143,12 +159,12 @@ export default function App() {
           
           {/* Logo */}
           <div className="flex items-center gap-8">
-            <button onClick={() => navigateTo('home')} className="flex items-center gap-2 group text-left cursor-pointer">
-              <span className={`w-8 h-8 rounded-lg font-bold flex items-center justify-center text-sm tracking-tight transition-colors ${
-                theme === 'dark' ? 'bg-white text-black group-hover:bg-[#5AA7A7] group-hover:text-white' : 'bg-[#0C373D] text-[#5AA7A7] group-hover:bg-[#072428]'
-              }`}>
-                G
-              </span>
+            <button onClick={() => navigateTo('home')} className="flex items-center gap-2.5 group text-left cursor-pointer">
+              <img
+                src="/images/brand/gibiconnect-icon.png"
+                alt="GIBIConnect"
+                className="w-8 h-8 object-contain rounded-lg shadow-xs group-hover:scale-105 transition-transform"
+              />
               <span className={`text-lg font-bold tracking-tight ${theme === 'dark' ? 'text-white' : 'text-[#0F172A]'}`}>
                 GIBI<span className="text-[#5AA7A7]">Connect</span>
               </span>
@@ -234,14 +250,34 @@ export default function App() {
               <span>AI Advisor</span>
             </button>
 
-            <button
-              onClick={() => navigateTo('auth')}
-              className={`text-xs font-semibold px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer ${
-                theme === 'dark' ? 'text-zinc-300 hover:text-white hover:bg-zinc-800' : 'text-[#0F172A] hover:bg-[#EBF4F7]'
-              }`}
-            >
-              Sign In
-            </button>
+            {currentUser ? (
+              <div className="flex items-center gap-2 pl-1">
+                <div
+                  className="w-7 h-7 rounded-full bg-[#0C373D] text-[#5AA7A7] font-bold flex items-center justify-center text-xs border border-[#5AA7A7]/40 shadow-xs"
+                  title={`${currentUser.full_name || 'User'} (${currentUser.email || ''})`}
+                >
+                  {(currentUser.full_name || currentUser.email || 'U').charAt(0).toUpperCase()}
+                </div>
+                <button
+                  onClick={handleSignOut}
+                  className={`text-[11px] font-medium transition-colors cursor-pointer ${
+                    theme === 'dark' ? 'text-zinc-400 hover:text-rose-400' : 'text-[#64748B] hover:text-rose-600'
+                  }`}
+                  title="Sign Out"
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => navigateTo('auth')}
+                className={`text-xs font-semibold px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer ${
+                  theme === 'dark' ? 'text-zinc-300 hover:text-white hover:bg-zinc-800' : 'text-[#0F172A] hover:bg-[#EBF4F7]'
+                }`}
+              >
+                Sign In
+              </button>
+            )}
           </div>
 
         </header>
@@ -287,7 +323,13 @@ export default function App() {
         {currentView === 'auth' && (
           <AuthPage
             onBack={() => navigateTo('home')}
-            onSuccess={() => navigateTo('platform', 'institutions')}
+            onSuccess={() => {
+              try {
+                const raw = localStorage.getItem('gibiconnect_user');
+                if (raw) setCurrentUser(JSON.parse(raw));
+              } catch {}
+              navigateTo('platform', 'institutions');
+            }}
           />
         )}
 
