@@ -60,7 +60,8 @@ export const INSTITUTION_ALIASES: Record<string, string[]> = {
   ],
   // Dilla University (DU)
   'du-011': [
-    'du', 'du-011', 'dilla', 'dilla university', 'dilla-university'
+    'du', 'du-011', 'dilla', 'dila', 'dillaa', 'dilla university', 'dila university', 'dilla-university',
+    'dila unviesrity', 'dila unvisridty', 'dilla unviesrity', 'dilla unvisridty', 'gedeo', 'gedeo university', 'odaya'
   ],
   // Haramaya University (HRU / hru-010 / hu-010)
   'hru-010': [
@@ -149,6 +150,25 @@ function escapeRegExp(str: string): string {
  * Universal resolver for Ethiopian institutions.
  * Resolves canonical IDs, codes, database UUIDs, URL slugs, and common spelling variations.
  */
+
+/**
+ * Normalizes common Ethiopian higher education misspellings and transliteration typos
+ */
+export function normalizeUniversityText(text: string): string {
+  if (!text) return '';
+  return text
+    .toLowerCase()
+    .replace(/\b(?:unviesrity|unvisridty|unversity|unversitys|univeristy|universty|univ|collge)\b/gi, 'university')
+    .replace(/\bdila\b/gi, 'dilla')
+    .replace(/\baddis abeba\b/gi, 'addis ababa')
+    .replace(/\b(?:welkite|wolkita|welqite)\b/gi, 'wolkite')
+    .replace(/\b(?:gonder|goder)\b/gi, 'gondar')
+    .replace(/\b(?:meqele|mekele)\b/gi, 'mekelle')
+    .replace(/\bawassa\b/gi, 'hawassa')
+    .replace(/\b(?:arbaminch|arba-minch)\b/gi, 'arba minch')
+    .replace(/\b(?:wolaitasodo|wolayta sodo|wolayta)\b/gi, 'wolaita sodo');
+}
+
 export function resolveInstitution(rawIdentifier: string | undefined | null): Institution {
   if (!rawIdentifier || typeof rawIdentifier !== 'string') {
     return ETHIOPIAN_INSTITUTIONS[0]; // AAU safe default

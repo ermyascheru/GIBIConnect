@@ -74,7 +74,12 @@ export const SORTED_INSTITUTION_ALIASES: { code: string; alias: string }[] = [
   { code: 'DDU', alias: 'ddu' },
   // DU
   { code: 'DU', alias: 'dilla university' },
+  { code: 'DU', alias: 'dila university' },
+  { code: 'DU', alias: 'dilla unviesrity' },
+  { code: 'DU', alias: 'dila unviesrity' },
   { code: 'DU', alias: 'dilla' },
+  { code: 'DU', alias: 'dila' },
+  { code: 'DU', alias: 'gedeo' },
   { code: 'DU', alias: 'du' },
   // HRU before HU
   { code: 'HRU', alias: 'haramaya university' },
@@ -212,13 +217,25 @@ export const SORTED_INSTITUTION_ALIASES: { code: string; alias: string }[] = [
  * using strict word-boundary matching.
  */
 export function extractInstitutionsFromQuery(query: string): string[] {
+  const normalizedQ = query
+    .toLowerCase()
+    .replace(/\b(?:unviesrity|unvisridty|unversity|unversitys|univeristy|universty|univ|collge)\b/gi, 'university')
+    .replace(/\bdila\b/gi, 'dilla')
+    .replace(/\baddis abeba\b/gi, 'addis ababa')
+    .replace(/\b(?:welkite|wolkita|welqite)\b/gi, 'wolkite')
+    .replace(/\b(?:gonder|goder)\b/gi, 'gondar')
+    .replace(/\b(?:meqele|mekele)\b/gi, 'mekelle')
+    .replace(/\bawassa\b/gi, 'hawassa')
+    .replace(/\b(?:arbaminch|arba-minch)\b/gi, 'arba minch')
+    .replace(/\b(?:wolaitasodo|wolayta sodo|wolayta)\b/gi, 'wolaita sodo');
+
   const q = query.toLowerCase();
   const matchedCodes = new Set<string>();
 
   for (const item of SORTED_INSTITUTION_ALIASES) {
     const escaped = escapeRegExp(item.alias);
     const regex = new RegExp(`(?:^|[^a-z0-9])${escaped}(?:$|[^a-z0-9])`, 'i');
-    if (regex.test(q)) {
+    if (regex.test(q) || regex.test(normalizedQ)) {
       matchedCodes.add(item.code);
     }
   }

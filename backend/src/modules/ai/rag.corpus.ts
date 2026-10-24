@@ -552,6 +552,69 @@ Chapter 4: Definite & Indefinite Integrals:
    - Wolkite Referral Hospital, Gubre Engineering Workshops & Mechatronics Lab, Central Digital Library.`
   },
   {
+    id: 'chunk-du-departments-complete-01',
+    institutionCode: 'DU',
+    domain: 'UNIVERSITY_CATALOG',
+    sourceTitle: 'Dilla University (DU) Official Academic Registrar Catalog & Department Directory',
+    pageNumber: 1,
+    chunkIndex: 1,
+    academicYear: '2016/2017 E.C.',
+    verificationStatus: 'VERIFIED',
+    keywords: ['dilla', 'dila', 'dilla university', 'du', 'gedeo', 'odaya', 'faculties', 'departments', 'medicine', 'engineering', 'agroforestry', 'tuition'],
+    content: `Dilla University (DU — Gedeo Zone, South Ethiopia) Complete Colleges & Departments (2016/2017 E.C.):
+1. College of Health & Medical Sciences (CHMS — Odaya Campus & Comprehensive Teaching Hospital):
+   - School of Medicine (MD): Doctor of Medicine (6 years), Residency in Surgery, Internal Medicine. Active Enrollment: 1,200.
+   - School of Public Health: B.Sc. in Public Health, MPH in Epidemiology & Child Nutrition. Active Enrollment: 750.
+   - School of Pharmacy: B.Pharm, Pharm.D. Specialization: Phytomedicines and Tropical Clinical Pharmacy. Active Enrollment: 550.
+   - School of Nursing & Midwifery: B.Sc. Nursing, B.Sc. Midwifery, Neonatal Care. Active Enrollment: 900.
+2. Institute of Technology (DU-IoT — Main Polytechnic Campus):
+   - Department of Computer Science & Software Engineering: B.Sc. Computer Science, B.Sc. Software Engineering, M.Sc. Computing. Active Enrollment: 1,250.
+   - Department of Electrical & Computer Engineering: B.Sc. Electrical (Power & Telecommunications), M.Sc. Active Enrollment: 1,100.
+   - Department of Civil & Water Resources Engineering: B.Sc. Civil Engineering, B.Sc. Hydraulic Engineering. Active Enrollment: 1,150.
+   - Department of Mechanical Engineering: B.Sc. Mechanical (Thermal & Agricultural Machinery). Active Enrollment: 700.
+3. College of Agriculture & Natural Resources (CANR — Gedeo Indigenous Agroforestry Complex):
+   - Department of Agroforestry & Biodiversity: B.Sc. Agroforestry, M.Sc. Tropical Silviculture, Ph.D. UNESCO Gedeo Cultural Landscape Center. Active Enrollment: 950.
+   - Department of Plant Sciences & Horticulture: B.Sc. Plant Science, B.Sc. Arabica Coffee Science. Active Enrollment: 850.
+   - Department of Animal Science: B.Sc. Animal Production & Aquaculture. Active Enrollment: 650.
+4. College of Natural & Computational Sciences:
+   - Department of Mathematics & Statistics (B.Sc., M.Sc.). Active Enrollment: 650.
+   - Department of Chemistry (Analytical & Phytochemistry). Active Enrollment: 600.
+   - Department of Physics (Applied Geophysics & Solar Energy). Active Enrollment: 450.
+   - Department of Biology & Biotechnology (Microbiology & Fermentation). Active Enrollment: 700.
+5. College of Business and Economics:
+   - Department of Accounting & Finance (IFRS & Banking). Active Enrollment: 1,200.
+   - Department of Economics (Agricultural & Regional Economics). Active Enrollment: 950.
+   - Department of Management (Supply Chain & Cooperative Leadership). Active Enrollment: 950.
+6. Statutory Tuition & Admissions:
+   - Regular Undergraduate: 100% government subsidized (0 ETB upfront) under Proclamation No. 650/2009 (Cost-Sharing).
+   - Continuing & Evening Education: 500 ETB per credit hour.
+   - Admissions Cut-Offs: Natural Science Male: 395+, Female: 375+; Social Science Male: 380+, Female: 360+.`
+  },
+  {
+    id: 'chunk-wu-wsu-dbu-complete-01',
+    institutionCode: 'WU',
+    domain: 'UNIVERSITY_CATALOG',
+    sourceTitle: 'Wollo, Wolaita Sodo & Debre Berhan Universities — Departments & Faculties Directory',
+    pageNumber: 2,
+    chunkIndex: 2,
+    academicYear: '2016/2017 E.C.',
+    verificationStatus: 'VERIFIED',
+    keywords: ['wollo', 'wu', 'kiot', 'wolaita sodo', 'wsu', 'otona', 'debre berhan', 'dbu', 'asrat woldeyes', 'departments', 'faculties'],
+    content: `Official Department Directories for Wollo, Wolaita Sodo, and Debre Berhan Universities:
+1. Wollo University (WU — Dessie & Kombolcha):
+   - Kombolcha Institute of Technology (KIOT): Mechanical & Industrial Engineering, Software Engineering, Electrical Engineering, Civil & Water Engineering.
+   - Dessie Health Sciences Campus: School of Medicine (MD), Pharmacy, Nursing, Public Health.
+   - Tuition: Regular: 0 ETB (Cost-Sharing); Extension: 550 ETB/credit.
+2. Wolaita Sodo University (WSU — Sodo):
+   - College of Health Sciences (OTONA Comprehensive Teaching Hospital): Medicine (MD), Public Health, Pharmacy, Medical Laboratory.
+   - Institute of Technology (Gandaba Campus): Computing & Software Engineering, Electrical Power, Civil Construction.
+   - Tuition: Regular: 0 ETB (Cost-Sharing); Extension: 500 ETB/credit.
+3. Debre Berhan University (DBU — Debre Berhan):
+   - Asrat Woldeyes Health Sciences Campus: Medicine (MD), Health Informatics, Nursing & Midwifery.
+   - Institute of Technology: Computing & Software Engineering, Electrical & Solar, Civil Engineering.
+   - Tuition: Regular: 0 ETB (Cost-Sharing); Extension: 500 ETB/credit.`
+  },
+  {
     id: 'chunk-all-regional-complete-01',
     institutionCode: 'MOE',
     domain: 'UNIVERSITY_CATALOG',

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Navbar, type PublicNavView } from './components/layout/Navbar';
+import { UserProfileDropdown } from './components/layout/UserProfileDropdown';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 import { ServicesPage } from './pages/ServicesPage';
@@ -251,23 +252,13 @@ export default function App() {
             </button>
 
             {currentUser ? (
-              <div className="flex items-center gap-2 pl-1">
-                <div
-                  className="w-7 h-7 rounded-full bg-[#0C373D] text-[#5AA7A7] font-bold flex items-center justify-center text-xs border border-[#5AA7A7]/40 shadow-xs"
-                  title={`${currentUser.full_name || 'User'} (${currentUser.email || ''})`}
-                >
-                  {(currentUser.full_name || currentUser.email || 'U').charAt(0).toUpperCase()}
-                </div>
-                <button
-                  onClick={handleSignOut}
-                  className={`text-[11px] font-medium transition-colors cursor-pointer ${
-                    theme === 'dark' ? 'text-zinc-400 hover:text-rose-400' : 'text-[#64748B] hover:text-rose-600'
-                  }`}
-                  title="Sign Out"
-                >
-                  Sign Out
-                </button>
-              </div>
+              <UserProfileDropdown
+                user={currentUser}
+                onSignOut={handleSignOut}
+                onNavigateToTab={(tab) => navigateTo('platform', tab, null)}
+                onNavigateToView={(view) => navigateTo(view)}
+                theme={theme}
+              />
             ) : (
               <button
                 onClick={() => navigateTo('auth')}

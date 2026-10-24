@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import katex from 'katex';
 import { ETHIOPIAN_INSTITUTIONS } from '../data/mockInstitutions';
-import { resolveInstitution, INSTITUTION_ALIASES } from '../utils/resolveInstitution';
+import { resolveInstitution, INSTITUTION_ALIASES, normalizeUniversityText } from '../utils/resolveInstitution';
 import {
   formatInstitutionFaculties,
   formatInstitutionDepartments,
@@ -955,6 +955,7 @@ How can I assist your higher education journey today? You can ask about:
      */
     const extractAllTargetInstitutions = (queryText: string): Institution[] => {
       const qText = queryText.toLowerCase();
+      const normalizedQ = normalizeUniversityText(queryText);
       const matchedCodes = new Set<string>();
       const matchedInstitutions: Institution[] = [];
 
@@ -969,7 +970,7 @@ How can I assist your higher education journey today? You can ask about:
       for (const item of allAliases) {
         const escaped = escapeRegExp(item.alias);
         const regex = new RegExp(`(?:^|[^a-z0-9])${escaped}(?:$|[^a-z0-9])`, 'i');
-        if (regex.test(qText)) {
+        if (regex.test(qText) || regex.test(normalizedQ)) {
           const inst = resolveInstitution(item.targetId);
           if (inst && !matchedCodes.has(inst.code)) {
             matchedCodes.add(inst.code);
@@ -978,14 +979,31 @@ How can I assist your higher education journey today? You can ask about:
         }
       }
 
-      // Check direct codes (AAU, ASTU, AASTU, UOG, AMU, DMU, DDU, HRU, HU, MU, WKU, etc.)
+      // Check direct codes (AAU, ASTU, AASTU, UOG, AMU, DMU, DDU, HRU, HU, MU, WKU, DU, etc.)
       for (const inst of ETHIOPIAN_INSTITUTIONS) {
         if (matchedCodes.has(inst.code)) continue;
         const escaped = escapeRegExp(inst.code.toLowerCase());
         const regex = new RegExp(`(?:^|[^a-z0-9])${escaped}(?:$|[^a-z0-9])`, 'i');
-        if (regex.test(qText)) {
+        if (regex.test(qText) || regex.test(normalizedQ)) {
           matchedCodes.add(inst.code);
           matchedInstitutions.push(inst);
+        }
+      }
+
+      // Fallback fuzzy check: if still empty, check words against known institutions
+      if (matchedInstitutions.length === 0) {
+        const tokens = normalizedQ.split(/[^a-z0-9]+/).filter((t) => t.length >= 3);
+        for (const token of tokens) {
+          for (const inst of ETHIOPIAN_INSTITUTIONS) {
+            const city = inst.city.toLowerCase();
+            const name = inst.nameEn.toLowerCase();
+            if (token === inst.code.toLowerCase() || city.includes(token) || name.includes(token)) {
+              if (!matchedCodes.has(inst.code)) {
+                matchedCodes.add(inst.code);
+                matchedInstitutions.push(inst);
+              }
+            }
+          }
         }
       }
 

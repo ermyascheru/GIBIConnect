@@ -1,4 +1,5 @@
 import React from 'react';
+import { UserProfileDropdown } from './UserProfileDropdown';
 
 export type PublicNavView = 'home' | 'about' | 'services' | 'contact' | 'auth';
 
@@ -64,20 +65,14 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Right Actions: Sign In / User & Get Started */}
         <div className="flex items-center gap-3">
           {currentUser ? (
-            <div className="flex items-center gap-2">
-              <div
-                className="w-8 h-8 rounded-full bg-[#0C373D] text-[#5AA7A7] font-bold flex items-center justify-center text-xs border border-[#5AA7A7]/40 shadow-xs"
-                title={`${currentUser.full_name || 'User'} (${currentUser.email || ''})`}
-              >
-                {(currentUser.full_name || currentUser.email || 'U').charAt(0).toUpperCase()}
-              </div>
-              <button
-                onClick={onSignOut}
-                className="text-xs font-semibold text-[#64748B] hover:text-rose-600 px-2 py-1 rounded-lg transition-colors cursor-pointer"
-              >
-                Sign Out
-              </button>
-            </div>
+            <UserProfileDropdown
+              user={currentUser}
+              onSignOut={onSignOut || (() => {})}
+              onNavigateToView={onNavigate}
+              onNavigateToTab={(tab) => {
+                if (tab) onGetStarted();
+              }}
+            />
           ) : (
             <button 
               onClick={() => onNavigate('auth')}

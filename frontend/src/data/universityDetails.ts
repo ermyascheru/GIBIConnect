@@ -727,6 +727,335 @@ export interface FacilityGalleryItem {
       ];
     }
 
+    if (code === 'DU') {
+      return [
+        {
+          id: 'du-chms',
+          name: 'College of Health & Medical Sciences (CHMS)',
+          campus: 'Odaya Clinical & Teaching Hospital Campus, Dilla',
+          dean: 'Dr. Dawit Mengistu (MD, Pediatric Specialist)',
+          established: 2004,
+          studentCount: 3400,
+          facultyCount: 280,
+          description: 'South Ethiopia premier medical training complex, operating the Dilla University Comprehensive Specialized Teaching Hospital serving over 3 million people.',
+          departments: [
+            { name: 'School of Medicine (MD)', head: 'Dr. Yared Teshome', degrees: ['MD (Doctor of Medicine)', 'Residency in Surgery', 'Internal Medicine'], enrolled: 1200, specialization: 'Community Pediatrics, Tropical Surgery' },
+            { name: 'School of Public Health', head: 'Dr. Asfaw Negash', degrees: ['B.Sc. Public Health', 'MPH in Epidemiology'], enrolled: 750, specialization: 'Nutritional Epidemiology, Child Survival' },
+            { name: 'School of Pharmacy', head: 'Dr. Senait Abera', degrees: ['B.Pharm', 'Pharm.D'], enrolled: 550, specialization: 'Clinical Pharmacy, Herbal Formulation' },
+            { name: 'School of Nursing & Midwifery', head: 'Sr. Almaz Bekele', degrees: ['B.Sc. Nursing', 'B.Sc. Midwifery'], enrolled: 900, specialization: 'Emergency Neonatal Care, Community Health' }
+          ]
+        },
+        {
+          id: 'du-iot',
+          name: 'Institute of Technology (DU-IoT)',
+          campus: 'Main Polytechnic Engineering Campus, Dilla',
+          dean: 'Dr. Belayneh Woldie (PhD in Water Resources)',
+          established: 2008,
+          studentCount: 4200,
+          facultyCount: 290,
+          description: 'Specialized polytechnic institute with advanced laboratories in computing, hydraulic structures, software development, and mechanical design.',
+          departments: [
+            { name: 'Department of Computer Science & Software Engineering', head: 'Dr. Mulatu Haile', degrees: ['B.Sc. Computer Science', 'B.Sc. Software Engineering', 'M.Sc.'], enrolled: 1250, specialization: 'Mobile Applications, Ethiopian Agro-Informatics' },
+            { name: 'Department of Electrical & Computer Engineering', head: 'Dr. Tadesse Gemechu', degrees: ['B.Sc. Electrical Engineering', 'M.Sc. Power Systems'], enrolled: 1100, specialization: 'Renewable Hydroelectric & Solar Microgrids' },
+            { name: 'Department of Civil & Water Resources Engineering', head: 'Dr. Birhanu Alemu', degrees: ['B.Sc. Civil Engineering', 'B.Sc. Hydraulic Engineering'], enrolled: 1150, specialization: 'Slope Stability, River Basin Modeling' },
+            { name: 'Department of Mechanical Engineering', head: 'Dr. Kassahun Desta', degrees: ['B.Sc. Mechanical Engineering'], enrolled: 700, specialization: 'Agricultural Machinery, Thermal Engines' }
+          ]
+        },
+        {
+          id: 'du-canr',
+          name: 'College of Agriculture & Natural Resources (CANR)',
+          campus: 'Gedeo Agroforestry Demonstration Campus, Dilla',
+          dean: 'Dr. Tesfaye Abebe (PhD in Agroforestry Systems)',
+          established: 1996,
+          studentCount: 2800,
+          facultyCount: 210,
+          description: 'Global center of excellence for UNESCO-recognized Gedeo indigenous agroforestry, soil biodiversity, and tropical coffee science.',
+          departments: [
+            { name: 'Department of Agroforestry & Biodiversity Conservation', head: 'Dr. Daniel Fitamo', degrees: ['B.Sc. Agroforestry', 'M.Sc. Tropical Silviculture', 'Ph.D.'], enrolled: 950, specialization: 'Gedeo Multi-Stratum Systems, Carbon Sequestration' },
+            { name: 'Department of Plant Sciences & Horticulture', head: 'Dr. Solomon Zewdie', degrees: ['B.Sc. Plant Science', 'B.Sc. Horticulture'], enrolled: 850, specialization: 'Arabica Coffee Genetics, Enset Production' },
+            { name: 'Department of Animal Science & Aquaculture', head: 'Dr. Hailu Tefera', degrees: ['B.Sc. Animal Science', 'B.Sc. Fisheries'], enrolled: 650, specialization: 'Highland Dairy, Sustainable Fish Farming' },
+            { name: 'Department of Natural Resource Economics', head: 'Dr. Mesfin Tulu', degrees: ['B.Sc. Agricultural Economics', 'M.Sc.'], enrolled: 350, specialization: 'Ecosystem Valuation, Cooperative Marketing' }
+          ]
+        },
+        {
+          id: 'du-cncs',
+          name: 'College of Natural & Computational Sciences',
+          campus: 'Main Science Complex, Dilla',
+          dean: 'Dr. Girma Shiferaw (PhD in Applied Physics)',
+          established: 1998,
+          studentCount: 2400,
+          facultyCount: 180,
+          description: 'Foundational pure and applied sciences college with modern research laboratories in physics, chemistry, biology, and applied mathematics.',
+          departments: [
+            { name: 'Department of Mathematics & Statistics', head: 'Dr. Getachew Kassa', degrees: ['B.Sc. Mathematics', 'B.Sc. Statistics', 'M.Sc.'], enrolled: 650, specialization: 'Stochastic Modeling, Biostatistics' },
+            { name: 'Department of Chemistry', head: 'Dr. Abebaw Adgo', degrees: ['B.Sc. Chemistry', 'M.Sc. Analytical Chemistry'], enrolled: 600, specialization: 'Phytochemical Extraction, Environmental Quality' },
+            { name: 'Department of Physics', head: 'Dr. Berhanu Mengistu', degrees: ['B.Sc. Physics', 'M.Sc. Geophysics'], enrolled: 450, specialization: 'Rift Valley Seismology, Solar Radiation' },
+            { name: 'Department of Biology & Biotechnology', head: 'Dr. Worku Legesse', degrees: ['B.Sc. Biology', 'B.Sc. Biotechnology'], enrolled: 700, specialization: 'Indigenous Microorganisms, Food Fermentation' }
+          ]
+        },
+        {
+          id: 'du-cbe',
+          name: 'College of Business and Economics',
+          campus: 'Downtown Commercial Campus, Dilla',
+          dean: 'Dr. Yohannes Wolde (PhD in Development Economics)',
+          established: 2002,
+          studentCount: 3100,
+          facultyCount: 190,
+          description: 'Regional center for business administration, financial auditing, trade economics, and public resource management.',
+          departments: [
+            { name: 'Department of Accounting & Finance', head: 'Ato Ephraim Bekele (M.Sc., CPA)', degrees: ['B.A. Accounting & Finance', 'M.Sc. Accounting'], enrolled: 1200, specialization: 'IFRS Standards, Agricultural Banking' },
+            { name: 'Department of Economics', head: 'Dr. Teklu Kidane', degrees: ['B.A. Economics', 'M.Sc. Agricultural Economics'], enrolled: 950, specialization: 'Commodity Exchange Modeling, Regional Development' },
+            { name: 'Department of Management', head: 'Dr. Tigist Haile', degrees: ['B.A. Management', 'MBA'], enrolled: 950, specialization: 'Supply Chain, Microfinance Institution Leadership' }
+          ]
+        }
+      ];
+    }
+
+    if (code === 'WU') {
+      return [
+        {
+          id: 'wu-kiot',
+          name: 'Kombolcha Institute of Technology (KIOT)',
+          campus: 'Industrial Hub Campus, Kombolcha',
+          dean: 'Dr. Tsegaye Feleke (PhD in Manufacturing Automation)',
+          established: 2007,
+          studentCount: 4600,
+          facultyCount: 310,
+          description: 'Premier industrial technology institute embedded in the Kombolcha Industrial Park corridor.',
+          departments: [
+            { name: 'Department of Mechanical & Industrial Engineering', head: 'Dr. Mulugeta Sisay', degrees: ['B.Sc. Mechanical', 'B.Sc. Industrial', 'M.Sc.'], enrolled: 1300, specialization: 'Automated Textile Machinery, CNC Machining' },
+            { name: 'Department of Software Engineering & Computer Science', head: 'Dr. Solomon Getachew', degrees: ['B.Sc. Software Engineering', 'B.Sc. Computer Science'], enrolled: 1200, specialization: 'Industrial IoT, Enterprise Resource Planning' },
+            { name: 'Department of Electrical & Computer Engineering', head: 'Dr. Getnet Abebe', degrees: ['B.Sc. Electrical', 'M.Sc. Telecommunications'], enrolled: 1100, specialization: 'Power Distribution, Industrial Automation' },
+            { name: 'Department of Civil & Water Engineering', head: 'Dr. Daniel Belay', degrees: ['B.Sc. Civil', 'B.Sc. Hydraulic'], enrolled: 1000, specialization: 'Highway Construction, Drainage Engineering' }
+          ]
+        },
+        {
+          id: 'wu-chs',
+          name: 'College of Medicine & Health Sciences',
+          campus: 'Dessie Referral Hospital Campus, Dessie',
+          dean: 'Dr. Melaku Abate (MD, Consultant Surgeon)',
+          established: 2005,
+          studentCount: 3200,
+          facultyCount: 250,
+          description: 'Historic clinical pavilion operating the 500-bed Dessie Comprehensive Referral Hospital.',
+          departments: [
+            { name: 'School of Medicine (MD)', head: 'Dr. Kebede Tilahun', degrees: ['MD (Doctor of Medicine)', 'Residency in Surgery'], enrolled: 1100, specialization: 'Trauma Care, Pediatric Surgery' },
+            { name: 'School of Public Health', head: 'Dr. Ayalew Tefera', degrees: ['B.Sc. Public Health', 'MPH'], enrolled: 750, specialization: 'Epidemic Surveillance, Maternal Health' },
+            { name: 'School of Pharmacy & Nursing', head: 'Sr. Muluemebet Gashaw', degrees: ['B.Pharm', 'B.Sc. Nursing'], enrolled: 950, specialization: 'Clinical Pharmacology, Critical Care' }
+          ]
+        }
+      ];
+    }
+
+    if (code === 'WSU') {
+      return [
+        {
+          id: 'wsu-chms',
+          name: 'College of Health & Medical Sciences (OTONA)',
+          campus: 'Otona Comprehensive Specialized Hospital, Sodo',
+          dean: 'Dr. Mengistu Meskele (MD, MPH)',
+          established: 2007,
+          studentCount: 3300,
+          facultyCount: 260,
+          description: 'Southern healthcare leader integrated with Otona Comprehensive Teaching Hospital with 600 beds.',
+          departments: [
+            { name: 'School of Medicine (MD)', head: 'Dr. Abate Lema', degrees: ['MD (Doctor of Medicine)', 'Residency in Emergency Medicine'], enrolled: 1200, specialization: 'Emergency Trauma, Orthopedics' },
+            { name: 'School of Public Health', head: 'Dr. Samuel Yohannes', degrees: ['B.Sc. Public Health', 'MPH'], enrolled: 800, specialization: 'Health Informatics, Biostatistics' },
+            { name: 'Department of Pharmacy & Medical Laboratory', head: 'Dr. Berhanu Bekele', degrees: ['B.Pharm', 'B.Sc. Medical Lab'], enrolled: 850, specialization: 'Clinical Toxicology, Parasitology' }
+          ]
+        },
+        {
+          id: 'wsu-iot',
+          name: 'Institute of Technology (WSU-IoT)',
+          campus: 'Gandaba Technology Campus, Sodo',
+          dean: 'Dr. Daniel Wolde (PhD in Civil Engineering)',
+          established: 2010,
+          studentCount: 3900,
+          facultyCount: 270,
+          description: 'Major regional technology institute specializing in computer engineering, structural designs, and water infrastructure.',
+          departments: [
+            { name: 'Department of Computer Science & IT', head: 'Dr. Mathewos Ayele', degrees: ['B.Sc. Computer Science', 'B.Sc. IT', 'M.Sc.'], enrolled: 1250, specialization: 'Machine Learning, Web Architecture' },
+            { name: 'Department of Electrical & Power Engineering', head: 'Dr. Girma Tadesse', degrees: ['B.Sc. Electrical', 'M.Sc. Power'], enrolled: 1100, specialization: 'High-Voltage Transmission, Control Systems' },
+            { name: 'Department of Civil Engineering & Surveying', head: 'Dr. Teklehaimanot Desta', degrees: ['B.Sc. Civil', 'B.Sc. Geomatics'], enrolled: 1150, specialization: 'Geotechnical Engineering, Road Construction' }
+          ]
+        }
+      ];
+    }
+
+    if (code === 'DBU') {
+      return [
+        {
+          id: 'dbu-chs',
+          name: 'Asrat Woldeyes Health Sciences Campus',
+          campus: 'Asrat Woldeyes Campus, Debre Berhan',
+          dean: 'Dr. Hailemariam Worku (MD)',
+          established: 2007,
+          studentCount: 2900,
+          facultyCount: 230,
+          description: 'Premier health training complex named in honor of Prof. Asrat Woldeyes, operating the Debre Berhan Referral Hospital.',
+          departments: [
+            { name: 'School of Medicine (MD)', head: 'Dr. Yitbarek Solomon', degrees: ['MD (Doctor of Medicine)', 'Residency'], enrolled: 950, specialization: 'General Surgery, Internal Medicine' },
+            { name: 'Department of Public Health & Health Informatics', head: 'Dr. Mesele Kebede', degrees: ['B.Sc. Public Health', 'B.Sc. Health Informatics'], enrolled: 850, specialization: 'Electronic Medical Records, Epidemiology' },
+            { name: 'Department of Nursing & Midwifery', head: 'Sr. Tsehaynesh Birhanu', degrees: ['B.Sc. Nursing', 'B.Sc. Midwifery'], enrolled: 800, specialization: 'Critical Care, Neonatal Care' }
+          ]
+        },
+        {
+          id: 'dbu-iot',
+          name: 'Institute of Technology (DBU-IoT)',
+          campus: 'Tegedlitu Industrial Campus, Debre Berhan',
+          dean: 'Dr. Fisseha Tadesse (PhD in Mechanical Engineering)',
+          established: 2008,
+          studentCount: 3800,
+          facultyCount: 260,
+          description: 'Cold-climate high-altitude engineering testing center near the Debre Berhan Industrial Hub.',
+          departments: [
+            { name: 'Department of Computing & Software Engineering', head: 'Dr. Abebe Getachew', degrees: ['B.Sc. Software Engineering', 'B.Sc. Computer Science'], enrolled: 1200, specialization: 'Distributed Systems, Mobile Engineering' },
+            { name: 'Department of Electrical & Computer Engineering', head: 'Dr. Getachew Hailu', degrees: ['B.Sc. Electrical Engineering'], enrolled: 1050, specialization: 'Industrial Electronics, Solar Microgrids' },
+            { name: 'Department of Civil & Architectural Engineering', head: 'Dr. Binyam Sisay', degrees: ['B.Sc. Civil Engineering', 'B.Sc. Architecture'], enrolled: 1150, specialization: 'Building Climatology, Structural Dynamics' }
+          ]
+        }
+      ];
+    }
+
+    if (code === 'DMU') {
+      return [
+        {
+          id: 'dmu-haddis',
+          name: 'Haddis Alemayehu Institute of Technology (HAIT)',
+          campus: 'Polytechnic Campus, Debre Markos',
+          dean: 'Dr. Solomon Mihret (PhD in Mechanical Engineering)',
+          established: 2007,
+          studentCount: 4100,
+          facultyCount: 280,
+          description: 'Named after the renowned Ethiopian author and diplomat Haddis Alemayehu, specializing in innovative agricultural and civil engineering.',
+          departments: [
+            { name: 'Department of Electrical & Computer Engineering', head: 'Dr. Getnet Belay', degrees: ['B.Sc. Electrical', 'M.Sc. Power'], enrolled: 1200, specialization: 'Industrial Automation, Smart Grid' },
+            { name: 'Department of Software Engineering & Computing', head: 'Dr. Tewodros Melaku', degrees: ['B.Sc. Software Engineering', 'B.Sc. Computer Science'], enrolled: 1150, specialization: 'Natural Language Processing, Cloud Computing' },
+            { name: 'Department of Civil & Water Resources Engineering', head: 'Dr. Aschalew Kassahun', degrees: ['B.Sc. Civil', 'B.Sc. Water Resources'], enrolled: 1150, specialization: 'Abay Basin Hydrology, Dam Safety' }
+          ]
+        },
+        {
+          id: 'dmu-chs',
+          name: 'College of Health Sciences',
+          campus: 'Debre Markos Comprehensive Hospital Campus',
+          dean: 'Dr. Alemu Worku (MD, Pediatrician)',
+          established: 2007,
+          studentCount: 2800,
+          facultyCount: 210,
+          description: 'Clinical training center affiliated with Debre Markos Referral Hospital.',
+          departments: [
+            { name: 'School of Medicine (MD)', head: 'Dr. Daniel Getahun', degrees: ['MD (Doctor of Medicine)'], enrolled: 950, specialization: 'Emergency Medicine, Tropical Health' },
+            { name: 'School of Public Health', head: 'Dr. Tesfaye Desta', degrees: ['B.Sc. Public Health', 'MPH'], enrolled: 750, specialization: 'Epidemiology, Health Management' },
+            { name: 'School of Pharmacy & Nursing', head: 'Sr. Rahel Mengistu', degrees: ['B.Pharm', 'B.Sc. Nursing'], enrolled: 800, specialization: 'Clinical Pharmacy, Midwifery' }
+          ]
+        }
+      ];
+    }
+
+    if (code === 'DDU') {
+      return [
+        {
+          id: 'ddu-iot',
+          name: 'Institute of Technology (DDU-IoT)',
+          campus: 'Railway & Logistics Campus, Dire Dawa',
+          dean: 'Dr. Mohammed Ahmed (PhD in Transportation Engineering)',
+          established: 2006,
+          studentCount: 4500,
+          facultyCount: 310,
+          description: 'Strategic eastern engineering institute recognized for logistics engineering, railway integration, and cross-border commercial computing.',
+          departments: [
+            { name: 'Department of Logistics & Railway Engineering', head: 'Dr. Abdi Mohammed', degrees: ['B.Sc. Logistics Engineering', 'B.Sc. Railway Engineering'], enrolled: 1250, specialization: 'Ethio-Djibouti Railway Telematics, Port Logistics' },
+            { name: 'Department of Computer Science & Software Engineering', head: 'Dr. Ephraim Solomon', degrees: ['B.Sc. Computer Science', 'B.Sc. Software Engineering'], enrolled: 1200, specialization: 'Trade Informatics, Cloud Systems' },
+            { name: 'Department of Electrical & Computer Engineering', head: 'Dr. Nebiyu Tadesse', degrees: ['B.Sc. Electrical Engineering'], enrolled: 1100, specialization: 'Telecommunications, Renewable Power' },
+            { name: 'Department of Civil Engineering', head: 'Dr. Fikadu Bekele', degrees: ['B.Sc. Civil Engineering'], enrolled: 950, specialization: 'Dryland Geotechnics, Highway Design' }
+          ]
+        },
+        {
+          id: 'ddu-chs',
+          name: 'College of Medicine & Health Sciences',
+          campus: 'Dil Chora Referral Hospital Campus, Dire Dawa',
+          dean: 'Dr. Fikru Tefera (MD)',
+          established: 2008,
+          studentCount: 2600,
+          facultyCount: 200,
+          description: 'Clinical teaching complex integrated directly with the historic Dil Chora Referral Hospital.',
+          departments: [
+            { name: 'School of Public Health & Medicine', head: 'Dr. Yassin Hassen', degrees: ['MD (Doctor of Medicine)', 'B.Sc. Public Health', 'MPH'], enrolled: 1100, specialization: 'Arid Zone Epidemiology, Tropical Medicine' },
+            { name: 'Department of Nursing & Midwifery', head: 'Sr. Halima Ali', degrees: ['B.Sc. Nursing', 'B.Sc. Midwifery'], enrolled: 850, specialization: 'Emergency Care, Community Pediatrics' },
+            { name: 'Department of Pharmacy', head: 'Dr. Ahmed Ibrahim', degrees: ['B.Pharm'], enrolled: 500, specialization: 'Pharmaceutical Supplies & Distribution' }
+          ]
+        }
+      ];
+    }
+
+    if (code === 'AMBO') {
+      return [
+        {
+          id: 'ambo-agri',
+          name: 'College of Agriculture & Veterinary Sciences (Awaro)',
+          campus: 'Awaro Agricultural Research Campus, Ambo',
+          dean: 'Dr. Girma Debele (PhD in Soil Chemistry)',
+          established: 1947,
+          studentCount: 3100,
+          facultyCount: 240,
+          description: 'Founded in 1947 as Ambo Agricultural College, it is one of Ethiopia oldest higher learning academies.',
+          departments: [
+            { name: 'Department of Agronomy & Crop Sciences', head: 'Dr. Takele Desta', degrees: ['B.Sc. Plant Sciences', 'M.Sc. Agronomy', 'Ph.D.'], enrolled: 1100, specialization: 'Cereal Genetics, Integrated Pest Management' },
+            { name: 'School of Veterinary Medicine (DVM)', head: 'Dr. Ashenafi Bekele', degrees: ['DVM (Doctor of Veterinary Medicine)'], enrolled: 850, specialization: 'Highland Livestock Pathology, Vaccine Development' },
+            { name: 'Department of Animal Production & Nutrition', head: 'Dr. Dejene Tolosa', degrees: ['B.Sc. Animal Science', 'M.Sc.'], enrolled: 750, specialization: 'Pasture Agronomy, Dairy Science' }
+          ]
+        },
+        {
+          id: 'ambo-iot',
+          name: 'Institute of Technology (Ambo-IoT)',
+          campus: 'Main Science & Tech Campus, Ambo',
+          dean: 'Dr. Kumsa Gemechu (PhD in Software Engineering)',
+          established: 2008,
+          studentCount: 3600,
+          facultyCount: 250,
+          description: 'Polytechnic institute leading computational engineering, water treatment, and electrical systems in Western Shoa.',
+          departments: [
+            { name: 'Department of Computer Science & Software Engineering', head: 'Dr. Tadesse Feyissa', degrees: ['B.Sc. Computer Science', 'B.Sc. Software Engineering'], enrolled: 1200, specialization: 'Afan Oromo NLP, Web Computing' },
+            { name: 'Department of Electrical & Computer Engineering', head: 'Dr. Alemayehu Regassa', degrees: ['B.Sc. Electrical Engineering'], enrolled: 1050, specialization: 'Microgrid Solar, Signal Processing' },
+            { name: 'Department of Civil Engineering & Water', head: 'Dr. Fikadu Negeri', degrees: ['B.Sc. Civil Engineering', 'B.Sc. Hydraulic'], enrolled: 1050, specialization: 'Geothermal Hydrology, Highway Engineering' }
+          ]
+        }
+      ];
+    }
+
+    if (code === 'SMU') {
+      return [
+        {
+          id: 'smu-informatics',
+          name: 'Faculty of Informatics & Computer Science',
+          campus: 'Mexico Square Technology Campus, Addis Ababa',
+          dean: 'Dr. Assefa Tilahun (PhD in Computer Science)',
+          established: 1998,
+          studentCount: 2400,
+          facultyCount: 160,
+          description: 'Pioneering accredited private faculty in Ethiopia for software development and computer science.',
+          departments: [
+            { name: 'Department of Computer Science', head: 'Dr. Hailemichael Mesfin', degrees: ['B.Sc. Computer Science', 'M.Sc. Computer Science'], enrolled: 1100, specialization: 'Full-Stack Development, Database Administration' },
+            { name: 'Department of Information Technology & Systems', head: 'Dr. Selamawit Tadesse', degrees: ['B.Sc. IT', 'M.Sc. Information Systems'], enrolled: 950, specialization: 'Network Engineering, Cyber Security' }
+          ]
+        },
+        {
+          id: 'smu-business',
+          name: 'School of Business & Economics',
+          campus: 'Sarbet Campus, Addis Ababa',
+          dean: 'Dr. Wondwosen Tamrat (PhD in Higher Education Management)',
+          established: 1998,
+          studentCount: 3800,
+          facultyCount: 210,
+          description: 'Premier private business academy in Ethiopia, renowned for accounting, management, and marketing.',
+          departments: [
+            { name: 'Department of Accounting & Finance', head: 'Ato Biruk Tesfaye (CPA)', degrees: ['B.A. Accounting & Finance', 'M.Sc. Accounting'], enrolled: 1500, specialization: 'Commercial Banking, Forensic Auditing' },
+            { name: 'Department of Marketing & Management', head: 'Dr. Alula Kebede', degrees: ['B.A. Management', 'B.A. Marketing', 'MBA'], enrolled: 1400, specialization: 'Strategic Business Planning, E-Commerce' }
+          ]
+        }
+      ];
+    }
+
     // Dynamic tailored schema for all other Ethiopian institutions (DU, WU, DMU, DBU, WSU, WCU, SMU, RVU, UNITY, AMBO, DDU)
     return [
       {
