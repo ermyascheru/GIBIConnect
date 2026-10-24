@@ -59,7 +59,7 @@ export const VERIFIED_RAG_CORPUS: RAGDocumentChunk[] = [
     chunkIndex: 1,
     academicYear: '2016/2017 E.C.',
     verificationStatus: 'VERIFIED',
-    keywords: ['euee', 'esee', 'cutoff', 'cut-off', 'matriculation', 'score', 'natural', 'social', 'female', 'male', 'affirmative', 'emerging', 'developing', 'moe'],
+    keywords: ['euee', 'esee', 'cutoff', 'cut-off', 'matriculation', 'score', 'natural', 'social', 'female', 'male', 'affirmative', 'emerging', 'developing', 'moe', 'passmark', 'passmarks', 'pass mark'],
     content: `Ministry of Education (MoE) 2016/2017 E.C. National University Entrance Examination (EUEE/ESEE) Eligibility & Placement Thresholds:
 1. General Public University Entry Pass Mark (out of 700 / 600 scale normalized):
    - Natural Science Stream: Minimum 360 points for Male candidates; 345 points for Female candidates; 330 points for applicants from Emerging/Developing Regions (Afar, Somali, Benishangul-Gumuz, Gambella) and pastoralist woredas.
@@ -233,6 +233,42 @@ export const VERIFIED_RAG_CORPUS: RAGDocumentChunk[] = [
    - Software & Electrical Engineering (BiT Poly Campus): Male 470+ | Female 450+.
 4. Hawassa University (HU):
    - Hawassa University excels in Forestry, Agricultural Sciences, Agribusiness, Law, and Engineering: Engineering cut-off Male 455+ | Female 435+.`
+  },
+  {
+    id: 'chunk-dmu-admissions-01',
+    institutionCode: 'DMU',
+    domain: 'UNIVERSITY_CATALOG',
+    sourceTitle: 'Debre Markos University (DMU) Admissions & Department Guide',
+    pageNumber: 14,
+    chunkIndex: 1,
+    academicYear: '2016/2017 E.C.',
+    verificationStatus: 'VERIFIED',
+    keywords: ['debre markos', 'derbre markos', 'dmu', 'debremarkos', 'cutoff', 'cut-off', 'admissions', 'engineering', 'medicine'],
+    content: `Debre Markos University (DMU) — Admissions Thresholds & Curricula (2016/2017 E.C.):
+1. Entrance Cut-Offs:
+   - College of Health Sciences / Medicine: Male Cut-Off: 510+ points | Female Cut-Off: 490+ points.
+   - Institute of Technology (IoT) Engineering (Civil, Electrical, Mechanical, Software): Male Cut-Off: 435+ points | Female Cut-Off: 415+ points.
+2. Structure & Financing: Regular undergraduate programs are 100% government-subsidized under Proclamation No. 650/2009 Cost-Sharing.`
+  },
+  {
+    id: 'chunk-ddu-amu-hru-01',
+    institutionCode: 'DDU',
+    domain: 'UNIVERSITY_CATALOG',
+    sourceTitle: 'Dire Dawa, Arba Minch & Haramaya Universities Admissions Guide',
+    pageNumber: 22,
+    chunkIndex: 1,
+    academicYear: '2016/2017 E.C.',
+    verificationStatus: 'VERIFIED',
+    keywords: ['dire dawa', 'dira dewa', 'ddu', 'arba minch', 'amu', 'haramaya', 'hru', 'awti', 'water technology', 'cutoff', 'cut-off', 'passmark', 'admissions', 'engineering'],
+    content: `Dire Dawa, Arba Minch & Haramaya Universities Admissions Cut-Offs (2016/2017 E.C.):
+1. Dire Dawa University (DDU):
+   - Institute of Technology Engineering & Computing Programs: Male Cut-Off: 435+ points | Female Cut-Off: 415+ points.
+2. Arba Minch University (AMU):
+   - Arba Minch Water Technology Institute (AWTI) & Engineering: Male Cut-Off: 445+ points | Female Cut-Off: 425+ points.
+3. Haramaya University (HRU):
+   - College of Agriculture & Environmental Sciences and Institute of Technology: Male Cut-Off: 440+ points | Female Cut-Off: 420+ points.
+   - College of Health & Medical Sciences (Hiwot Fana Comprehensive Hospital): Male Cut-Off: 515+ points | Female Cut-Off: 495+ points.
+4. Cost-Sharing: 100% upfront government tuition subsidy for all regular placed undergraduates (Proclamation No. 650/2009).`
   },
 
   // ============================================================================

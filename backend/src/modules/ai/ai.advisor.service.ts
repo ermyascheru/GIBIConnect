@@ -125,8 +125,14 @@ export class AIAdvisorService {
     const retrievalStart = Date.now();
     const { mode, intent } = ragRetriever.classifyQueryIntent(cleanQuery, request.mode);
 
-    // Retrieve Top-4 VERIFIED chunks via 3-Tier Hybrid Search + RRF
-    const scoredChunks = await ragRetriever.retrieveTopK(cleanQuery, 4, request.studentProfile);
+    // Retrieve Top VERIFIED chunks via 3-Tier Hybrid Search + RRF (scaled to 6 for compound multi-part queries)
+    const isCompoundQuery =
+      cleanQuery.includes(' and ') ||
+      cleanQuery.includes(' also ') ||
+      cleanQuery.includes(' besides ') ||
+      (cleanQuery.includes('?') && cleanQuery.indexOf('?') !== cleanQuery.lastIndexOf('?'));
+    const dynamicTopK = isCompoundQuery ? 6 : 4;
+    const scoredChunks = await ragRetriever.retrieveTopK(cleanQuery, dynamicTopK, request.studentProfile);
     const retrievalMs = Date.now() - retrievalStart;
     const topConfidence = scoredChunks[0]?.rrfScore ?? 0;
 
