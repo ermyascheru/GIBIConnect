@@ -7,6 +7,11 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?style=flat&logo=typescript)](https://www.typescriptlang.org)
 [![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=flat&logo=vite)](https://vitejs.dev)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-38B2AC?style=flat&logo=tailwind-css)](https://tailwindcss.com)
+[![Walkthrough Demo](https://img.shields.io/badge/Google%20Vids-Watch%20Walkthrough-4285F4?style=flat&logo=googledrive&logoColor=white)](https://docs.google.com/videos/d/1aLvWOlvbh4TJvzOfrtax0wI9XgHHYmaWO83Pbz6Effc/play?usp=sharing)
+[![Documentation PDF](https://img.shields.io/badge/Documentation-GIBIConnect.pdf-red?style=flat&logo=adobeacrobatreader&logoColor=white)](./docs/GIBIConnect.pdf)
+
+> 🎥 **Walkthrough Video:** [Watch the Full Platform Demo on Google Vids](https://docs.google.com/videos/d/1aLvWOlvbh4TJvzOfrtax0wI9XgHHYmaWO83Pbz6Effc/play?usp=sharing)  
+> 📄 **Official Documentation:** [GIBIConnect System Specification (PDF)](./docs/GIBIConnect.pdf)
 
 GIBIConnect is Ethiopia’s premier digital higher-education platform, connecting secondary school seniors, university students, and parents with verified institutional data, 5-year degree curricula, admissions criteria, statutory cost-sharing calculators, and grounded AI academic advising.
 
