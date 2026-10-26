@@ -114,4 +114,12 @@ gibiconnect/
 └── README.md                 # Project documentation
 ```
 
+---
+
+## 👥 Project Team & Contributors
+
+| Name | Student ID | Roles & Responsibilities |
+| :--- | :--- | :--- |
+| **Ermiyas Cheru** | `CTC/5723/26` | **Frontend & AI Backend** (React 19 UI/UX, Hybrid RAG Retriever, Vector Embeddings & Advisory Logic) |
+| **Fekadu Alemnew** | `CTC-4438-26` | **Backend & Database** (REST API Architecture, Prisma ORM, Neon PostgreSQL Schema & Relational Models) |
 
